@@ -1,0 +1,2240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light">
+<title>1706 Studio — A House for the Intelligence Era</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@300;400;500&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light only;
+    --paper: #F5F1E8;
+    --paper-warm: #EDE7D6;
+    --paper-deep: #E0D6BD;
+    --ink: #1A1614;
+    --ink-soft: #2D2520;
+    --muted: #6B5F54;
+    --muted-soft: #9C8F80;
+    --rule: #C8BBA8;
+    --rule-soft: #DDD2B8;
+    --accent: #8B2A1E;
+    --accent-deep: #5C1B14;
+    --highlight: #E8DFC8;
+  }
+
+  html {
+    background: #F5F1E8 !important;
+    color-scheme: light only;
+    scroll-behavior: smooth;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: #F5F1E8 !important;
+    color: #1A1614 !important;
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    html, body { background: #F5F1E8 !important; color: #1A1614 !important; }
+  }
+
+  /* Grain texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.18'/%3E%3C/svg%3E");
+    mix-blend-mode: multiply;
+    opacity: 0.4;
+  }
+
+  .container { position: relative; z-index: 2; }
+
+  /* Selection styling */
+  ::selection { background: var(--accent); color: var(--paper); }
+
+  /* Custom dot separator - the 17.06 detail */
+  .dot {
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    background: currentColor;
+    border-radius: 50%;
+    margin: 0 0.4em;
+    vertical-align: middle;
+    transform: translateY(-0.15em);
+    opacity: 0.7;
+  }
+
+  .dot-accent {
+    background: var(--accent);
+    opacity: 1;
+  }
+
+  /* Typographic ligature for the date number */
+  .date-num {
+    font-feature-settings: "lnum", "tnum";
+    letter-spacing: -0.01em;
+  }
+
+  /* Top nav */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+    background: rgba(245, 241, 232, 0.85);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s ease;
+  }
+
+  nav.scrolled { border-bottom-color: var(--rule); }
+
+  .nav-mark {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 1.4rem;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    text-decoration: none;
+    display: flex;
+    align-items: baseline;
+    gap: 0.05em;
+  }
+
+  .nav-mark span.dot-mark {
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin: 0 0.15em;
+    align-self: center;
+    transform: translateY(-2px);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .nav-links a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .nav-links a:hover { color: var(--ink); }
+
+  .nav-cta {
+    padding: 0.55rem 1.25rem;
+    border: 1px solid var(--ink);
+    color: var(--ink) !important;
+    transition: all 0.25s ease;
+  }
+
+  .nav-cta:hover { background: var(--ink); color: var(--paper) !important; }
+
+  /* Hero - reframed as publication masthead */
+  .masthead {
+    min-height: 100vh;
+    padding: 8rem 2.5rem 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  .masthead-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .masthead-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 4rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .masthead-meta-left, .masthead-meta-right {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .masthead-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: end;
+  }
+
+  .number-block {
+    opacity: 0;
+    animation: fadeUp 1s 0.4s forwards;
+  }
+
+  .number {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(7rem, 16vw, 14rem);
+    line-height: 0.85;
+    letter-spacing: -0.045em;
+    color: var(--ink);
+    font-feature-settings: "lnum";
+    display: flex;
+    align-items: baseline;
+  }
+
+  .number .seventeen, .number .o-six {
+    display: inline-block;
+  }
+
+  .number .num-dot {
+    display: inline-block;
+    width: 0.13em;
+    height: 0.13em;
+    background: var(--accent);
+    border-radius: 50%;
+    margin: 0 0.05em;
+    align-self: flex-end;
+    transform: translateY(-0.18em);
+  }
+
+  .studio-mark {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    color: var(--accent);
+    letter-spacing: -0.01em;
+    margin-top: 0.25rem;
+    opacity: 0;
+    animation: fadeUp 1s 0.6s forwards;
+  }
+
+  .number-caption {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 2rem;
+    line-height: 1.6;
+    opacity: 0;
+    animation: fadeUp 1s 0.8s forwards;
+  }
+
+  .masthead-statement {
+    padding-bottom: 1rem;
+    opacity: 0;
+    animation: fadeUp 1s 1s forwards;
+  }
+
+  .statement-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+  }
+
+  .statement {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(1.4rem, 2.4vw, 2rem);
+    line-height: 1.3;
+    color: var(--ink);
+    letter-spacing: -0.018em;
+    max-width: 36ch;
+  }
+
+  .statement em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .masthead-footer {
+    max-width: 1400px;
+    margin: 4rem auto 0;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    width: 100%;
+    opacity: 0;
+    animation: fadeUp 1s 1.2s forwards;
+  }
+
+  .masthead-footer strong {
+    display: block;
+    color: var(--ink);
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    margin-top: 0.4rem;
+  }
+
+  /* Section structure */
+  section {
+    padding: 7rem 2.5rem;
+    position: relative;
+  }
+
+  .section-inner { max-width: 1400px; margin: 0 auto; }
+
+  .section-header {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 4rem;
+    margin-bottom: 5rem;
+    align-items: start;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .section-marker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    line-height: 1.6;
+  }
+
+  .section-marker strong {
+    display: block;
+    color: var(--muted);
+    font-weight: 400;
+    margin-top: 0.4rem;
+  }
+
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(2.2rem, 4.2vw, 3.6rem);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+  }
+
+  .section-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  /* The Living Essay */
+  .essay {
+    background: var(--paper);
+    border-top: 4px double var(--ink);
+    border-bottom: 4px double var(--ink);
+  }
+
+  .essay-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--rule);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .essay-meta strong {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .essay-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+    max-width: 18ch;
+  }
+
+  .essay-title em { font-style: italic; color: var(--accent); }
+
+  .essay-subtitle {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.2rem, 2vw, 1.6rem);
+    line-height: 1.4;
+    color: var(--muted);
+    margin-bottom: 4rem;
+    max-width: 50ch;
+    letter-spacing: -0.005em;
+  }
+
+  .essay-body {
+    max-width: 38rem;
+    margin: 0 auto;
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 1.18rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    letter-spacing: -0.005em;
+  }
+
+  .essay-body p {
+    margin-bottom: 1.6rem;
+    text-indent: 0;
+  }
+
+  .essay-body p.lead {
+    font-size: 1.4rem;
+    line-height: 1.55;
+    color: var(--ink);
+    margin-bottom: 2.5rem;
+    letter-spacing: -0.012em;
+  }
+
+  .essay-body p.lead::first-letter {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 4.5rem;
+    float: left;
+    line-height: 0.9;
+    margin: 0.1em 0.15em 0 -0.05em;
+    color: var(--accent);
+  }
+
+  .essay-body em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .essay-body .pullquote {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.6rem;
+    line-height: 1.4;
+    color: var(--ink);
+    margin: 3rem 0;
+    padding: 0 0 0 2rem;
+    border-left: 2px solid var(--accent);
+    letter-spacing: -0.01em;
+  }
+
+  .essay-divider {
+    text-align: center;
+    margin: 3rem 0;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 1em;
+    font-size: 0.7rem;
+  }
+
+  .essay-signature {
+    margin-top: 5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--rule);
+    max-width: 38rem;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .essay-signature strong {
+    display: block;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1rem;
+    letter-spacing: 0.01em;
+    text-transform: none;
+    color: var(--ink);
+    margin-top: 0.3rem;
+  }
+
+  /* Method as scholarly TOC */
+  .method-list { border-top: 1px solid var(--ink); }
+
+  .method-item {
+    display: grid;
+    grid-template-columns: 100px 1fr 2fr;
+    gap: 3rem;
+    padding: 2.5rem 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: baseline;
+    cursor: pointer;
+    transition: padding 0.3s ease, background 0.3s ease;
+  }
+
+  .method-item:hover { padding-left: 1rem; background: var(--paper-warm); }
+  .method-item:hover .method-name { color: var(--accent); }
+
+  .method-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+  }
+
+  .method-num strong {
+    display: block;
+    color: var(--accent);
+    font-weight: 500;
+    margin-top: 0.2rem;
+  }
+
+  .method-name {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(1.4rem, 2.3vw, 2rem);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--ink);
+    transition: color 0.3s ease;
+  }
+
+  .method-name em {
+    font-style: italic;
+    color: var(--muted);
+    font-weight: 400;
+    font-size: 0.65em;
+    display: block;
+    margin-top: 0.4rem;
+    letter-spacing: 0.02em;
+  }
+
+  .method-desc {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 50ch;
+  }
+
+  /* The annotated paper - new section */
+  .annotated {
+    background: var(--paper-warm);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .annotated-intro {
+    max-width: 60ch;
+    margin: 0 auto 4rem;
+    text-align: center;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    letter-spacing: -0.005em;
+  }
+
+  .annotation-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 4rem;
+    padding-bottom: 4rem;
+    border-bottom: 1px solid var(--rule);
+    align-items: start;
+  }
+
+  .annotation-block:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  .annotation-original {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: var(--ink);
+    background: var(--paper);
+    padding: 2rem;
+    border-left: 3px solid var(--ink);
+  }
+
+  .annotation-original .quote-mark {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .annotation-commentary {
+    padding: 0 1rem;
+  }
+
+  .annotation-commentary-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  .annotation-commentary p {
+    font-family: 'Fraunces', serif;
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    letter-spacing: -0.005em;
+  }
+
+  .annotation-commentary em { font-style: italic; color: var(--accent); }
+
+  /* Reading list */
+  .reading {
+    background: var(--paper);
+  }
+
+  .reading-intro {
+    max-width: 55ch;
+    margin: 0 auto 5rem;
+    text-align: center;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+
+  .reading-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    border-top: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .reading-item {
+    padding: 2.5rem 2rem;
+    border-bottom: 1px solid var(--rule);
+    border-right: 1px solid var(--rule);
+  }
+
+  .reading-item:nth-child(2n) { border-right: none; }
+  .reading-item:nth-last-child(-n+2) { border-bottom: none; }
+
+  .reading-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .reading-item-author {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 0.95rem;
+    color: var(--accent);
+    text-transform: none;
+    letter-spacing: 0.01em;
+  }
+
+  .reading-item-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 1.4rem;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+  }
+
+  .reading-item-note {
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+
+  /* Timeline of Attention - the visual moment */
+  .timeline {
+    background: var(--paper-warm);
+    padding: 7rem 2.5rem;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .timeline-intro {
+    max-width: 60ch;
+    margin: 0 auto 5rem;
+    text-align: center;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    letter-spacing: -0.005em;
+  }
+
+  .timeline-svg-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: var(--paper);
+    padding: 4rem 3rem;
+    border: 1px solid var(--rule);
+    box-shadow: 2px 2px 0 var(--paper-deep);
+  }
+
+  .timeline-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .timeline-caption {
+    max-width: 60ch;
+    margin: 3rem auto 0;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .timeline-caption strong {
+    display: block;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Notes from the Field */
+  .notes {
+    background: var(--paper);
+  }
+
+  .notes-intro {
+    max-width: 60ch;
+    margin: 0 auto 5rem;
+    text-align: center;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    letter-spacing: -0.005em;
+  }
+
+  .notes-list {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .note {
+    padding: 3rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .note:first-child {
+    border-top: 2px solid var(--ink);
+  }
+
+  .note:last-child {
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .note-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .note-meta-date {
+    color: var(--accent);
+  }
+
+  .note-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 1.5rem;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin-bottom: 1.25rem;
+    max-width: 30ch;
+  }
+
+  .note-body {
+    font-family: 'Fraunces', serif;
+    font-size: 1.08rem;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    letter-spacing: -0.005em;
+    max-width: 60ch;
+  }
+
+  .note-body em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .note-tag {
+    display: inline-block;
+    margin-top: 1.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-left: 1rem;
+    border-left: 2px solid var(--accent);
+  }
+
+  /* Position section - editorial manifesto break */
+  .position {
+    background: var(--paper-warm);
+    padding: 9rem 2.5rem;
+    border-top: 4px double var(--ink);
+    border-bottom: 4px double var(--ink);
+    position: relative;
+  }
+
+  .position-statement {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(1.7rem, 3vw, 2.4rem);
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    max-width: 30ch;
+    border-left: 3px solid var(--accent);
+    padding-left: 2rem;
+    margin-bottom: 5rem;
+  }
+
+  .position-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    border-top: 2px solid var(--ink);
+  }
+
+  .position-card {
+    padding: 3rem 3rem 3rem 0;
+    border-bottom: 1px solid var(--ink);
+    background: var(--paper-warm);
+  }
+
+  .position-card:nth-child(odd) {
+    padding-right: 4rem;
+    border-right: 1px solid var(--ink);
+  }
+
+  .position-card:nth-child(even) { padding-left: 4rem; }
+
+  .position-card:nth-last-child(-n+2) { border-bottom: none; }
+
+  .position-card-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  .position-card-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin-bottom: 0.85rem;
+  }
+
+  .position-card-body {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  /* Voices */
+  .voices { padding: 7rem 2.5rem; background: var(--paper); }
+
+  .voices-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    margin-top: 4rem;
+  }
+
+  .voice-card {
+    border-top: 2px solid var(--ink);
+    padding-top: 2rem;
+  }
+
+  .voice-name {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 2.2rem;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  .voice-role {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-top: 0.5rem;
+    margin-bottom: 1.3rem;
+  }
+
+  .voice-bio {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  /* Closing */
+  .closing {
+    padding: 11rem 2.5rem;
+    text-align: center;
+    background: var(--paper);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .closing::before {
+    content: '17·06';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Fraunces', serif;
+    font-weight: 200;
+    font-size: clamp(15rem, 38vw, 38rem);
+    color: var(--paper-warm);
+    line-height: 1;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.7;
+    letter-spacing: -0.05em;
+  }
+
+  .closing-inner { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; }
+
+  .closing-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 2rem;
+  }
+
+  .closing-headline {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    max-width: 22ch;
+    margin: 0 auto 2.5rem;
+  }
+
+  .closing-headline em { font-style: italic; color: var(--accent); }
+
+  .closing-meta {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--muted);
+    margin-bottom: 3rem;
+    max-width: 40ch;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+  }
+
+  .closing-button {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid var(--ink);
+  }
+
+  .closing-button:hover { background: var(--accent); border-color: var(--accent); }
+
+  /* Footer */
+  footer {
+    padding: 4rem 2.5rem 3rem;
+    border-top: 1px solid var(--rule);
+    background: var(--paper);
+  }
+
+  .footer-grid {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .footer-brand {
+    font-family: 'Fraunces', serif;
+    font-size: 1.8rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: baseline;
+    gap: 0.05em;
+  }
+
+  .footer-brand .footer-dot {
+    width: 4px;
+    height: 4px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin: 0 0.15em;
+    align-self: center;
+    transform: translateY(-3px);
+    display: inline-block;
+  }
+
+  .footer-tagline {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--muted);
+    margin-top: 0.6rem;
+    max-width: 32ch;
+    line-height: 1.5;
+  }
+
+  .footer-col h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  .footer-col a {
+    display: block;
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    transition: color 0.2s ease;
+  }
+
+  .footer-col a:hover { color: var(--accent); }
+
+  .footer-bottom {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-top: 2rem;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .masthead-grid,
+    .section-header,
+    .annotation-block,
+    .position-grid,
+    .voices-grid,
+    .footer-grid,
+    .reading-grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+
+    .position-card:nth-child(odd) { padding-right: 0; border-right: none; }
+    .position-card:nth-child(even) { padding-left: 0; }
+
+    .reading-item, .reading-item:nth-child(2n) {
+      border-right: none;
+      border-bottom: 1px solid var(--rule);
+    }
+    .reading-item:last-child { border-bottom: none; }
+
+    .nav-links a:not(.nav-cta) { display: none; }
+
+    .method-item {
+      grid-template-columns: 60px 1fr;
+      gap: 1.5rem;
+    }
+    .method-desc { grid-column: 2; }
+
+    .masthead-meta {
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: start;
+    }
+
+    .masthead-footer {
+      flex-direction: column;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    section { padding: 5rem 1.5rem; }
+    .masthead { padding: 7rem 1.5rem 3rem; }
+    nav { padding: 1.25rem 1.5rem; }
+
+    .timeline-svg-wrapper { padding: 2rem 1rem; }
+    .timeline { padding: 5rem 1.5rem; }
+
+    .notes { padding: 5rem 1.5rem; }
+    .note { padding: 2rem 0; }
+    .note-title { font-size: 1.25rem; }
+    .note-body { font-size: 1rem; }
+    .note-meta {
+      flex-direction: column;
+      gap: 0.4rem;
+      align-items: start;
+    }
+
+    .essay-body { font-size: 1.08rem; }
+    .essay-body p.lead { font-size: 1.2rem; }
+    .essay-body p.lead::first-letter { font-size: 3.5rem; }
+
+    .essay-signature {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+
+  /* True mobile breakpoint */
+  @media (max-width: 640px) {
+    nav {
+      padding: 1rem 1.25rem;
+    }
+
+    .nav-mark {
+      font-size: 1.2rem;
+    }
+
+    .masthead {
+      padding: 6rem 1.25rem 2.5rem;
+      min-height: auto;
+    }
+
+    .masthead-meta {
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      padding-bottom: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .number {
+      font-size: clamp(5rem, 22vw, 7rem);
+    }
+
+    .studio-mark {
+      font-size: 1.4rem;
+    }
+
+    .number-caption {
+      font-size: 0.6rem;
+      margin-top: 1.5rem;
+    }
+
+    .statement {
+      font-size: 1.25rem;
+    }
+
+    .masthead-footer {
+      margin-top: 3rem;
+      font-size: 0.6rem;
+    }
+
+    section {
+      padding: 4rem 1.25rem;
+    }
+
+    .section-header {
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+      padding-bottom: 1.5rem;
+    }
+
+    .section-marker {
+      font-size: 0.6rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 7vw, 2.4rem);
+    }
+
+    /* Timeline stacks readably on phone */
+    .timeline {
+      padding: 4rem 1.25rem;
+    }
+
+    .timeline-svg-wrapper {
+      padding: 1.5rem 0.5rem;
+      box-shadow: none;
+      border: 1px solid var(--rule);
+    }
+
+    .timeline-svg {
+      min-width: 600px;
+    }
+
+    .timeline-svg-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 0 -0.5rem;
+      padding: 0 0.5rem;
+    }
+
+    .timeline-svg-scroll::after {
+      content: 'scroll horizontally to view →';
+      display: block;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 1rem;
+    }
+
+    .timeline-intro,
+    .timeline-caption {
+      font-size: 0.95rem;
+    }
+
+    .timeline-caption {
+      font-size: 0.65rem;
+    }
+
+    /* Essay tighter on phone */
+    .essay {
+      padding: 4rem 1.25rem;
+    }
+
+    .essay-meta {
+      font-size: 0.6rem;
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: start;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+    }
+
+    .essay-title {
+      font-size: clamp(2rem, 9vw, 3rem);
+    }
+
+    .essay-subtitle {
+      font-size: 1.1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .essay-body {
+      font-size: 1.02rem;
+      line-height: 1.7;
+    }
+
+    .essay-body p.lead {
+      font-size: 1.1rem;
+    }
+
+    .essay-body p.lead::first-letter {
+      font-size: 3rem;
+      margin: 0.05em 0.1em 0 0;
+    }
+
+    .essay-body .pullquote {
+      font-size: 1.25rem;
+      padding-left: 1.25rem;
+      margin: 2rem 0;
+    }
+
+    /* Method tighter on phone */
+    .method-item {
+      grid-template-columns: 45px 1fr;
+      gap: 1rem;
+      padding: 2rem 0;
+    }
+
+    .method-num {
+      font-size: 0.6rem;
+    }
+
+    .method-name {
+      font-size: 1.2rem;
+    }
+
+    .method-desc {
+      font-size: 0.92rem;
+    }
+
+    /* Annotated paper */
+    .annotation-block {
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+      padding-bottom: 3rem;
+    }
+
+    .annotation-original {
+      padding: 1.5rem;
+      font-size: 0.78rem;
+    }
+
+    .annotation-commentary {
+      padding: 0;
+    }
+
+    .annotation-commentary p {
+      font-size: 1rem;
+    }
+
+    /* Notes */
+    .notes {
+      padding: 4rem 1.25rem;
+    }
+
+    .note {
+      padding: 2rem 0;
+    }
+
+    .note-title {
+      font-size: 1.2rem;
+    }
+
+    .note-body {
+      font-size: 0.98rem;
+    }
+
+    .note-tag {
+      font-size: 0.55rem;
+    }
+
+    /* Reading list */
+    .reading-item {
+      padding: 2rem 1.25rem;
+    }
+
+    .reading-item-header {
+      flex-direction: column;
+      gap: 0.3rem;
+      align-items: start;
+    }
+
+    .reading-item-title {
+      font-size: 1.2rem;
+    }
+
+    .reading-item-note {
+      font-size: 0.88rem;
+    }
+
+    /* Position */
+    .position {
+      padding: 6rem 1.25rem;
+    }
+
+    .position-statement {
+      font-size: 1.4rem;
+      padding-left: 1.25rem;
+      margin-bottom: 3rem;
+    }
+
+    .position-card {
+      padding: 2rem 0;
+    }
+
+    .position-card-title {
+      font-size: 1.25rem;
+    }
+
+    /* Voices */
+    .voices {
+      padding: 4rem 1.25rem;
+    }
+
+    .voice-name {
+      font-size: 1.7rem;
+    }
+
+    /* Closing */
+    .closing {
+      padding: 7rem 1.25rem;
+    }
+
+    .closing::before {
+      font-size: clamp(10rem, 50vw, 18rem);
+    }
+
+    .closing-headline {
+      font-size: clamp(1.8rem, 8vw, 2.5rem);
+    }
+
+    .closing-meta {
+      font-size: 1rem;
+    }
+
+    .closing-button {
+      padding: 0.85rem 2rem;
+      font-size: 0.65rem;
+    }
+
+    /* Footer */
+    footer {
+      padding: 3rem 1.25rem 2rem;
+    }
+
+    .footer-grid {
+      gap: 2rem;
+    }
+
+    .footer-brand {
+      font-size: 1.5rem;
+    }
+
+    .footer-bottom {
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: start;
+      font-size: 0.55rem;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<nav id="nav">
+  <a href="#" class="nav-mark">17<span class="dot-mark"></span>06</a>
+  <div class="nav-links">
+    <a href="#essay">Essay</a>
+    <a href="#method">Method</a>
+    <a href="#paper">Paper</a>
+    <a href="#notes">Notes</a>
+    <a href="#reading">Reading</a>
+    <a href="#voices">Voices</a>
+    <a href="#begin" class="nav-cta">Begin</a>
+  </div>
+</nav>
+
+<header class="masthead">
+  <div class="masthead-inner">
+
+    <div class="masthead-meta">
+      <div class="masthead-meta-left">
+        <span>Vol. I</span>
+        <span class="dot dot-accent"></span>
+        <span>MMXXVI</span>
+      </div>
+      <div class="masthead-meta-right">
+        <span>London</span>
+        <span class="dot"></span>
+        <span>Edinburgh</span>
+      </div>
+    </div>
+
+    <div class="masthead-grid">
+
+      <div class="number-block">
+        <div class="number date-num">
+          <span class="seventeen">17</span><span class="num-dot"></span><span class="o-six">06</span>
+        </div>
+        <div class="studio-mark">Studio</div>
+        <div class="number-caption">
+          arXiv:1706.03762<br>
+          Vaswani et al.<span class="dot"></span>June 2017<br>
+          The paper that opened the era
+        </div>
+      </div>
+
+      <div class="masthead-statement">
+        <div class="statement-eyebrow">A house for the intelligence era</div>
+        <p class="statement">
+          Most of what is written about artificial intelligence misses the point. <em>The story is not the technology. The story is the people, and the work, and what survives the transition.</em>
+        </p>
+      </div>
+
+    </div>
+
+    <div class="masthead-footer">
+      <div>
+        Founded in service of the next era of work
+      </div>
+      <div>
+        Reading time, an hour<span class="dot"></span>or a year
+      </div>
+    </div>
+
+  </div>
+</header>
+
+<!-- THE LIVING ESSAY -->
+<section class="essay" id="essay">
+  <div class="section-inner">
+
+    <div class="essay-meta">
+      <div>
+        <span>Essay № 01</span>
+        <span class="dot dot-accent"></span>
+        <span>Spring MMXXVI</span>
+      </div>
+      <div>
+        <strong>Featured</strong>
+      </div>
+    </div>
+
+    <h1 class="essay-title">Attention Is All You <em>Need</em>.</h1>
+    <p class="essay-subtitle">
+      A field changed when eight researchers focused on what mattered. The same lesson now applies to organisations.
+    </p>
+
+    <div class="essay-body">
+
+      <p class="lead">In June of 2017, eight researchers at Google published a paper that quietly changed everything. They argued the field had been building the wrong machinery for years. You did not need recurrent networks. You did not need convolutions. You needed attention. The architecture they proposed was simpler than what had come before, not more complex. The thesis was that focus on the right thing was more powerful than the elaboration of the wrong things.</p>
+
+      <p>Eight years later, every modern AI system descends from that paper. The transformer architecture they introduced underpins every model you have heard of. The lesson, however, is not really about machine learning. It is about how progress actually happens in any field. Most of the time, it happens by removing complexity rather than adding it. By attending to what matters and ignoring what does not.</p>
+
+      <p>We are at the same moment again, this time with organisations.</p>
+
+      <p>The intelligence era is arriving, faster than most leaders are prepared for. Every company we work with is being asked to deploy agents into their operations, redesign their workflows, rethink their headcount, restructure their org charts. Almost none of them know how. The big consultancies sell strategy decks that gather dust. The system integrators run two-year projects that miss the point by the time they ship. The AI-native firms speak in tokens and embeddings rather than outcomes. Everywhere, the noise is overwhelming. And in the noise, the actual question gets lost.</p>
+
+      <p class="pullquote">The actual question is not how to deploy more technology. It is how to focus an organisation on what genuinely matters, and to design the agents and the people and the work around that focus.</p>
+
+      <p>This is what attention means in the context of an organisation. Not the cognitive load on your inbox. Not the executive bandwidth lost to meetings. Attention is the firm's collective capacity to direct its energy at the things that produce real outcomes for the people it exists to serve. Most companies spend their attention badly. They optimise the visible at the expense of the meaningful. They mistake activity for progress. They confuse the instruments of work, the apps and the org charts and the quarterly metrics, with the work itself.</p>
+
+      <p>The agentic era will reward the organisations that can focus their attention on what matters. It will punish the ones that cannot. This is not a technology problem. It is a leadership problem, an organisational design problem, a culture problem. The technology is the smaller half of the work.</p>
+
+      <div class="essay-divider">§ § §</div>
+
+      <p>We named this firm 1706 Studio because we believe the parallel is real. The paper that opened the AI era was not the most technically complex piece of research published that year. It was the simplest one with the right insight. The firms that win the next decade will not be the ones with the most technology. They will be the ones with the clearest attention.</p>
+
+      <p>Our work is to help leaders find that clarity. Not to sell them more software. Not to add to the noise. To help them see, with care, what genuinely matters in their organisation right now, and to design the people, the agents, and the work around that.</p>
+
+      <p>We believe the human is at the centre. Always. The agents serve the work. The work serves the people. The firm exists to design the relationships between all three.</p>
+
+      <p>This essay will be replaced quarterly with new thinking. The reading list grows over time. The annotated paper is below, for those who want to read what we read. None of this is service. It is an open invitation to think with us.</p>
+
+      <p>If any of it lands, you know how to find us.</p>
+
+    </div>
+
+    <div class="essay-signature">
+      <div>
+        Signed
+        <strong>Craig Hepburn</strong>
+      </div>
+      <div>
+        On behalf of
+        <strong>1706 Studio</strong>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TIMELINE OF ATTENTION - the visual moment -->
+<section class="timeline">
+  <div class="section-inner">
+
+    <div class="section-header">
+      <div class="section-marker">
+        Frontispiece
+        <strong>A timeline of attention</strong>
+      </div>
+      <h2 class="section-title">Two histories, <em>converging.</em></h2>
+    </div>
+
+    <p class="timeline-intro">
+      Attention has been studied seriously for one hundred and thirty-five years. The field of artificial intelligence discovered it formally in 2017. The two lineages converge on the same question and answer it from opposite ends. Our work sits at the join.
+    </p>
+
+    <div class="timeline-svg-wrapper">
+      <div class="timeline-svg-scroll">
+      <svg class="timeline-svg" viewBox="0 0 1100 520" xmlns="http://www.w3.org/2000/svg">
+        <!-- Definitions -->
+        <defs>
+          <filter id="rough" x="-2%" y="-2%" width="104%" height="104%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="3"/>
+            <feDisplacementMap in="SourceGraphic" scale="1.5"/>
+          </filter>
+        </defs>
+
+        <!-- Top track label -->
+        <text x="40" y="55" font-family="JetBrains Mono, monospace" font-size="11" fill="#6B5F54" letter-spacing="2.5">
+          THE COGNITIVE TRADITION
+        </text>
+        <text x="40" y="72" font-family="Fraunces, serif" font-style="italic" font-size="13" fill="#9C8F80">
+          philosophy, psychology, neuroscience
+        </text>
+
+        <!-- Top track line -->
+        <line x1="40" y1="120" x2="1060" y2="120" stroke="#1A1614" stroke-width="1" filter="url(#rough)"/>
+
+        <!-- Top track points -->
+        <!-- William James 1890 -->
+        <circle cx="80" cy="120" r="4" fill="#1A1614"/>
+        <line x1="80" y1="120" x2="80" y2="148" stroke="#1A1614" stroke-width="0.8"/>
+        <text x="80" y="170" font-family="Fraunces, serif" font-weight="500" font-size="14" fill="#1A1614" text-anchor="middle">William James</text>
+        <text x="80" y="188" font-family="Fraunces, serif" font-style="italic" font-size="11" fill="#6B5F54" text-anchor="middle">Principles of Psychology</text>
+        <text x="80" y="204" font-family="JetBrains Mono, monospace" font-size="10" fill="#8B2A1E" text-anchor="middle">1890</text>
+
+        <!-- Donald Broadbent 1958 -->
+        <circle cx="290" cy="120" r="4" fill="#1A1614"/>
+        <line x1="290" y1="120" x2="290" y2="148" stroke="#1A1614" stroke-width="0.8"/>
+        <text x="290" y="170" font-family="Fraunces, serif" font-weight="500" font-size="14" fill="#1A1614" text-anchor="middle">Donald Broadbent</text>
+        <text x="290" y="188" font-family="Fraunces, serif" font-style="italic" font-size="11" fill="#6B5F54" text-anchor="middle">filter theory of attention</text>
+        <text x="290" y="204" font-family="JetBrains Mono, monospace" font-size="10" fill="#8B2A1E" text-anchor="middle">1958</text>
+
+        <!-- Daniel Kahneman 1973 -->
+        <circle cx="490" cy="120" r="4" fill="#1A1614"/>
+        <line x1="490" y1="120" x2="490" y2="148" stroke="#1A1614" stroke-width="0.8"/>
+        <text x="490" y="170" font-family="Fraunces, serif" font-weight="500" font-size="14" fill="#1A1614" text-anchor="middle">Daniel Kahneman</text>
+        <text x="490" y="188" font-family="Fraunces, serif" font-style="italic" font-size="11" fill="#6B5F54" text-anchor="middle">Attention and Effort</text>
+        <text x="490" y="204" font-family="JetBrains Mono, monospace" font-size="10" fill="#8B2A1E" text-anchor="middle">1973</text>
+
+        <!-- McGilchrist 2009 -->
+        <circle cx="780" cy="120" r="4" fill="#1A1614"/>
+        <line x1="780" y1="120" x2="780" y2="148" stroke="#1A1614" stroke-width="0.8"/>
+        <text x="780" y="170" font-family="Fraunces, serif" font-weight="500" font-size="14" fill="#1A1614" text-anchor="middle">Iain McGilchrist</text>
+        <text x="780" y="188" font-family="Fraunces, serif" font-style="italic" font-size="11" fill="#6B5F54" text-anchor="middle">The Master and His Emissary</text>
+        <text x="780" y="204" font-family="JetBrains Mono, monospace" font-size="10" fill="#8B2A1E" text-anchor="middle">2009</text>
+
+        <!-- The convergence point on top -->
+        <circle cx="920" cy="120" r="6" fill="none" stroke="#8B2A1E" stroke-width="1.5"/>
+        <circle cx="920" cy="120" r="3" fill="#8B2A1E"/>
+
+        <!-- Diagonal lines toward convergence -->
+        <line x1="920" y1="125" x2="920" y2="260" stroke="#8B2A1E" stroke-width="1" stroke-dasharray="3,3"/>
+
+        <!-- Convergence label -->
+        <text x="920" y="232" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="2" fill="#8B2A1E" text-anchor="middle">THE JOIN</text>
+        <text x="920" y="250" font-family="Fraunces, serif" font-style="italic" font-size="13" fill="#1A1614" text-anchor="middle">17·06.2017</text>
+
+        <!-- Centre divider line -->
+        <line x1="40" y1="290" x2="1060" y2="290" stroke="#C8BBA8" stroke-width="0.5" stroke-dasharray="2,4"/>
+
+        <!-- Bottom track label -->
+        <text x="40" y="320" font-family="JetBrains Mono, monospace" font-size="11" fill="#6B5F54" letter-spacing="2.5">
+          THE MACHINE TRADITION
+        </text>
+        <text x="40" y="337" font-family="Fraunces, serif" font-style="italic" font-size="13" fill="#9C8F80">
+          machine learning, agentic systems
+        </text>
+
+        <!-- Bottom track line -->
+        <line x1="40" y1="395" x2="1060" y2="395" stroke="#1A1614" stroke-width="1" filter="url(#rough)"/>
+
+        <!-- Bottom track points -->
+        <!-- Bahdanau 2014 -->
+        <circle cx="700" cy="395" r="4" fill="#1A1614"/>
+        <line x1="700" y1="395" x2="700" y2="372" stroke="#1A1614" stroke-width="0.8"/>
+        <text x="700" y="362" font-family="JetBrains Mono, monospace" font-size="10" fill="#8B2A1E" text-anchor="middle">2014</text>
+        <text x="700" y="346" font-family="Fraunces, serif" font-weight="500" font-size="14" fill="#1A1614" text-anchor="middle">Bahdanau et al.</text>
+        <text x="700" y="328" font-family="Fraunces, serif" font-style="italic" font-size="11" fill="#6B5F54" text-anchor="middle">attention in neural translation</text>
+
+        <!-- Vaswani 2017 - the convergence on bottom -->
+        <circle cx="920" cy="395" r="6" fill="none" stroke="#8B2A1E" stroke-width="1.5"/>
+        <circle cx="920" cy="395" r="3" fill="#8B2A1E"/>
+        <line x1="920" y1="395" x2="920" y2="365" stroke="#8B2A1E" stroke-width="0.8"/>
+        <text x="920" y="355" font-family="JetBrains Mono, monospace" font-size="10" fill="#8B2A1E" text-anchor="middle" font-weight="500">2017</text>
+        <text x="920" y="338" font-family="Fraunces, serif" font-weight="500" font-size="14" fill="#1A1614" text-anchor="middle">Vaswani et al.</text>
+        <text x="920" y="320" font-family="Fraunces, serif" font-style="italic" font-size="11" fill="#8B2A1E" text-anchor="middle">Attention Is All You Need</text>
+
+        <!-- Now -->
+        <circle cx="1020" cy="395" r="4" fill="#1A1614"/>
+        <line x1="1020" y1="395" x2="1020" y2="420" stroke="#1A1614" stroke-width="0.8"/>
+        <text x="1020" y="442" font-family="Fraunces, serif" font-weight="500" font-size="14" fill="#1A1614" text-anchor="middle">Now</text>
+        <text x="1020" y="460" font-family="Fraunces, serif" font-style="italic" font-size="11" fill="#6B5F54" text-anchor="middle">the agentic era</text>
+
+        <!-- Sweeping arrow from convergence outward -->
+        <path d="M 925 395 Q 970 410 1015 410" fill="none" stroke="#8B2A1E" stroke-width="1" stroke-dasharray="2,3"/>
+
+        <!-- Annotation about the firm -->
+        <line x1="500" y1="290" x2="500" y2="290" stroke="#8B2A1E"/>
+
+        <!-- Footer text -->
+        <text x="550" y="498" font-family="Fraunces, serif" font-style="italic" font-size="13" fill="#1A1614" text-anchor="middle">
+          The same question asked from opposite ends. The same answer arriving in the same year.
+        </text>
+      </svg>
+      </div>
+    </div>
+
+    <p class="timeline-caption">
+      <strong>One hundred and thirty-five years of attention</strong>
+      The cognitive tradition asked how the human mind directs focus.<br>
+      The machine tradition asked how a system might learn to focus its own.<br>
+      Both arrived at the same answer in 2017.
+    </p>
+
+  </div>
+</section>
+
+<!-- METHOD -->
+<section id="method">
+  <div class="section-inner">
+
+    <div class="section-header">
+      <div class="section-marker">
+        § 02
+        <strong>The method</strong>
+      </div>
+      <h2 class="section-title">The architecture of <em>attention,</em> applied to organisations.</h2>
+    </div>
+
+    <div class="method-list">
+
+      <div class="method-item">
+        <div class="method-num">/01<strong>i.</strong></div>
+        <div class="method-name">Attention Audit <em>where leadership focus actually goes</em></div>
+        <div class="method-desc">Most companies spend their attention on the wrong things. The first job is to see clearly where it goes today and where it should go tomorrow.</div>
+      </div>
+
+      <div class="method-item">
+        <div class="method-num">/02<strong>ii.</strong></div>
+        <div class="method-name">The Encoder <em>understanding the organisation as it is</em></div>
+        <div class="method-desc">We absorb the operating reality, encode it into a working model, and represent it back to leadership in a form they can act on.</div>
+      </div>
+
+      <div class="method-item">
+        <div class="method-num">/03<strong>iii.</strong></div>
+        <div class="method-name">Multi-Head <em>parallel perspectives, integrated</em></div>
+        <div class="method-desc">Specialists working in parallel from different angles, operational, financial, cultural, technical, market, synthesised into one coherent view.</div>
+      </div>
+
+      <div class="method-item">
+        <div class="method-num">/04<strong>iv.</strong></div>
+        <div class="method-name">The Decoder <em>strategy generated from understanding</em></div>
+        <div class="method-desc">Where understanding becomes action. The operating model, the deployment plan, the things that actually need to ship.</div>
+      </div>
+
+      <div class="method-item">
+        <div class="method-num">/05<strong>v.</strong></div>
+        <div class="method-name">Residual Connections <em>preserving what already works</em></div>
+        <div class="method-desc">We do not tear down. The capability you already have skips past the bottleneck of redesign and continues forward, intact.</div>
+      </div>
+
+      <div class="method-item">
+        <div class="method-num">/06<strong>vi.</strong></div>
+        <div class="method-name">Positional Encoding <em>context, timing, and place</em></div>
+        <div class="method-desc">Generic advice fails because it is not positioned to a specific moment. Every recommendation is encoded to where you actually are.</div>
+      </div>
+
+      <div class="method-item">
+        <div class="method-num">/07<strong>vii.</strong></div>
+        <div class="method-name">Layer Normalisation <em>stable ground for deployment</em></div>
+        <div class="method-desc">Agentic systems land on stable ground or they do not land at all. We normalise the operational layer so the deployment is real, not performative.</div>
+      </div>
+
+      <div class="method-item">
+        <div class="method-num">/08<strong>viii.</strong></div>
+        <div class="method-name">The Transformer Block <em>integrated, repeatable, alive</em></div>
+        <div class="method-desc">When all of the above are working together, the organisation has a complete unit that can repeatedly transform inputs into outputs. That is the work.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ANNOTATED PAPER -->
+<section class="annotated" id="paper">
+  <div class="section-inner">
+
+    <div class="section-header">
+      <div class="section-marker">
+        § 03
+        <strong>The annotated paper</strong>
+      </div>
+      <h2 class="section-title">Reading <em>Attention Is All You Need</em>, <br>through the lens of organisations.</h2>
+    </div>
+
+    <p class="annotated-intro">
+      The paper that opened the AI era was a research artefact. We have spent considerable time reading it as something else: a guide to how attention, hierarchy, and parallel processing might be redesigned in the organisations of the next decade. What follows is a small selection of passages from the original paper, with our commentary.
+    </p>
+
+    <div class="annotation-block">
+      <div class="annotation-original">
+        <span class="quote-mark">From the Abstract</span>
+        "The dominant sequence transduction models are based on complex recurrent or convolutional neural networks. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely."
+      </div>
+      <div class="annotation-commentary">
+        <div class="annotation-commentary-label">Our reading</div>
+        <p>
+          The first sentence of the paper is a diagnosis. The dominant approach is too complex. The second sentence is a thesis. <em>Simpler architecture, focused on the one thing that mattered (attention), would outperform.</em> Almost every successful organisational redesign we have ever seen follows this structure. Diagnose where the complexity is unnecessary, identify the one mechanism that matters, build around that. Most companies inherit elaborate machinery from a previous era and never ask whether the machinery is still doing the work.
+        </p>
+      </div>
+    </div>
+
+    <div class="annotation-block">
+      <div class="annotation-original">
+        <span class="quote-mark">Section 3.2.1</span>
+        "An attention function can be described as mapping a query and a set of key-value pairs to an output, where the query, keys, values, and output are all vectors. The output is computed as a weighted sum of the values, where the weight assigned to each value is computed by a compatibility function of the query with the corresponding key."
+      </div>
+      <div class="annotation-commentary">
+        <div class="annotation-commentary-label">Our reading</div>
+        <p>
+          This is the technical heart of the paper, and it has a remarkable organisational analogue. <em>An organisation is also a function that maps queries to outputs by weighting which information sources are most compatible with the question being asked.</em> A good organisation routes the right query to the right person with the right context, and weights their input correctly. A bad organisation routes everything to everyone and weights nothing. The transformer's contribution was to make this routing explicit, parallel, and differentiable. The same operations could redesign how decisions get made inside companies.
+        </p>
+      </div>
+    </div>
+
+    <div class="annotation-block">
+      <div class="annotation-original">
+        <span class="quote-mark">Section 3.2.2 — Multi-Head Attention</span>
+        "Instead of performing a single attention function with d_model-dimensional keys, values and queries, we found it beneficial to linearly project the queries, keys and values h times with different, learned linear projections."
+      </div>
+      <div class="annotation-commentary">
+        <div class="annotation-commentary-label">Our reading</div>
+        <p>
+          Multi-head attention is the discovery that one perspective is not enough. The model gets better when several different attention mechanisms run in parallel, each looking at the same data through a different learned lens, and the results are concatenated. <em>This is exactly how good consulting works, when it works.</em> A senior team brings several perspectives to the same problem in parallel, integrates them, and produces a synthesis that no single perspective could have reached. Most organisations operate as single-head systems. They have one dominant lens, usually financial, and miss everything the other lenses would have caught.
+        </p>
+      </div>
+    </div>
+
+    <div class="annotation-block">
+      <div class="annotation-original">
+        <span class="quote-mark">Section 3.4 — Why Attention</span>
+        "A single attention layer connects all positions with a constant number of sequentially executed operations, whereas a recurrent layer requires O(n) sequential operations. Self-attention layers are faster than recurrent layers when the sequence length is smaller than the representation dimensionality."
+      </div>
+      <div class="annotation-commentary">
+        <div class="annotation-commentary-label">Our reading</div>
+        <p>
+          Recurrent networks process information one step at a time, like a hierarchy passing memos up and down. Self-attention sees the whole context at once. <em>This is the deepest structural insight of the paper for organisational work.</em> Most companies are built on recurrent communication. Information goes up the hierarchy, gets compressed, comes back down, gets misinterpreted. The companies that will thrive in the agentic era will be the ones that flatten this. Where context is shared, where everyone sees the whole sequence, where decisions can be made closer to where the work happens.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- NOTES FROM THE FIELD -->
+<section class="notes" id="notes">
+  <div class="section-inner">
+
+    <div class="section-header">
+      <div class="section-marker">
+        § 04
+        <strong>Notes from the field</strong>
+      </div>
+      <h2 class="section-title">A small record <em>of recent work,</em> <br>told without naming names.</h2>
+    </div>
+
+    <p class="notes-intro">
+      We do not publish case studies. The work belongs to the people who commissioned it. What follows are short, anonymised notes on the kinds of questions we have been asked, and the angles we have taken on them.
+    </p>
+
+    <div class="notes-list">
+
+      <div class="note">
+        <div class="note-meta">
+          <div>Note № 01</div>
+          <div class="note-meta-date">Spring MMXXVI</div>
+        </div>
+        <h3 class="note-title">Codifying the operating model of a venture firm into agentic infrastructure.</h3>
+        <p class="note-body">
+          A venture studio asked us to help redesign itself from the inside out, around the assumption that agents would be first-class participants in its operations from day one. We did not build them an AI tool. We did something more difficult and more useful: <em>we codified the operating model of the firm into a structure that an agent could read, reason about, and act on,</em> with humans coordinating the relationships and judgement that agents cannot. The result is a chief of staff agent that holds context across the entire firm, coordinates project teams, and removes a category of friction the partners had been carrying for years.
+        </p>
+        <span class="note-tag">Operating model · Chief of staff · Friction removal</span>
+      </div>
+
+      <div class="note">
+        <div class="note-meta">
+          <div>Note № 02</div>
+          <div class="note-meta-date">Spring MMXXVI</div>
+        </div>
+        <h3 class="note-title">An executive-tier agent for a founder operating across multiple ventures.</h3>
+        <p class="note-body">
+          A founder running several companies in parallel asked us to design what an executive-tier agent might look like for someone in their position. The technical challenge was straightforward. The harder question was philosophical: <em>which decisions should remain entirely human, which should be agent-assisted, and which could be agent-led with human approval?</em> The work produced a working agent and, more importantly, a written constitution for how the founder would relate to it. The relationship turned out to matter more than the technology.
+        </p>
+        <span class="note-tag">Founder operations · Agent constitution · Human–agent relationship</span>
+      </div>
+
+      <div class="note">
+        <div class="note-meta">
+          <div>Note № 03</div>
+          <div class="note-meta-date">Spring MMXXVI</div>
+        </div>
+        <h3 class="note-title">Building agent infrastructure for a non-profit helping ordinary people use AI well.</h3>
+        <p class="note-body">
+          A US-based organisation working to help ordinary people get genuine value from AI, and to defend them against its harms, asked us to build the agentic backbone they would need. The work matters because most AI infrastructure is being built for enterprises and the wealthy. <em>Almost no one is building thoughtful tools for the people who will be most affected by the transition and least equipped to navigate it.</em> The brief was technical. The motivation was civic. We took it because the question of who AI ends up serving is the most important question in the field.
+        </p>
+        <span class="note-tag">Civic infrastructure · Defensive AI · The other 95 per cent</span>
+      </div>
+
+      <div class="note">
+        <div class="note-meta">
+          <div>Note № 04</div>
+          <div class="note-meta-date">Spring MMXXVI</div>
+        </div>
+        <h3 class="note-title">What we are learning, written down before we forget.</h3>
+        <p class="note-body">
+          A note about the work itself rather than a specific engagement. We have been struck, across every project this season, by how little of the difficulty is technical. <em>The hard part is almost always organisational, almost always about people, almost always about questions of authority and judgement that have been carried unexamined for years.</em> The agentic transition is forcing companies to be honest about how they actually work. The companies willing to look at this clearly are finding the deployments easier than they expected. The ones still arguing about model selection are finding the deployments impossible. We are taking notes.
+        </p>
+        <span class="note-tag">Methodology · Field observations · The honest work</span>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- READING LIST -->
+<section class="reading" id="reading">
+  <div class="section-inner">
+
+    <div class="section-header">
+      <div class="section-marker">
+        § 05
+        <strong>The reading list</strong>
+      </div>
+      <h2 class="section-title">What we read, <em>and why we read it.</em></h2>
+    </div>
+
+    <p class="reading-intro">
+      A short list, updated quarterly. Not a syllabus on artificial intelligence. A syllabus on people, work, attention, and the longer arc of how technology either lifts or diminishes us.
+    </p>
+
+    <div class="reading-grid">
+
+      <div class="reading-item">
+        <div class="reading-item-header">
+          <span>2009</span>
+          <span class="reading-item-author">Iain McGilchrist</span>
+        </div>
+        <div class="reading-item-title">The Master and His Emissary</div>
+        <p class="reading-item-note">Two ways the brain attends to the world. The mode you choose determines what you can see. Foundational text on why attention is the substrate of every other capacity.</p>
+      </div>
+
+      <div class="reading-item">
+        <div class="reading-item-header">
+          <span>1958</span>
+          <span class="reading-item-author">Hannah Arendt</span>
+        </div>
+        <div class="reading-item-title">The Human Condition</div>
+        <p class="reading-item-note">The distinction between labour, work, and action. Reads as if it were written for the agentic era. The most important book about what humans are for that we know of.</p>
+      </div>
+
+      <div class="reading-item">
+        <div class="reading-item-header">
+          <span>2002</span>
+          <span class="reading-item-author">Carlota Perez</span>
+        </div>
+        <div class="reading-item-title">Technological Revolutions and Financial Capital</div>
+        <p class="reading-item-note">The pattern that connects every technology revolution to the social one that follows. Helps locate where we actually are in the AI cycle.</p>
+      </div>
+
+      <div class="reading-item">
+        <div class="reading-item-header">
+          <span>1973</span>
+          <span class="reading-item-author">Peter Drucker</span>
+        </div>
+        <div class="reading-item-title">Management: Tasks, Responsibilities, Practices</div>
+        <p class="reading-item-note">The original text on knowledge work and what it asks of organisations. Drucker saw most of this fifty years ago and most companies still have not caught up.</p>
+      </div>
+
+      <div class="reading-item">
+        <div class="reading-item-header">
+          <span>2017</span>
+          <span class="reading-item-author">Vaswani et al.</span>
+        </div>
+        <div class="reading-item-title">Attention Is All You Need</div>
+        <p class="reading-item-note">The paper the firm is named for. Eight authors, eight pages, the architecture that opened the modern era of artificial intelligence. We annotate it above.</p>
+      </div>
+
+      <div class="reading-item">
+        <div class="reading-item-header">
+          <span>1972</span>
+          <span class="reading-item-author">Stafford Beer</span>
+        </div>
+        <div class="reading-item-title">Brain of the Firm</div>
+        <p class="reading-item-note">The cybernetic view of organisations. How information flows, how feedback loops actually work, how a company is more like a living system than a machine.</p>
+      </div>
+
+      <div class="reading-item">
+        <div class="reading-item-header">
+          <span>1999</span>
+          <span class="reading-item-author">Stewart Brand</span>
+        </div>
+        <div class="reading-item-title">The Clock of the Long Now</div>
+        <p class="reading-item-note">Thinking in centuries rather than quarters. The intellectual posture every senior leader needs and almost none cultivate.</p>
+      </div>
+
+      <div class="reading-item">
+        <div class="reading-item-header">
+          <span>2018</span>
+          <span class="reading-item-author">James Bridle</span>
+        </div>
+        <div class="reading-item-title">New Dark Age</div>
+        <p class="reading-item-note">The cost of mistaking computation for understanding. A counterweight to the techno-optimism that dominates AI discourse.</p>
+      </div>
+
+      <div class="reading-item">
+        <div class="reading-item-header">
+          <span>1964</span>
+          <span class="reading-item-author">Marshall McLuhan</span>
+        </div>
+        <div class="reading-item-title">Understanding Media</div>
+        <p class="reading-item-note">The medium is the message. Every new technology rewrites the human relationships around it. AI is the most consequential medium since print, and we are not yet asking the right questions about it.</p>
+      </div>
+
+      <div class="reading-item">
+        <div class="reading-item-header">
+          <span>2023</span>
+          <span class="reading-item-author">Karen Hao</span>
+        </div>
+        <div class="reading-item-title">Empire of AI</div>
+        <p class="reading-item-note">The political economy of the AI industry, told without flattery. Required reading for anyone deploying these systems into their organisation.</p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- POSITION -->
+<section class="position">
+  <div class="section-inner">
+
+    <div class="section-header">
+      <div class="section-marker">
+        § 06
+        <strong>The position</strong>
+      </div>
+      <h2 class="section-title">Human first. <em>Agent augmented.</em><br>Always in that order.</h2>
+    </div>
+
+    <p class="position-statement">
+      The future of work is not human against agent. It is not human replaced by agent. It is the human at the centre, augmented by a network of agents that handle the work below the threshold of judgement.
+    </p>
+
+    <div class="position-grid">
+
+      <div class="position-card">
+        <div class="position-card-label">What we believe</div>
+        <h3 class="position-card-title">Judgement is the asset.</h3>
+        <p class="position-card-body">The skills that survive automation are the ones that require relationship, context, and accountability. The firm builds organisations around those skills, not against them.</p>
+      </div>
+
+      <div class="position-card">
+        <div class="position-card-label">What we reject</div>
+        <h3 class="position-card-title">Headcount as a metric of seriousness.</h3>
+        <p class="position-card-body">The companies that win the next decade are not the ones with the largest headcount. They are the ones whose people do work agents cannot, supported by agents that do work people should not have to.</p>
+      </div>
+
+      <div class="position-card">
+        <div class="position-card-label">How we work</div>
+        <h3 class="position-card-title">Strategy and delivery, in the same room.</h3>
+        <p class="position-card-body">Senior advisory at the top, operational delivery underneath, with the methodology that connects them owned by the firm. No handoffs. No translation gaps. The strategy ships.</p>
+      </div>
+
+      <div class="position-card">
+        <div class="position-card-label">Why it matters</div>
+        <h3 class="position-card-title">Most agentic deployments fail.</h3>
+        <p class="position-card-body">They fail because the technical work and the organisational work happen separately. The model is right, the org is wrong. We work both layers as one.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- VOICES -->
+<section class="voices" id="voices">
+  <div class="section-inner">
+
+    <div class="section-header">
+      <div class="section-marker">
+        § 07
+        <strong>The partnership</strong>
+      </div>
+      <h2 class="section-title">Built by two people <em>who have done this before.</em></h2>
+    </div>
+
+    <div class="voices-grid">
+
+      <div class="voice-card">
+        <h3 class="voice-name">Craig Hepburn</h3>
+        <div class="voice-role">CEO<span class="dot dot-accent"></span>Founding Partner</div>
+        <p class="voice-bio">Twenty years building at the frontier of digital. Microsoft, Nokia, UEFA, Art Basel. Perplexity Fellow. Publishes Ground Truth on the orchestration layer thesis. Brings the strategy, the technical depth, and the senior advisory practice.</p>
+      </div>
+
+      <div class="voice-card">
+        <h3 class="voice-name">Fergus</h3>
+        <div class="voice-role">COO<span class="dot dot-accent"></span>Founding Partner</div>
+        <p class="voice-bio">Operational leadership at scale across Microsoft, Nokia, and Minecraft Studios. Brings the delivery model, the financial discipline, the network of builders, and the business framing that keeps the firm focused on outcomes the buyer can act on.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section class="closing" id="begin">
+  <div class="closing-inner">
+    <div class="closing-eyebrow">An open invitation</div>
+    <h2 class="closing-headline">Most things do not need <em>more attention.</em> The right things do.</h2>
+    <p class="closing-meta">
+      We are not selling a service. We are inviting a conversation. If anything you have read here has landed, write.
+    </p>
+    <a href="mailto:hello@1706.ai" class="closing-button">hello@1706.ai</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+
+    <div>
+      <div class="footer-brand">17<span class="footer-dot"></span>06 Studio</div>
+      <p class="footer-tagline">A house for the intelligence era. Building the future of work, with the human at the centre.</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>The Studio</h4>
+      <a href="#essay">Essay</a>
+      <a href="#method">Method</a>
+      <a href="#paper">Annotated Paper</a>
+      <a href="#notes">Notes from the Field</a>
+      <a href="#reading">Reading List</a>
+      <a href="#voices">Voices</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>Adjacent</h4>
+      <a href="#">Ground Truth</a>
+      <a href="#">Agent Network</a>
+      <a href="#">Notes & Sessions</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>Begin</h4>
+      <a href="mailto:hello@1706.ai">hello@1706.ai</a>
+      <a href="#">LinkedIn</a>
+      <a href="#">Substack</a>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <div>1706 Studio Ltd<span class="dot"></span>London<span class="dot"></span>MMXXVI</div>
+    <div>17·06.ai</div>
+  </div>
+</footer>
+
+</div>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  });
+</script>
+
+</body>
+</html>
