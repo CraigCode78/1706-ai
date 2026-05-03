@@ -1003,6 +1003,38 @@
     color: var(--ink-soft);
   }
 
+  .voices-divider {
+    margin: 5rem auto 4rem;
+    max-width: 1400px;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .voices-divider-line {
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  .voices-divider-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .voices-next-gen {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .voices-next-gen .voice-card {
+    border-top: 2px solid var(--ink);
+    padding-top: 2rem;
+  }
+
   /* Closing */
   .closing {
     padding: 11rem 2.5rem;
@@ -1552,6 +1584,15 @@
 
     .voice-name {
       font-size: 1.7rem;
+    }
+
+    .voices-divider {
+      margin: 3rem auto 2.5rem;
+      gap: 1rem;
+    }
+
+    .voices-divider-label {
+      font-size: 0.55rem;
     }
 
     /* Closing */
@@ -2260,7 +2301,7 @@
         § 07
         <strong>The partnership</strong>
       </div>
-      <h2 class="section-title">Built by two people <em>who have done this before.</em></h2>
+      <h2 class="section-title">Built by people <em>who have done this before,</em><br>and people who are doing it next.</h2>
     </div>
 
     <div class="voices-grid">
@@ -2278,6 +2319,21 @@
       </div>
 
     </div>
+
+    <div class="voices-divider">
+      <div class="voices-divider-line"></div>
+      <div class="voices-divider-label">The next generation</div>
+      <div class="voices-divider-line"></div>
+    </div>
+
+    <div class="voices-next-gen">
+      <div class="voice-card">
+        <h3 class="voice-name">Connor Hepburn</h3>
+        <div class="voice-role">Next Gen Partner<span class="dot dot-accent"></span>Agent Infrastructure</div>
+        <p class="voice-bio">Builds the agents the firm runs on. Connor is part of the first generation of operators native to these tools, and the fluency shows in the work. Has built executive-tier agents, prototyped chief of staff systems, and brings the engineering instincts of someone who learned to code by needing to. The firm exists partly to demonstrate what happens when builders of his generation are given real responsibility from the start.</p>
+      </div>
+    </div>
+
   </div>
 </section>
 
