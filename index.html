@@ -162,6 +162,35 @@
 
   .nav-cta:hover { background: var(--ink); color: var(--paper) !important; }
 
+  .nav-toggle {
+    display: none;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+  }
+  .nav-toggle span {
+    display: block;
+    height: 1.5px;
+    background: var(--ink);
+    transition: transform 0.3s ease, opacity 0.2s ease;
+    transform-origin: center;
+  }
+  .nav-toggle[aria-expanded="true"] span:nth-child(1) {
+    transform: translateY(10px) rotate(45deg);
+  }
+  .nav-toggle[aria-expanded="true"] span:nth-child(2) {
+    opacity: 0;
+  }
+  .nav-toggle[aria-expanded="true"] span:nth-child(3) {
+    transform: translateY(-10px) rotate(-45deg);
+  }
+
   /* Hero - reframed as publication masthead */
   .masthead {
     min-height: 100vh;
@@ -1162,7 +1191,43 @@
     }
     .reading-item:last-child { border-bottom: none; }
 
-    .nav-links a:not(.nav-cta) { display: none; }
+    .nav-toggle { display: flex; }
+
+    .nav-links {
+      position: fixed;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding: 1rem 1.5rem 2rem;
+      background: rgba(245, 241, 232, 0.98);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--rule);
+      transform: translateY(-8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+    nav.menu-open .nav-links {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .nav-links a {
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--rule);
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+    }
+    .nav-links a:last-child { border-bottom: none; }
+    .nav-links .nav-cta {
+      margin-top: 1rem;
+      justify-content: center;
+      border-bottom: 1px solid var(--ink);
+    }
 
     .method-item {
       grid-template-columns: 60px 1fr;
@@ -1207,6 +1272,27 @@
       flex-direction: column;
       gap: 1rem;
     }
+  }
+
+  /* Tablet / small laptop tuning */
+  @media (max-width: 768px) {
+    section { padding: 4.5rem 1.5rem; }
+    .masthead { padding: 6.5rem 1.5rem 3rem; }
+
+    .masthead-grid { gap: 2.5rem; }
+    .number { line-height: 0.88; }
+
+    .essay-body { font-size: 1.05rem; }
+    .essay-body p.lead { font-size: 1.15rem; }
+    .essay-body .pullquote { font-size: 1.4rem; }
+
+    .method-item {
+      grid-template-columns: 50px 1fr;
+      gap: 1.25rem;
+      padding: 2.25rem 0;
+    }
+
+    .footer-grid { gap: 2rem; }
   }
 
   /* True mobile breakpoint */
@@ -1291,6 +1377,9 @@
       -webkit-overflow-scrolling: touch;
       margin: 0 -0.5rem;
       padding: 0 0.5rem;
+      position: relative;
+      mask-image: linear-gradient(to right, black 0%, black 85%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, black 0%, black 85%, transparent 100%);
     }
 
     .timeline-svg-scroll::after {
@@ -1506,6 +1595,20 @@
       font-size: 0.55rem;
     }
   }
+
+  /* Very narrow phones (iPhone SE etc.) */
+  @media (max-width: 375px) {
+    .essay-body p.lead::first-letter {
+      font-size: 2.4rem;
+      margin: 0.1em 0.12em 0 0;
+    }
+    section { padding: 3.5rem 1rem; }
+    .masthead { padding: 5.5rem 1rem 2rem; }
+    nav { padding: 0.85rem 1rem; }
+    .number-caption,
+    .masthead-meta,
+    .masthead-footer { font-size: 0.55rem; }
+  }
 </style>
 </head>
 <body>
@@ -1513,7 +1616,10 @@
 
 <nav id="nav">
   <a href="#" class="nav-mark">17<span class="dot-mark"></span>06</a>
-  <div class="nav-links">
+  <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-links" id="nav-links">
     <a href="#essay">Essay</a>
     <a href="#method">Method</a>
     <a href="#paper">Paper</a>
@@ -2233,6 +2339,21 @@
   window.addEventListener('scroll', () => {
     if (window.scrollY > 50) nav.classList.add('scrolled');
     else nav.classList.remove('scrolled');
+  });
+
+  const navToggle = document.getElementById('nav-toggle');
+  const navLinks = document.getElementById('nav-links');
+  const closeMenu = () => {
+    nav.classList.remove('menu-open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  };
+  navToggle.addEventListener('click', () => {
+    const open = nav.classList.toggle('menu-open');
+    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && nav.classList.contains('menu-open')) closeMenu();
   });
 </script>
 
