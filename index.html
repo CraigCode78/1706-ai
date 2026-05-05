@@ -262,6 +262,26 @@
     display: inline-block;
   }
 
+  .digit-reel {
+    display: inline-block;
+    height: 0.85em;
+    line-height: 0.85;
+    overflow: hidden;
+    vertical-align: baseline;
+  }
+
+  .digit-reel-inner {
+    display: flex;
+    flex-direction: column;
+    line-height: 0.85;
+    will-change: transform;
+  }
+
+  .digit-reel-inner > span {
+    display: block;
+    height: 0.85em;
+  }
+
   .number .num-dot {
     display: inline-block;
     width: 0.13em;
@@ -1692,7 +1712,7 @@
 
       <div class="number-block">
         <div class="number date-num">
-          <span class="seventeen">17</span><span class="num-dot"></span><span class="o-six">06</span>
+          <span class="digit-reel" data-target="1">1</span><span class="digit-reel" data-target="7">7</span><span class="num-dot"></span><span class="digit-reel" data-target="0">0</span><span class="digit-reel" data-target="6">6</span>
         </div>
         <div class="studio-mark">Studio</div>
         <div class="number-caption">
@@ -2412,6 +2432,55 @@
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && nav.classList.contains('menu-open')) closeMenu();
   });
+
+  (function() {
+    const reels = document.querySelectorAll('.digit-reel');
+    if (!reels.length) return;
+
+    // Build reel structure
+    reels.forEach(reel => {
+      const target = parseInt(reel.dataset.target, 10);
+      const inner = document.createElement('span');
+      inner.className = 'digit-reel-inner';
+      // Six repetitions of 0-9 for spinning headroom
+      let html = '';
+      for (let r = 0; r < 6; r++) {
+        for (let d = 0; d < 10; d++) html += '<span>' + d + '</span>';
+      }
+      inner.innerHTML = html;
+      // Initial position: show target digit immediately
+      inner.style.transform = 'translateY(-' + (target * 0.85) + 'em)';
+      reel.textContent = '';
+      reel.appendChild(inner);
+    });
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion || sessionStorage.getItem('number-animated') === '1') return;
+
+    const config = [
+      { rotations: 2, duration: 1400 },
+      { rotations: 3, duration: 1700 },
+      { rotations: 4, duration: 2000 },
+      { rotations: 5, duration: 2300 },
+    ];
+
+    requestAnimationFrame(() => {
+      reels.forEach((reel, i) => {
+        const inner = reel.querySelector('.digit-reel-inner');
+        const target = parseInt(reel.dataset.target, 10);
+        const cfg = config[i];
+        const finalSteps = cfg.rotations * 10 + target;
+
+        inner.style.transition = 'none';
+        inner.style.transform = 'translateY(0)';
+        // Force reflow so the transition takes effect on the next change
+        void inner.offsetHeight;
+        inner.style.transition = 'transform ' + cfg.duration + 'ms cubic-bezier(0.16, 1, 0.3, 1)';
+        inner.style.transform = 'translateY(-' + (finalSteps * 0.85) + 'em)';
+      });
+      sessionStorage.setItem('number-animated', '1');
+    });
+  })();
 </script>
 
 </body>
