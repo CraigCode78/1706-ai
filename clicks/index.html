@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light only">
+<title>Working Note 03 — Advisor engagement</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F5F0E6;
+    --paper-warm: #EFE8DA;
+    --ink: #1A1714;
+    --ink-soft: #3A332B;
+    --ink-muted: #756B5C;
+    --rule: #C9BEA6;
+    --rule-soft: #D9CFB8;
+    --accent: #8B3A2E;
+    --agent: #B8553F;
+    color-scheme: light only;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--paper) !important;
+    color: var(--ink) !important;
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    html, body {
+      background: var(--paper) !important;
+      color: var(--ink) !important;
+    }
+  }
+
+  body {
+    padding: 60px 20px;
+    min-height: 100vh;
+  }
+
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+    background: var(--paper);
+    padding: 72px 80px 80px;
+    position: relative;
+  }
+
+  /* Subtle paper grain */
+  .page::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.35;
+    background-image:
+      radial-gradient(circle at 20% 30%, transparent 0, transparent 40%, rgba(117, 107, 92, 0.02) 41%, transparent 42%),
+      radial-gradient(circle at 70% 70%, transparent 0, transparent 50%, rgba(117, 107, 92, 0.02) 51%, transparent 52%);
+  }
+
+  /* Masthead */
+  .masthead {
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 48px;
+    overflow: hidden;
+  }
+
+  .mast-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    line-height: 1.7;
+    font-weight: 500;
+    width: 48%;
+  }
+
+  .mast-left { float: left; }
+
+  .mast-right {
+    float: right;
+    text-align: right;
+  }
+
+  .mast-label strong {
+    display: block;
+    color: var(--ink);
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  .mast-right .studio-row {
+    display: inline-block;
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .mast-right .studio-row svg {
+    vertical-align: -1px;
+    margin-right: 5px;
+  }
+
+  /* Title block */
+  .title-block { margin-bottom: 56px; }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 22px;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: 64px;
+    line-height: 0.98;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    margin-bottom: 24px;
+  }
+
+  h1 em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--accent);
+  }
+
+  .subtitle {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    max-width: 540px;
+    letter-spacing: -0.005em;
+  }
+
+  /* Section heads */
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-top: 56px;
+    margin-bottom: 22px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--ink-muted);
+    font-weight: 500;
+  }
+
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  /* Body type */
+  p {
+    font-family: 'Inter', sans-serif;
+    font-size: 15.5px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    margin-bottom: 16px;
+    font-weight: 400;
+  }
+
+  p strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  p.lead {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+    margin-bottom: 20px;
+  }
+
+  p.lead em { font-style: italic; }
+
+  .principle {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--ink);
+    padding: 20px 0 8px;
+    border-top: 1px solid var(--rule-soft);
+    margin-top: 20px;
+    letter-spacing: -0.005em;
+  }
+
+  /* Four offer blocks */
+  .offers {
+    margin-top: 28px;
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+
+  .offer-cell {
+    float: left;
+    width: 47%;
+    margin-bottom: 28px;
+  }
+
+  .offer-cell:nth-child(odd) { margin-right: 6%; }
+  .offer-cell:nth-child(2n) { clear: right; }
+  .offer-cell:nth-child(2n+1) { clear: left; }
+
+  .offer-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .offer-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 20px;
+    color: var(--ink);
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+
+  .offer-body {
+    font-family: 'Inter', sans-serif;
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
+
+  /* Diagram wrapper */
+  .figure {
+    margin: 36px 0 24px;
+    padding: 32px 28px 24px;
+    background: var(--paper-warm);
+    border: 1px solid var(--rule-soft);
+    position: relative;
+  }
+
+  .figure-tag {
+    position: absolute;
+    top: -8px;
+    left: 24px;
+    background: var(--paper);
+    padding: 0 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    font-weight: 600;
+  }
+
+  .figure-caption {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    text-align: center;
+    margin-top: 16px;
+    font-weight: 500;
+  }
+
+  .figure-caption em {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 13px;
+    text-transform: none;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+    font-weight: 300;
+    display: block;
+    margin-top: 6px;
+  }
+
+  /* Tracks */
+  .tracks {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin: 24px 0 8px;
+  }
+
+  .track {
+    padding: 22px 24px;
+    background: var(--paper-warm);
+    border-left: 2px solid var(--rule);
+  }
+
+  .track.advisory { border-left-color: var(--ink); }
+  .track.project { border-left-color: var(--accent); }
+
+  .track-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .track.advisory .track-label { color: var(--ink); }
+  .track.project .track-label { color: var(--accent); }
+
+  .track-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 19px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .track-body {
+    font-family: 'Inter', sans-serif;
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
+
+  /* Engagement shape: definition list */
+  .terms { margin-top: 8px; }
+
+  .term {
+    padding: 18px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    overflow: hidden;
+  }
+
+  .term:last-child { border-bottom: none; }
+
+  .term-label {
+    float: left;
+    width: 130px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    font-weight: 600;
+    padding-top: 4px;
+  }
+
+  .term-body {
+    margin-left: 154px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
+
+  .term-body strong {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 21px;
+    color: var(--ink);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+
+  /* Next steps */
+  .steps {
+    list-style: none;
+    counter-reset: step;
+    margin-top: 12px;
+  }
+
+  .steps li {
+    counter-increment: step;
+    padding: 14px 0 14px 50px;
+    border-bottom: 1px solid var(--rule-soft);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    position: relative;
+  }
+
+  .steps li::before {
+    content: counter(step, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* Closing */
+  .close-divider {
+    margin: 56px 0 32px;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  .close-text {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+    margin-bottom: 32px;
+  }
+
+  .close-text em { font-style: italic; }
+
+  /* Signature */
+  .signature {
+    margin-top: 48px;
+    padding-top: 28px;
+    border-top: 1px solid var(--rule);
+    overflow: hidden;
+  }
+
+  .sig-left { float: left; }
+  .sig-right { float: right; text-align: right; }
+
+  .sig-name {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 22px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+
+  .sig-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-top: 8px;
+    font-weight: 500;
+  }
+
+  .sig-mark-block {
+    text-align: right;
+  }
+
+  .sig-mark {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 32px;
+    color: var(--accent);
+    line-height: 1;
+    font-weight: 300;
+  }
+
+  .sig-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-top: 10px;
+    font-weight: 500;
+  }
+
+  /* Footer */
+  .doc-footer {
+    margin-top: 64px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule-soft);
+    overflow: hidden;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    font-weight: 500;
+  }
+
+  .doc-footer .ft-left { float: left; }
+  .doc-footer .ft-center { text-align: center; }
+  .doc-footer .ft-right { float: right; }
+
+  /* Studio link styling */
+  .studio-link {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .studio-link:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* Print styles for clean PDF export */
+  @media print {
+    body { padding: 0; background: var(--paper); }
+    .page { padding: 40px 50px; max-width: 100%; box-shadow: none; }
+    .figure { break-inside: avoid; }
+    .track { break-inside: avoid; }
+    .signature { break-inside: avoid; }
+    .section-head { break-after: avoid; }
+  }
+
+  /* Mobile */
+  @media (max-width: 640px) {
+    body { padding: 20px 0; }
+    .page { padding: 32px 24px 48px; }
+    h1 { font-size: 42px; }
+    .masthead { flex-direction: column; gap: 16px; }
+    .mast-right { text-align: left; }
+    .offers { grid-template-columns: 1fr; gap: 24px; }
+    .term { grid-template-columns: 1fr; gap: 4px; }
+    .signature { flex-direction: column; align-items: flex-start; gap: 24px; }
+    .sig-mark-block { text-align: left; }
+    .doc-footer { flex-direction: column; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<style>
+  #pin-gate {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Inter', -apple-system, sans-serif;
+  }
+  #pin-gate.hidden { display: none; }
+  #pin-gate .box { text-align: center; max-width: 380px; padding: 40px 32px; }
+  #pin-gate .mark {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 28px; font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 32px;
+    display: inline-flex; align-items: baseline; gap: 0.05em;
+  }
+  #pin-gate .mark .dot {
+    width: 5px; height: 5px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin: 0 0.18em;
+    align-self: center;
+    transform: translateY(-3px);
+  }
+  #pin-gate h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 400; font-size: 22px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  #pin-gate p {
+    color: var(--ink-muted);
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+  #pin-gate input {
+    width: 100%; padding: 14px 16px;
+    background: var(--paper-warm);
+    border: 1px solid var(--rule);
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px; letter-spacing: 0.5em; text-align: center;
+    border-radius: 4px; outline: none;
+    transition: border-color 0.15s ease;
+  }
+  #pin-gate input:focus { border-color: var(--accent); }
+  #pin-gate .err {
+    color: var(--accent);
+    font-size: 11px; margin-top: 12px; min-height: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+</style>
+<div id="pin-gate">
+  <div class="box">
+    <div class="mark">17<span class="dot"></span>06</div>
+    <h2>Private working note</h2>
+    <p>This document is shared by direct invitation. Enter the access code to continue.</p>
+    <input id="pin-input" type="password" inputmode="numeric" maxlength="4" autocomplete="off" autofocus>
+    <div class="err" id="pin-err">&nbsp;</div>
+  </div>
+</div>
+<script>
+  (function(){
+    var PIN = "2704";
+    var gate = document.getElementById('pin-gate');
+    var input = document.getElementById('pin-input');
+    var err = document.getElementById('pin-err');
+    if (sessionStorage.getItem('clicks-pin-ok') === '1') { gate.classList.add('hidden'); return; }
+    input.addEventListener('input', function(){
+      err.innerHTML = '&nbsp;';
+      if (input.value.length === 4) {
+        if (input.value === PIN) {
+          sessionStorage.setItem('clicks-pin-ok', '1');
+          gate.classList.add('hidden');
+        } else {
+          err.textContent = 'Incorrect code';
+          input.value = '';
+        }
+      }
+    });
+  })();
+</script>
+
+<div class="page">
+
+  <!-- MASTHEAD -->
+  <header class="masthead">
+    <div class="mast-label mast-left">
+      Prepared for
+      <strong>Adrian Li Mow Ching &amp; Kevin Michaluk</strong>
+      Clicks Technology Limited
+    </div>
+    <div class="mast-label mast-right">
+      By Craig Hepburn
+      <strong>
+        <span class="studio-row">
+          <svg width="11" height="11" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0.5" y="0.5" width="13" height="13" fill="none" stroke="#1A1714" stroke-width="1"/>
+            <line x1="0" y1="7" x2="14" y2="7" stroke="#1A1714" stroke-width="1"/>
+            <line x1="7" y1="0" x2="7" y2="14" stroke="#1A1714" stroke-width="1"/>
+          </svg>
+          <a href="https://1706.ai" class="studio-link">1706 Studios</a> &middot; Working note 03
+        </span>
+      </strong>
+      5 May 2026
+    </div>
+  </header>
+
+  <!-- TITLE -->
+  <div class="title-block">
+    <div class="eyebrow">An advisor engagement</div>
+    <h1>What you get,<br>how it <em>works</em>,<br>and what it <em>costs</em>.</h1>
+    <p class="subtitle">A working note on how the advisor relationship is structured, written so the shape is clear and nothing material is left to assumption.</p>
+  </div>
+
+  <!-- OPENER -->
+  <section>
+    <p class="lead">First, a quick word before the detail.</p>
+    <p>I have genuinely enjoyed the conversations with both of you. Adrian, it has been brilliant to meet you and get into the substance properly. Kevin, you and I have been in each other&rsquo;s orbit long enough that this kind of feels overdue. I have thought about this carefully. There is a lot landing on my desk at the moment, and I have been deliberate about where I put my time and energy. Clicks is one I want to lean into.</p>
+    <p>The hardware angle matters. The combination of where you are heading on the device side and what is happening across the agentic landscape is one of the more interesting positions I have seen, and my background through Nokia and the hardware world means I think I can bring genuine value to how this gets shaped.</p>
+    <p>So with that said, here is how I see the engagement working in practice. The intent is not to over specify a relationship that should remain flexible, but to make the shape of it clear so we can move forward with confidence on both sides. Adrian and I will work through any details together.</p>
+  </section>
+
+  <!-- WHAT YOU GET -->
+  <div class="section-head">
+    <span class="section-num">i.</span>
+    <span class="section-title">What you get</span>
+  </div>
+  <p>When you engage me as an advisor, you get four things, and they travel together.</p>
+
+  <div class="offers">
+    <div class="offer-cell">
+      <div class="offer-label">01 &middot; Time</div>
+      <div class="offer-title">My time</div>
+      <div class="offer-body">A genuine commitment, not a notional one. One day per week as the baseline cadence, structured around what is actually useful in the moment. Working sessions with the founders, deeper dives where the questions warrant it, and asynchronous input when something needs a fast read.</div>
+    </div>
+    <div class="offer-cell">
+      <div class="offer-label">02 &middot; Thinking</div>
+      <div class="offer-title">My thinking</div>
+      <div class="offer-body">Two decades of operating context across telecoms, consumer hardware, and culture, sharpened by the last several years at the front edge of AI and agentic systems. Hardware companies need someone who has lived inside hardware and can hold a credible point of view on how AI changes the product, the company, and the operating model in parallel.</div>
+    </div>
+    <div class="offer-cell">
+      <div class="offer-label">03 &middot; Network</div>
+      <div class="offer-title">My network</div>
+      <div class="offer-body">A small team and wider network of AI and agentic engineers I work with regularly. They are not on standby for Clicks, but they are reachable when a conversation requires their depth, and they can be brought in to scope and deliver specific projects when we agree there is something worth building.</div>
+    </div>
+    <div class="offer-cell">
+      <div class="offer-label">04 &middot; Knowledge</div>
+      <div class="offer-title">My access to that knowledge</div>
+      <div class="offer-body">The advisor relationship gives Clicks a window into what is happening across the agentic landscape, what is working, what is not, and where the leverage is. That intelligence flows back into your operating decisions and your product roadmap continuously, not just in scheduled sessions.</div>
+    </div>
+  </div>
+
+  <!-- WHY THIS IS DIFFERENT -->
+  <div class="section-head">
+    <span class="section-num">ii.</span>
+    <span class="section-title">Why this is different from standard advisory</span>
+  </div>
+
+  <p>Most advisory relationships are about counsel. This one includes counsel, but the harder edge of what I bring is operational. Specifically, identifying where AI and agentic infrastructure can <strong>replace, augment, or pre empt cost</strong> inside Clicks. That means existing functions running leaner, and future hires you do not need to make because the work is being done by agents you already own.</p>
+
+  <p>I am doing this with a couple of other companies right now, and the pattern is consistent. A single well designed agent can absorb the work of a senior hire, often at a fraction of the annual cost.</p>
+
+  <!-- VISUAL 1: AGENT TOPOLOGY -->
+  <div class="figure">
+    <div class="figure-tag">Fig. 01 &middot; Agent topology</div>
+    <svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; display: block;">
+      <!-- TODAY ROW -->
+      <text x="20" y="38" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="1.8" fill="#756B5C" font-weight="600">TODAY</text>
+      <line x1="20" y1="48" x2="620" y2="48" stroke="#D9CFB8" stroke-width="1"/>
+
+      <!-- Human node, today -->
+      <circle cx="100" cy="90" r="22" fill="none" stroke="#1A1714" stroke-width="1.5"/>
+      <circle cx="100" cy="82" r="6" fill="#1A1714"/>
+      <path d="M 87 102 Q 100 92 113 102" stroke="#1A1714" stroke-width="1.5" fill="none"/>
+      <text x="100" y="138" text-anchor="middle" font-family="Fraunces, serif" font-size="11" fill="#1A1714" font-weight="400">Operations Lead</text>
+      <text x="100" y="152" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9" fill="#756B5C" letter-spacing="1">£80K / YR</text>
+
+      <!-- Tasks fanning right -->
+      <line x1="125" y1="90" x2="220" y2="58" stroke="#C9BEA6" stroke-width="0.8"/>
+      <line x1="125" y1="90" x2="220" y2="74" stroke="#C9BEA6" stroke-width="0.8"/>
+      <line x1="125" y1="90" x2="220" y2="90" stroke="#C9BEA6" stroke-width="0.8"/>
+      <line x1="125" y1="90" x2="220" y2="106" stroke="#C9BEA6" stroke-width="0.8"/>
+      <line x1="125" y1="90" x2="220" y2="122" stroke="#C9BEA6" stroke-width="0.8"/>
+
+      <text x="226" y="62" font-family="Inter, sans-serif" font-size="10" fill="#3A332B">Planning</text>
+      <text x="226" y="78" font-family="Inter, sans-serif" font-size="10" fill="#3A332B">Reporting</text>
+      <text x="226" y="94" font-family="Inter, sans-serif" font-size="10" fill="#3A332B">Coordination</text>
+      <text x="226" y="110" font-family="Inter, sans-serif" font-size="10" fill="#3A332B">Scheduling</text>
+      <text x="226" y="126" font-family="Inter, sans-serif" font-size="10" fill="#3A332B">Follow-up</text>
+
+      <!-- Annotation right -->
+      <text x="500" y="78" font-family="Fraunces, serif" font-style="italic" font-size="12" fill="#756B5C">One person,</text>
+      <text x="500" y="94" font-family="Fraunces, serif" font-style="italic" font-size="12" fill="#756B5C">five workstreams,</text>
+      <text x="500" y="110" font-family="Fraunces, serif" font-style="italic" font-size="12" fill="#756B5C">linear capacity.</text>
+
+      <!-- WITH AGENTS ROW -->
+      <text x="20" y="190" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="1.8" fill="#8B3A2E" font-weight="600">WITH AGENTS</text>
+      <line x1="20" y1="200" x2="620" y2="200" stroke="#D9CFB8" stroke-width="1"/>
+
+      <!-- Smaller human at orchestration -->
+      <circle cx="100" cy="240" r="16" fill="none" stroke="#1A1714" stroke-width="1.5"/>
+      <circle cx="100" cy="234" r="4" fill="#1A1714"/>
+      <path d="M 91 248 Q 100 240 109 248" stroke="#1A1714" stroke-width="1.5" fill="none"/>
+      <text x="100" y="275" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" fill="#756B5C" letter-spacing="1">ORCHESTRATES</text>
+
+      <!-- Agent nodes (hexagons) -->
+      <g>
+        <polygon points="200,232 217,222 234,232 234,252 217,262 200,252" fill="#F5F0E6" stroke="#8B3A2E" stroke-width="1.3"/>
+        <text x="217" y="245" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" fill="#8B3A2E" font-weight="600">AGENT</text>
+        <text x="217" y="278" text-anchor="middle" font-family="Inter, sans-serif" font-size="9" fill="#3A332B">Reporting</text>
+      </g>
+
+      <g>
+        <polygon points="280,232 297,222 314,232 314,252 297,262 280,252" fill="#F5F0E6" stroke="#8B3A2E" stroke-width="1.3"/>
+        <text x="297" y="245" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" fill="#8B3A2E" font-weight="600">AGENT</text>
+        <text x="297" y="278" text-anchor="middle" font-family="Inter, sans-serif" font-size="9" fill="#3A332B">Coordination</text>
+      </g>
+
+      <g>
+        <polygon points="360,232 377,222 394,232 394,252 377,262 360,252" fill="#F5F0E6" stroke="#8B3A2E" stroke-width="1.3"/>
+        <text x="377" y="245" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" fill="#8B3A2E" font-weight="600">AGENT</text>
+        <text x="377" y="278" text-anchor="middle" font-family="Inter, sans-serif" font-size="9" fill="#3A332B">Scheduling</text>
+      </g>
+
+      <g>
+        <polygon points="440,232 457,222 474,232 474,252 457,262 440,252" fill="#F5F0E6" stroke="#8B3A2E" stroke-width="1.3"/>
+        <text x="457" y="245" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" fill="#8B3A2E" font-weight="600">AGENT</text>
+        <text x="457" y="278" text-anchor="middle" font-family="Inter, sans-serif" font-size="9" fill="#3A332B">Follow-up</text>
+      </g>
+
+      <!-- Lines from human to agents -->
+      <line x1="116" y1="240" x2="200" y2="240" stroke="#8B3A2E" stroke-width="0.8" stroke-dasharray="2,3"/>
+      <line x1="116" y1="240" x2="280" y2="240" stroke="#8B3A2E" stroke-width="0.8" stroke-dasharray="2,3"/>
+      <line x1="116" y1="240" x2="360" y2="240" stroke="#8B3A2E" stroke-width="0.8" stroke-dasharray="2,3"/>
+      <line x1="116" y1="240" x2="440" y2="240" stroke="#8B3A2E" stroke-width="0.8" stroke-dasharray="2,3"/>
+
+      <!-- Annotation right -->
+      <text x="500" y="225" font-family="Fraunces, serif" font-style="italic" font-size="12" fill="#1A1714">Same output.</text>
+      <text x="500" y="241" font-family="Fraunces, serif" font-style="italic" font-size="12" fill="#1A1714">Different</text>
+      <text x="500" y="257" font-family="Fraunces, serif" font-style="italic" font-size="12" fill="#1A1714">cost base.</text>
+    </svg>
+    <div class="figure-caption">
+      A function reshaped, not removed
+      <em>The retainer should be read against what it removes from your cost base, not just what it adds to it.</em>
+    </div>
+  </div>
+
+  <p>That is the framing I work in.</p>
+
+  <!-- HOW WE WORK TOGETHER -->
+  <div class="section-head">
+    <span class="section-num">iii.</span>
+    <span class="section-title">How we work together</span>
+  </div>
+
+  <p>The relationship has two distinct tracks. Keeping them separate is what makes the engagement clean and durable.</p>
+
+  <div class="tracks">
+    <div class="track advisory">
+      <div class="track-label">Track A &middot; Continuous</div>
+      <div class="track-title">The advisory track</div>
+      <div class="track-body">This is the ongoing relationship. Strategic input across two areas. First, AI operations and agentic infrastructure inside Clicks, the operating model conversation we have been circling. Second, product and concept input on the hardware roadmap, particularly the communication device direction and how the product reflects the agentic thesis. Continuous, not transactional.</div>
+    </div>
+    <div class="track project">
+      <div class="track-label">Track B &middot; Discrete</div>
+      <div class="track-title">The project track</div>
+      <div class="track-body">Where a specific piece of build work emerges from the advisory conversations, something that needs the team rather than just my time, we scope it as a discrete project with its own brief, timeline, and fixed price. You see the cost before committing, you control which projects happen and when. If no projects are right, no projects happen. The advisory relationship continues either way.</div>
+    </div>
+  </div>
+
+  <!-- VISUAL 2: TWO TRACKS RIBBON -->
+  <div class="figure">
+    <div class="figure-tag">Fig. 02 &middot; Two tracks across the term</div>
+    <svg viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; display: block;">
+      <!-- Timeline labels -->
+      <text x="40" y="20" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="1.5" fill="#756B5C" font-weight="600">M01</text>
+      <text x="316" y="20" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="1.5" fill="#8B3A2E" font-weight="600">M06 &middot; REVIEW</text>
+      <text x="568" y="20" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="1.5" fill="#756B5C" font-weight="600">M24</text>
+
+      <!-- Review marker -->
+      <line x1="320" y1="30" x2="320" y2="180" stroke="#8B3A2E" stroke-width="0.8" stroke-dasharray="3,4" opacity="0.6"/>
+
+      <!-- ADVISORY LANE -->
+      <text x="40" y="55" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="1.8" fill="#1A1714" font-weight="600">A &middot; ADVISORY</text>
+      <line x1="40" y1="80" x2="600" y2="80" stroke="#1A1714" stroke-width="1.5"/>
+
+      <!-- Session marks along advisory line -->
+      <g fill="#1A1714">
+        <circle cx="60" cy="80" r="3"/>
+        <circle cx="100" cy="80" r="3"/>
+        <circle cx="140" cy="80" r="3"/>
+        <circle cx="180" cy="80" r="3"/>
+        <circle cx="220" cy="80" r="3"/>
+        <circle cx="260" cy="80" r="3"/>
+        <circle cx="300" cy="80" r="3"/>
+        <circle cx="340" cy="80" r="3"/>
+        <circle cx="380" cy="80" r="3"/>
+        <circle cx="420" cy="80" r="3"/>
+        <circle cx="460" cy="80" r="3"/>
+        <circle cx="500" cy="80" r="3"/>
+        <circle cx="540" cy="80" r="3"/>
+        <circle cx="580" cy="80" r="3"/>
+      </g>
+      <text x="40" y="105" font-family="Inter, sans-serif" font-size="11" fill="#3A332B" font-style="italic">Continuous flow &middot; weekly cadence &middot; £10,000 / month</text>
+
+      <!-- PROJECT LANE -->
+      <text x="40" y="140" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="1.8" fill="#8B3A2E" font-weight="600">B &middot; PROJECT</text>
+
+      <!-- Project blocks -->
+      <rect x="80" y="150" width="90" height="14" fill="none" stroke="#8B3A2E" stroke-width="1"/>
+      <text x="125" y="160" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7" fill="#8B3A2E" letter-spacing="1" font-weight="600">SCOPE</text>
+
+      <rect x="220" y="150" width="120" height="14" fill="#8B3A2E" stroke="#8B3A2E" stroke-width="1"/>
+      <text x="280" y="160" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7" fill="#F5F0E6" letter-spacing="1" font-weight="600">BUILD</text>
+
+      <rect x="400" y="150" width="70" height="14" fill="none" stroke="#8B3A2E" stroke-width="1"/>
+      <text x="435" y="160" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7" fill="#8B3A2E" letter-spacing="1" font-weight="600">DELIVER</text>
+
+      <text x="40" y="186" font-family="Inter, sans-serif" font-size="11" fill="#3A332B" font-style="italic">Discrete bursts &middot; scoped, priced, and approved before each one begins</text>
+    </svg>
+    <div class="figure-caption">
+      Continuous advisory, discrete projects
+      <em>The retainer buys you me. Projects are how the team gets engaged, when and if you want them.</em>
+    </div>
+  </div>
+
+  <!-- THE SHAPE OF THE ENGAGEMENT -->
+  <div class="section-head">
+    <span class="section-num">iv.</span>
+    <span class="section-title">The shape of the engagement</span>
+  </div>
+
+  <div class="terms">
+    <div class="term">
+      <div class="term-label">Term</div>
+      <div class="term-body">
+        <strong>24 months</strong>
+        With a six month review point for both sides. Thirty day exit notice on either side after the review.
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="term-label">Retainer</div>
+      <div class="term-body">
+        <strong>£10,000 per month</strong>
+        Payable monthly in advance. If that feels heavy for where Clicks is right now, let me know and we can talk it through, I can explain the thinking behind it.
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="term-label">Equity</div>
+      <div class="term-body">
+        <strong>Modest allocation, milestone vesting</strong>
+        Standard advisor vesting with a three month cliff, then milestone based vesting over the term as discussed with Kevin. Open to landing inside the range Clicks works in with other advisors, assuming it sits in a sensible band for the value being exchanged.
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="term-label">Exclusivity</div>
+      <div class="term-body">
+        <strong>Narrow and specific</strong>
+        I will not advise companies building directly competing hardware products in the smartphone accessory or dedicated AI communication device categories. I retain the right to advise adjacent companies and continue my own commercial work outside the engagement.
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="term-label">Confidentiality</div>
+      <div class="term-body">
+        <strong>Standard mutual NDA</strong>
+        Anything sensitive shared in either direction stays inside the relationship.
+      </div>
+    </div>
+  </div>
+
+  <!-- NEXT STEPS -->
+  <div class="section-head">
+    <span class="section-num">v.</span>
+    <span class="section-title">Next steps</span>
+  </div>
+
+  <ol class="steps">
+    <li>Adrian and I to work through retainer and equity details and finalise the agreement.</li>
+    <li>Short form advisor agreement drafted and signed within the working week.</li>
+    <li>First working session scheduled in the week following Kevin&rsquo;s return from New York.</li>
+  </ol>
+
+  <!-- CLOSING -->
+  <div class="close-divider"></div>
+
+  <p class="close-text">A final word. I am <em>excited</em> about this one. Hardware is going to be a huge component of how the agentic era actually plays out in people&rsquo;s hands, and Clicks is positioned uniquely well to have a real voice in that conversation. There is a lot I want to bring to it, and I think the rapport is already in the right place. Looking forward to getting properly started.</p>
+
+  <!-- SIGNATURE -->
+  <div class="signature">
+    <div class="sig-left">
+      <div class="sig-name">Craig Hepburn</div>
+      <div class="sig-meta"><a href="https://1706.ai" class="studio-link">1706.ai</a> &middot; London</div>
+    </div>
+    <div class="sig-right sig-mark-block">
+      <div class="sig-mark">&mdash;</div>
+      <div class="sig-date">5 May 2026</div>
+    </div>
+  </div>
+
+  <!-- DOC FOOTER -->
+  <div class="doc-footer">
+    <span class="ft-left"><a href="https://1706.ai" class="studio-link">1706.ai</a> &middot; Working Note 03</span>
+    <span class="ft-right">Confidential &middot; Clicks Technology Limited</span>
+  </div>
+
+</div>
+
+</body>
+</html>
