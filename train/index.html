@@ -510,9 +510,106 @@
     color: var(--accent);
   }
 
+  /* Mobile nav */
+  .mobile-nav-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 200;
+    width: 44px;
+    height: 44px;
+    padding: 12px;
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+  }
+  .mobile-nav-toggle span {
+    display: block;
+    height: 1.5px;
+    background: var(--ink);
+    transition: transform 0.3s ease, opacity 0.2s ease;
+    transform-origin: center;
+  }
+  .mobile-nav-toggle[aria-expanded="true"] span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  .mobile-nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+  .mobile-nav-toggle[aria-expanded="true"] span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  .mobile-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 150;
+    background: var(--bg);
+    border-bottom: 1px solid var(--rule);
+    padding: 80px 32px 40px;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease;
+    max-height: 100vh;
+    overflow-y: auto;
+  }
+  .mobile-nav.open { transform: translateY(0); }
+  .mobile-nav .brand {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 22px;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .mobile-nav .brand-mark { color: var(--accent); }
+  .mobile-nav .tagline {
+    color: var(--ink-muted);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .mobile-nav ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: mtoc;
+  }
+  .mobile-nav ol li {
+    counter-increment: mtoc;
+    border-bottom: 1px solid var(--rule);
+  }
+  .mobile-nav ol li a {
+    display: flex;
+    gap: 16px;
+    padding: 14px 0;
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    min-height: 44px;
+    align-items: center;
+  }
+  .mobile-nav ol li a::before {
+    content: counter(mtoc, decimal-leading-zero);
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 1024px) {
+    .mobile-nav-toggle, .mobile-nav { display: none; }
+  }
+
   /* Print */
   @media print {
-    aside { display: none; }
+    aside, .mobile-nav-toggle, .mobile-nav { display: none; }
     body { background: white; color: black; }
     .layout { grid-template-columns: 1fr; }
   }
@@ -603,6 +700,44 @@
           input.value = '';
         }
       }
+    });
+  })();
+</script>
+
+<button class="mobile-nav-toggle" id="mnav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="mnav">
+  <span></span><span></span><span></span>
+</button>
+
+<div class="mobile-nav" id="mnav">
+  <div class="brand"><span class="brand-mark">∴</span> Train</div>
+  <div class="tagline">Working playbook · v0.1</div>
+  <ol>
+    <li><a href="#thesis">The thesis</a></li>
+    <li><a href="#order">The order of operations</a></li>
+    <li><a href="#mechanics">The mechanics</a></li>
+    <li><a href="#stack">The platform stack</a></li>
+    <li><a href="#guardrails">What we are not doing yet</a></li>
+    <li><a href="#roles">Roles that need to exist</a></li>
+    <li><a href="#substack">Substack: framing for the team</a></li>
+    <li><a href="#portfolio">Train and the wider portfolio</a></li>
+  </ol>
+</div>
+
+<script>
+  (function(){
+    var toggle = document.getElementById('mnav-toggle');
+    var nav = document.getElementById('mnav');
+    var close = function(){
+      nav.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    };
+    toggle.addEventListener('click', function(){
+      var open = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    nav.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', close); });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && nav.classList.contains('open')) close();
     });
   })();
 </script>
