@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>1706 Studio — Internal Vision Document, Vol. I MMXXVI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1916;
+    --ink-soft: #4a4843;
+    --ink-faint: #8a877f;
+    --paper: #faf8f3;
+    --paper-warm: #f4f1e8;
+    --rule: #1a1916;
+    --rule-soft: rgba(26,25,22,0.18);
+    --accent: #6b1f1a;
+    --serif: 'EB Garamond', 'Garamond', 'Georgia', serif;
+    --sans: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: var(--serif);
+    color: var(--ink);
+    background: var(--paper);
+    line-height: 1.65;
+    font-size: 18px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+  }
+
+  /* MASTHEAD */
+  .masthead {
+    border-top: 2px solid var(--rule);
+    border-bottom: 0.5px solid var(--rule);
+    padding: 0.75rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 3rem;
+  }
+  .masthead .lhs { display: flex; gap: 1.5rem; align-items: baseline; }
+  .masthead strong { color: var(--ink); font-weight: 500; letter-spacing: 0.16em; font-size: 13px; }
+  .masthead .vol { font-style: italic; font-family: var(--serif); letter-spacing: 0.04em; text-transform: none; font-size: 13px; color: var(--ink); }
+
+  /* TITLE BLOCK */
+  .kicker {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+  h1.title {
+    font-family: var(--serif);
+    font-size: 56px;
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    margin: 0 0 1.5rem;
+    color: var(--ink);
+  }
+  h1.title em { font-style: italic; color: var(--ink-soft); }
+  .standfirst {
+    font-size: 22px;
+    line-height: 1.45;
+    color: var(--ink-soft);
+    font-style: italic;
+    margin: 0 0 2.5rem;
+    max-width: 600px;
+  }
+  .byline {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--ink-soft);
+    border-top: 0.5px solid var(--rule-soft);
+    border-bottom: 0.5px solid var(--rule-soft);
+    padding: 0.9rem 0;
+    margin-bottom: 3rem;
+    display: flex;
+    justify-content: space-between;
+    letter-spacing: 0.04em;
+  }
+  .byline .author { color: var(--ink); }
+
+  /* PROSE */
+  p { font-size: 18px; margin: 0 0 1.1rem; }
+  p.lede { font-size: 21px; line-height: 1.55; margin-bottom: 1.5rem; }
+  p em { font-style: italic; }
+
+  .ornament {
+    text-align: center;
+    font-family: var(--serif);
+    color: var(--ink-faint);
+    letter-spacing: 0.6em;
+    margin: 3rem 0;
+    font-size: 16px;
+  }
+
+  /* SECTIONS */
+  .section { margin: 4.5rem 0 0; }
+  .section-num {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    display: block;
+    margin-bottom: 0.6rem;
+  }
+  h2.section-title {
+    font-family: var(--serif);
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin: 0 0 2rem;
+    max-width: 620px;
+    color: var(--ink);
+  }
+  h2.section-title em { font-style: italic; color: var(--ink-soft); }
+  h3.subhead {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 400;
+    font-style: italic;
+    margin: 2.4rem 0 1rem;
+    color: var(--ink);
+  }
+
+  /* PULL QUOTE */
+  .pullquote {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 26px;
+    line-height: 1.35;
+    color: var(--ink);
+    border-left: 2px solid var(--ink);
+    padding: 0.4rem 0 0.4rem 1.8rem;
+    margin: 2.5rem 0;
+    max-width: 600px;
+  }
+
+  /* STAT GRID */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    margin: 2.5rem 0;
+  }
+  .stat {
+    padding: 1.5rem 1.2rem;
+    border-right: 0.5px solid var(--rule-soft);
+    border-bottom: 0.5px solid var(--rule-soft);
+  }
+  .stat:nth-child(2n) { border-right: 0; }
+  .stat:nth-last-child(-n+2) { border-bottom: 0; }
+  .stat .num {
+    font-family: var(--serif);
+    font-size: 44px;
+    font-weight: 400;
+    line-height: 1;
+    margin-bottom: 0.6rem;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+  .stat .num span { font-size: 22px; color: var(--ink-soft); }
+  .stat .lbl {
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+
+  /* CHART FRAME */
+  .chart-frame {
+    border-top: 1px solid var(--rule);
+    border-bottom: 0.5px solid var(--rule-soft);
+    padding: 1.4rem 0 1.2rem;
+    margin: 2.5rem 0;
+  }
+  .chart-frame .cap {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 0.5rem;
+  }
+  .chart-frame .cap-title {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 19px;
+    color: var(--ink);
+    margin-bottom: 1.2rem;
+  }
+  .chart-frame .cap-foot {
+    font-family: var(--sans);
+    font-size: 11px;
+    color: var(--ink-faint);
+    margin-top: 0.8rem;
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+  }
+  .chart-wrap {
+    position: relative;
+    width: 100%;
+    height: 280px;
+  }
+
+  /* LAYER LIST */
+  .layer-list {
+    counter-reset: layer;
+    margin: 2rem 0;
+    padding: 0;
+    list-style: none;
+  }
+  .layer-list li {
+    counter-increment: layer;
+    padding: 1.3rem 0 1.3rem 4rem;
+    border-top: 0.5px solid var(--rule-soft);
+    position: relative;
+  }
+  .layer-list li:last-child { border-bottom: 0.5px solid var(--rule-soft); }
+  .layer-list li::before {
+    content: counter(layer, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 1.4rem;
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--ink-faint);
+  }
+  .layer-list .lt {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-style: italic;
+    margin-bottom: 0.4rem;
+    color: var(--ink);
+  }
+  .layer-list .ld {
+    font-size: 17px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  /* PRINCIPLE GRID */
+  .principle-grid {
+    margin: 2rem 0;
+    border-top: 1px solid var(--rule);
+  }
+  .principle {
+    padding: 1.3rem 0;
+    border-bottom: 0.5px solid var(--rule-soft);
+    display: grid;
+    grid-template-columns: 170px 1fr;
+    gap: 2rem;
+    align-items: baseline;
+  }
+  .principle .head {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .principle .body {
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+  .principle .body em { font-style: italic; color: var(--ink-soft); }
+
+  /* NINETY DAY GRID */
+  .ninety-day {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--rule-soft);
+    border: 0.5px solid var(--rule-soft);
+    margin: 2.5rem 0;
+  }
+  .day-block {
+    background: var(--paper);
+    padding: 1.4rem 1.3rem 1.6rem;
+  }
+  .day-block .ph {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 0.6rem;
+  }
+  .day-block .pt {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 21px;
+    line-height: 1.25;
+    margin-bottom: 0.8rem;
+    color: var(--ink);
+  }
+  .day-block .pd {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    font-family: var(--sans);
+  }
+
+  /* SIGN OFF */
+  .signoff {
+    margin-top: 5rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--rule);
+    font-family: var(--serif);
+  }
+  .signoff .closing {
+    font-size: 21px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    font-style: italic;
+    margin-bottom: 2rem;
+    max-width: 600px;
+  }
+  .signoff .sig {
+    font-style: italic;
+    font-size: 26px;
+    margin-bottom: 0.4rem;
+    color: var(--ink);
+  }
+  .signoff .role {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .footer {
+    margin-top: 4rem;
+    padding-top: 1.2rem;
+    border-top: 0.5px solid var(--rule-soft);
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    .page { padding: 2rem 1.25rem 3rem; }
+    h1.title { font-size: 38px; }
+    h2.section-title { font-size: 28px; }
+    .standfirst { font-size: 19px; }
+    p, p.lede { font-size: 17px; }
+    p.lede { font-size: 19px; }
+    .stat-grid { grid-template-columns: 1fr; }
+    .stat { border-right: 0; }
+    .stat:nth-last-child(-n+2) { border-bottom: 0.5px solid var(--rule-soft); }
+    .stat:last-child { border-bottom: 0; }
+    .principle { grid-template-columns: 1fr; gap: 0.4rem; }
+    .ninety-day { grid-template-columns: 1fr; }
+    .pullquote { font-size: 21px; padding-left: 1.2rem; }
+    .layer-list li { padding-left: 3rem; }
+  }
+
+  /* PRINT */
+  @media print {
+    body { background: white; font-size: 11pt; }
+    .page { max-width: 100%; padding: 0; }
+    .chart-wrap { height: 200px; }
+    .section { page-break-inside: avoid; margin-top: 2rem; }
+    .pullquote, .signoff { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<style>
+  #pin-gate {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Inter', -apple-system, sans-serif;
+  }
+  #pin-gate.hidden { display: none; }
+  #pin-gate .box { text-align: center; max-width: 380px; padding: 40px 32px; }
+  #pin-gate .mark {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 28px; font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 32px;
+    display: inline-flex; align-items: baseline; gap: 0.05em;
+  }
+  #pin-gate .mark .dot {
+    width: 5px; height: 5px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin: 0 0.18em;
+    align-self: center;
+    transform: translateY(-3px);
+  }
+  #pin-gate h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 400; font-size: 22px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  #pin-gate p {
+    color: var(--ink-faint);
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+  #pin-gate input {
+    width: 100%; padding: 14px 16px;
+    background: var(--paper-warm);
+    border: 1px solid var(--rule-soft);
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px; letter-spacing: 0.5em; text-align: center;
+    border-radius: 4px; outline: none;
+    transition: border-color 0.15s ease;
+  }
+  #pin-gate input:focus { border-color: var(--accent); }
+  #pin-gate .err {
+    color: var(--accent);
+    font-size: 11px; margin-top: 12px; min-height: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+</style>
+<div id="pin-gate">
+  <div class="box">
+    <div class="mark">17<span class="dot"></span>06</div>
+    <h2>Internal note</h2>
+    <p>This document is shared with the team by direct invitation. Enter the access code to continue.</p>
+    <input id="pin-input" type="password" inputmode="numeric" maxlength="4" autocomplete="off" autofocus>
+    <div class="err" id="pin-err">&nbsp;</div>
+  </div>
+</div>
+<script>
+  (function(){
+    var PIN = "2704";
+    var gate = document.getElementById('pin-gate');
+    var input = document.getElementById('pin-input');
+    var err = document.getElementById('pin-err');
+    if (sessionStorage.getItem('memo-pin-ok') === '1') { gate.classList.add('hidden'); return; }
+    input.addEventListener('input', function(){
+      err.innerHTML = '&nbsp;';
+      if (input.value.length === 4) {
+        if (input.value === PIN) {
+          sessionStorage.setItem('memo-pin-ok', '1');
+          gate.classList.add('hidden');
+        } else {
+          err.textContent = 'Incorrect code';
+          input.value = '';
+        }
+      }
+    });
+  })();
+</script>
+
+<article class="page" role="article" aria-label="1706 internal vision document">
+
+  <header class="masthead">
+    <div class="lhs">
+      <strong>1706</strong>
+      <span class="vol">Studio</span>
+    </div>
+    <div>Internal &middot; Vol. I MMXXVI</div>
+  </header>
+
+  <span class="kicker">An internal note &middot; from the founding partners &middot; for the team</span>
+
+  <h1 class="title">The work in front of us, <em>and the two years that decide it.</em></h1>
+
+  <p class="standfirst">A vision document for the team. Why this matters, why now, what we are building, and how we will get it done.</p>
+
+  <div class="byline">
+    <span class="author">Craig Hepburn &middot; Founding Partner</span>
+    <span>For internal circulation</span>
+  </div>
+
+  <p class="lede">Most of what is written about artificial intelligence misses the human at the centre of it. People are anxious. Their attention is being eaten by tools that promised to free them. Their jobs feel under threat from a technology they did not ask for. They are being told the future will be different and they are not being told what to do about it on Monday morning. This is the ground we are standing on, and it is the same ground every leader, every team, every person who will buy from us is standing on too. If we cannot start there, we cannot start anywhere.</p>
+
+  <p>The shift we believe in is not from human to machine. It is from human attention being spent on the wrong things to human attention being spent on what only humans can do. Agents are the mechanism. Refocused attention is the outcome. Everything 1706 builds and sells points at that single idea.</p>
+
+  <div class="ornament">&sect; &sect; &sect;</div>
+
+  <section class="section">
+    <span class="section-num">&sect; 01 &middot; The shift</span>
+    <h2 class="section-title">What has actually changed, <em>in the last twelve months.</em></h2>
+
+    <p>The market has moved past tools. It has moved past pilots. It has moved past the question of whether agents work. The largest, most public companies in technology have made structural commitments in a single six month window, and the data behind them tells the same story.</p>
+
+    <div class="stat-grid">
+      <div class="stat">
+        <div class="num">85<span>%</span></div>
+        <div class="lbl">Of companies struggle to find AI ROI. Cause cited: fragmented data and operating context.</div>
+      </div>
+      <div class="stat">
+        <div class="num">75<span>%</span></div>
+        <div class="lbl">Of small and medium businesses are using AI in some form already.</div>
+      </div>
+      <div class="stat">
+        <div class="num">~1<span>%</span></div>
+        <div class="lbl">Have mature deployments delivering real measurable value.</div>
+      </div>
+      <div class="stat">
+        <div class="num">46<span>%</span></div>
+        <div class="lbl">CAGR forecast for the agent market, 2025 to 2030, across multiple independent houses.</div>
+      </div>
+    </div>
+
+    <p>Three quarters of businesses are using AI. One per cent are getting value from it. The diagnosis is consistent across McKinsey, Lopez Research, Deloitte and Gartner: the technology works, the models are capable, the missing piece is the structure that lets agents operate against the real context of a business. The gap between adoption and value is the largest opportunity in enterprise software since the cloud.</p>
+
+    <div class="chart-frame">
+      <div class="cap">Figure 01</div>
+      <div class="cap-title">The agent market, five-year shape.</div>
+      <div class="chart-wrap"><canvas id="mktChart" role="img" aria-label="Bar chart showing the agent market growing from approximately eight billion dollars in 2025 to over fifty billion dollars in 2030"></canvas></div>
+      <div class="cap-foot">Sources: MarketsandMarkets, Grand View Research, BCC Research. Three independent forecasts, converging within a narrow range. The convergence is the meaningful signal.</div>
+    </div>
+
+    <p>The operator signal is louder than the analyst signal. Coinbase has cut fourteen per cent of its workforce to rebuild as an intelligence with humans around the edge. Block has sixty per cent of twelve thousand employees using its internal agent weekly. Shopify has made AI usage a performance review criterion and requires teams to prove AI cannot do the work before they can hire. Klarna has publicly stated its agents do work previously done by seven hundred customer service representatives. None of this is a pilot. It is structural.</p>
+
+    <p class="pullquote">Every story about the big companies is free marketing for what we sell to the small ones. They are normalising the playbook in public. We are productising it.</p>
+  </section>
+
+  <section class="section">
+    <span class="section-num">&sect; 02 &middot; The position</span>
+    <h2 class="section-title">What people are actually buying, <em>once you cut through the noise.</em></h2>
+
+    <p>People do not want more AI. They want fewer tools, less noise, and their attention back. They want agents that take the operational grunt work away. They want their teams to stop fearing for their jobs and start running faster than they ever have. They want to look at their week and see space for the work that matters, instead of the work that fills the calendar.</p>
+
+    <p>Every conversation we have had this season points at the same thing. Vecto. The portfolio companies. The founders and operators reaching out unprompted. The number one ask is not strategy and it is not software. It is <em>agents that operate inside our business</em>. Demand is already coming through the door. The job is to ship.</p>
+
+    <h3 class="subhead">Where we sit, deliberately.</h3>
+    <p>We are not a consultancy. Consultancies sell time. We are not a software vendor. Vendors sell licences. We are not a no-code agent platform. Platforms sell tools. We are a productised agent factory. We codify how a business operates and ship the agents that run it. The catalogue grows. The methodology compounds. The clients accumulate. The business scales.</p>
+  </section>
+
+  <section class="section">
+    <span class="section-num">&sect; 03 &middot; The model</span>
+    <h2 class="section-title">The five layers of the AI <em>operating model.</em></h2>
+
+    <p>The factory has a product. The product is the AI Operating Model: a complete, structured way of redesigning a business so that agents can operate inside it and humans can do the work only they can do. Five layers, in order. Each one earns the layer above.</p>
+
+    <ol class="layer-list">
+      <li>
+        <div class="lt">Clarity Layer</div>
+        <div class="ld">What genuinely matters in this business right now. Where leadership attention should go. The North Star against which everything else is measured.</div>
+      </li>
+      <li>
+        <div class="lt">Operating Context Layer</div>
+        <div class="ld">The structured codification of how the business actually operates. Positioning, ICP, processes, decisions, voice, all written for humans and agents to read together. The connective tissue. The thing that turns scattered knowledge into operational fuel.</div>
+      </li>
+      <li>
+        <div class="lt">Agent Layer</div>
+        <div class="ld">Operational agents from a defined catalogue, deployed against the context layer. We start with one, prove it, expand. Each agent is version controlled, scoped, and accountable.</div>
+      </li>
+      <li>
+        <div class="lt">Orchestration and Governance</div>
+        <div class="ld">Identity, action history, confidence thresholds, blast radius, cost. The leader can answer at any moment what the agents did, when, and at what cost.</div>
+      </li>
+      <li>
+        <div class="lt">Human Operating Layer</div>
+        <div class="ld">Roles redesigned, teams reshaped, attention refocused. AI fluency as a baseline. Humans above the loop, in the loop where it matters, never under it.</div>
+      </li>
+    </ol>
+  </section>
+
+  <section class="section">
+    <span class="section-num">&sect; 04 &middot; The opportunity, in numbers</span>
+    <h2 class="section-title">A small slice <em>is enough.</em></h2>
+
+    <p>The temptation is to inflate the maths. The more honest move is to show how forgiving the maths actually is. The agent market alone is heading from roughly eight billion dollars in 2025 to over fifty billion by 2030. The UK has approximately five and a half million SMEs. The EU has twenty four million. The US has thirty three million. The segment that genuinely fits our offer (small and medium businesses with operational pain to solve, ten or more employees, willing to invest in transformation) is in the millions.</p>
+
+    <div class="chart-frame">
+      <div class="cap">Figure 02</div>
+      <div class="cap-title">What we need to capture, to be very successful.</div>
+      <div class="chart-wrap" style="height: 220px;"><canvas id="mathChart" role="img" aria-label="Horizontal bar chart showing client targets needed to reach revenue milestones, ranging from twenty-five clients for ten million pounds to one hundred and twenty-five for fifty million."></canvas></div>
+      <div class="cap-foot">Indicative client volumes assuming an average two-year client value of approximately four hundred thousand pounds (build plus retainer). Less than one in two thousand UK SMEs gets us to twenty-five million pounds in annual revenue.</div>
+    </div>
+
+    <p class="pullquote">We need to win less than one in two thousand businesses we could plausibly sell to, in the UK alone, to build a fundable, exitable, twenty-five million pound revenue company.</p>
+
+    <p>Add Europe and the US and the maths becomes laughably forgiving. The strategic question is not whether the market is large enough. It is whether we can build fast enough to claim our share before the window narrows.</p>
+  </section>
+
+  <section class="section">
+    <span class="section-num">&sect; 05 &middot; The two-year build</span>
+    <h2 class="section-title">A company <em>designed to scale, designed to exit.</em></h2>
+
+    <p>Be honest about the shape of the bet. We are building a company that we intend to sell, or to take serious investment into, within roughly twenty four months. This is not a lifestyle business. It is not a long-form consultancy. It is a fast, focused, productised build aimed at a strategic acquisition or a significant institutional round at the point where the catalogue, the methodology, and the customer base are visibly compounding.</p>
+
+    <h3 class="subhead">What gets acquired, at premium multiples.</h3>
+    <p>Revenue alone is not what gets bought. Defensibility is. Three things compound inside 1706, and the team should hold them in mind in every decision they make.</p>
+
+    <div class="principle-grid">
+      <div class="principle">
+        <div class="head">Catalogue</div>
+        <div class="body">Every agent we ship teaches us how to ship the next one cheaper. By engagement fifty, the catalogue is an asset a competitor cannot replicate without our history. <em>This is the product moat.</em></div>
+      </div>
+      <div class="principle">
+        <div class="head">Methodology</div>
+        <div class="body">The way we codify a business into the operating context layer is genuinely novel. If we document it ruthlessly, refine it through repetition, and publish parts of it, it becomes the standard the industry references. <em>Standards are durable moats.</em></div>
+      </div>
+      <div class="principle">
+        <div class="head">Data</div>
+        <div class="body">Every engagement produces evaluation data, configuration patterns, telemetry on which agents perform in which contexts. By engagement one hundred we know things no one else knows. <em>This is the moat acquirers pay a premium for.</em></div>
+      </div>
+    </div>
+
+    <p>The plausible exit profile, two to three years out, is a strategic acquisition by a player who needs the methodology and the customer base to accelerate their own agent strategy. Salesforce. ServiceNow. Microsoft. A Big Four firm building out their AI services arm. Private equity rolling up the category. The multiples on high-growth, defensible AI services in this period are running between five and fifteen times revenue, depending on growth rate and margin.</p>
+  </section>
+
+  <section class="section">
+    <span class="section-num">&sect; 06 &middot; How we get this done</span>
+    <h2 class="section-title">The framework, the team, <em>and the operating rhythm.</em></h2>
+
+    <h3 class="subhead">The thinking framework.</h3>
+    <p>We work both layers as one. The strategic question (where should leadership attention go) and the operational delivery (which agents, in what order, with what context) happen in the same room, with the same people, on the same timeline. No handoffs. No translation gaps. The strategy ships because the people who designed it are the people deploying it. This is the structural advantage we have over the consultancies, and we should never give it up.</p>
+
+    <h3 class="subhead">The team shape, by phase.</h3>
+
+    <div class="chart-frame">
+      <div class="cap">Figure 03</div>
+      <div class="cap-title">How the team scales over twenty-four months.</div>
+      <div class="chart-wrap" style="height: 300px;"><canvas id="teamChart" role="img" aria-label="Stacked bar chart showing team composition growing across four phases from foundation to exit-ready, with founders, builders, operators and platform team."></canvas></div>
+      <div class="cap-foot">Indicative shape only. The principle is that the build team grows fastest, then the platform team, with a small senior layer holding the strategy and the methodology constant throughout.</div>
+    </div>
+
+    <h3 class="subhead">How we attract the people we need.</h3>
+    <p>The talent we want is the talent every serious AI company is currently fighting for: AI-native builders, fluent operators, designers who think in systems, methodology-minded thinkers. The good news is that the people we want are not motivated by the things conventional firms offer. They are motivated by three things, and we should design 1706 around them.</p>
+
+    <div class="principle-grid">
+      <div class="principle">
+        <div class="head">Real responsibility</div>
+        <div class="body">Builders of this generation are not waiting their turn. They want to ship something with their name on it, in front of real clients, inside the first month. We give them that. <em>The work is the recruitment.</em></div>
+      </div>
+      <div class="principle">
+        <div class="head">A short, defined arc</div>
+        <div class="body">Two-year build to a meaningful outcome is honest, urgent, and different from the open-ended career bet most firms ask for. The right people lean into a clear deadline. <em>The wrong people self-select out.</em></div>
+      </div>
+      <div class="principle">
+        <div class="head">Skin in the game</div>
+        <div class="body">Equity that means something at exit, structured cleanly, communicated openly. The team builds the value, the team participates in the value. <em>This is non-negotiable for the people we want.</em></div>
+      </div>
+      <div class="principle">
+        <div class="head">A house, not a desk</div>
+        <div class="body">1706 is a studio in the editorial sense. The work is intellectually serious, the writing is published, the standards are visible, the people in the room are the kind of people they wanted to be in the room with. <em>Culture is a recruitment moat.</em></div>
+      </div>
+    </div>
+
+    <h3 class="subhead">How we operate, internally.</h3>
+    <p>We run the operating model on ourselves before we sell it. Our own context layer, our own agents, our own catalogue under construction. Every internal process becomes a candidate for codification. Every meeting transcribed into the context layer. Every decision logged. Every agent we build for ourselves becomes a product line for the catalogue. This is not a cute internal habit. It is the cheapest, fastest research and development we will ever do, and the credibility it gives us in client conversations is unfair.</p>
+  </section>
+
+  <section class="section">
+    <span class="section-num">&sect; 07 &middot; The next ninety days</span>
+    <h2 class="section-title">What gets shipped, <em>before the quarter closes.</em></h2>
+
+    <p>The next ninety days are the ones that turn the thesis into a thing. Three workstreams, in parallel, with named owners and measurable outcomes.</p>
+
+    <div class="ninety-day">
+      <div class="day-block">
+        <div class="ph">Workstream 01</div>
+        <div class="pt">Ship the proof.</div>
+        <div class="pd">Three operational agents live inside Vecto and at least one portfolio company. Instrumented, governed, producing measurable output. The proof point everything else points to.</div>
+      </div>
+      <div class="day-block">
+        <div class="ph">Workstream 02</div>
+        <div class="pt">Codify the methodology.</div>
+        <div class="pd">The operating context layer template. The agent definition format. The governance setup. The runbook that makes engagement two cheaper than engagement one.</div>
+      </div>
+      <div class="day-block">
+        <div class="ph">Workstream 03</div>
+        <div class="pt">Build the showcase.</div>
+        <div class="pd">The architecture diagram, the public reference implementation, the live demo, the recorded walkthrough. The thing prospects and investors actually see.</div>
+      </div>
+    </div>
+
+    <p>A fourth workstream sits beneath all three: write everything down as we go. The runbook, the methodology, the lessons from each engagement. Without it we are a consultancy. With it we are a factory.</p>
+  </section>
+
+  <section class="section">
+    <span class="section-num">&sect; 08 &middot; What we believe</span>
+    <h2 class="section-title">A few things <em>that should not need restating, but do.</em></h2>
+
+    <div class="principle-grid">
+      <div class="principle">
+        <div class="head">Human first</div>
+        <div class="body"><em>Always in that order.</em> Agents serve the work. Work serves the people. We exist to design the relationships between all three.</div>
+      </div>
+      <div class="principle">
+        <div class="head">Attention is the asset</div>
+        <div class="body">Not headcount. Not technology stack. Not features shipped. The thing we are protecting and amplifying in every engagement is <em>where the human attention goes.</em></div>
+      </div>
+      <div class="principle">
+        <div class="head">Speed with care</div>
+        <div class="body">Two years is short. We move fast. We do not move sloppily. <em>The work has to survive its own scaling.</em></div>
+      </div>
+      <div class="principle">
+        <div class="head">Ship the methodology</div>
+        <div class="body">Every artefact we produce makes the next engagement cheaper. <em>Documentation is leverage.</em> A founder who does not document is just an expensive freelancer.</div>
+      </div>
+      <div class="principle">
+        <div class="head">No theatre</div>
+        <div class="body">No demos that do not work. No claims we cannot back. No dashboards built for the meeting. <em>Real artefacts, real agents, real numbers, every time.</em></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ornament">&sect; &sect; &sect;</div>
+
+  <div class="signoff">
+    <p class="closing">If any of this lands, the next move is yours. Read it twice. Mark what is wrong. Bring back the questions. We will hold a session to walk through it together and to assign the next ninety days. The work is in front of us. The window is open. The team in this room is the team we are betting on.</p>
+    <div class="sig">Craig</div>
+    <div class="role">on behalf of 1706 Studio</div>
+  </div>
+
+  <div class="footer">
+    <span>1706 Studio &middot; London &middot; Edinburgh</span>
+    <span>Internal &middot; not for circulation</span>
+  </div>
+
+</article>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+(function(){
+  if (typeof Chart === 'undefined') return;
+
+  Chart.defaults.font.family = "'Inter', 'Helvetica Neue', Arial, sans-serif";
+  Chart.defaults.font.size = 11;
+  Chart.defaults.color = '#4a4843';
+
+  new Chart(document.getElementById('mktChart'), {
+    type: 'bar',
+    data: {
+      labels: ['2024','2025','2026','2027','2028','2029','2030'],
+      datasets: [{
+        label: 'Agent market (USD bn)',
+        data: [5.25, 7.84, 11.5, 17.0, 24.8, 36.2, 52.6],
+        backgroundColor: '#1a1916',
+        borderRadius: 0,
+        barPercentage: 0.65
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: function(c){ return '$' + c.parsed.y.toFixed(1) + 'bn'; } } }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#4a4843' } },
+        y: {
+          grid: { color: 'rgba(26,25,22,0.06)' },
+          ticks: { color: '#4a4843', callback: function(v){ return '$' + Math.round(v) + 'bn'; } }
+        }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('mathChart'), {
+    type: 'bar',
+    data: {
+      labels: ['£10m revenue', '£25m revenue', '£50m revenue'],
+      datasets: [{
+        label: 'Clients required',
+        data: [25, 63, 125],
+        backgroundColor: ['#8a877f', '#4a4843', '#1a1916'],
+        borderRadius: 0
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: function(c){ return Math.round(c.parsed.x) + ' clients on the books'; } } }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(26,25,22,0.06)' },
+          ticks: { color: '#4a4843', callback: function(v){ return Math.round(v); } }
+        },
+        y: { grid: { display: false }, ticks: { color: '#1a1916', font: { size: 13 } } }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('teamChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Q1 2026 \u2014 foundation', 'Q3 2026 \u2014 first scale', 'Q1 2027 \u2014 productised', 'Q3 2027 \u2014 exit-ready'],
+      datasets: [
+        { label: 'Founders / senior', data: [3, 3, 4, 5], backgroundColor: '#1a1916' },
+        { label: 'AI-first builders', data: [2, 5, 10, 16], backgroundColor: '#4a4843' },
+        { label: 'Operators / methodology', data: [1, 3, 6, 10], backgroundColor: '#8a877f' },
+        { label: 'Platform / catalogue', data: [0, 2, 5, 9], backgroundColor: '#c4c1b6' }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom',
+          labels: { boxWidth: 10, boxHeight: 10, color: '#4a4843', font: { size: 11 }, padding: 14 }
+        },
+        tooltip: { callbacks: { label: function(c){ return c.dataset.label + ': ' + Math.round(c.parsed.y); } } }
+      },
+      scales: {
+        x: { stacked: true, grid: { display: false }, ticks: { color: '#4a4843', font: { size: 11 } } },
+        y: {
+          stacked: true,
+          grid: { color: 'rgba(26,25,22,0.06)' },
+          ticks: { color: '#4a4843', callback: function(v){ return Math.round(v); } }
+        }
+      }
+    }
+  });
+})();
+</script>
+</body>
+</html>
