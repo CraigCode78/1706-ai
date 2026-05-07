@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Train — A working playbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e0c;
+    --bg-elevated: #15151220;
+    --ink: #e8e4d8;
+    --ink-soft: #b8b3a3;
+    --ink-muted: #76715f;
+    --rule: #2a2820;
+    --accent: #d4a64a;
+    --accent-soft: #d4a64a30;
+    --warn: #c46a3a;
+    --serif: 'Fraunces', Georgia, serif;
+    --mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-weight: 400;
+    line-height: 1.65;
+    font-size: 18px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-image:
+      radial-gradient(ellipse at top, #1a1814 0%, var(--bg) 60%);
+    min-height: 100vh;
+  }
+
+  ::selection { background: var(--accent-soft); color: var(--ink); }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  @media (min-width: 1024px) {
+    .layout {
+      grid-template-columns: 240px 1fr;
+      gap: 80px;
+      padding: 0 48px;
+    }
+  }
+
+  /* Sidebar */
+  aside {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    aside {
+      display: block;
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 80px 0 40px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+  }
+
+  aside .brand {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 28px;
+    letter-spacing: -0.01em;
+    text-transform: none;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+
+  aside .brand-mark {
+    color: var(--accent);
+  }
+
+  aside .tagline {
+    color: var(--ink-muted);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    margin-bottom: 48px;
+  }
+
+  aside nav ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: toc;
+  }
+
+  aside nav ol li {
+    counter-increment: toc;
+    margin-bottom: 18px;
+    line-height: 1.4;
+  }
+
+  aside nav ol li a {
+    display: flex;
+    gap: 12px;
+    color: var(--ink-muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  aside nav ol li a::before {
+    content: counter(toc, decimal-leading-zero);
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  aside nav ol li a:hover {
+    color: var(--ink);
+  }
+
+  /* Main content */
+  main {
+    padding: 80px 0 160px;
+    max-width: 720px;
+  }
+
+  /* Header */
+  .doc-header {
+    margin-bottom: 80px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .meta {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .meta span:not(:first-child)::before {
+    content: '·';
+    margin-right: 16px;
+    color: var(--ink-muted);
+  }
+
+  h1 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(48px, 8vw, 88px);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    margin: 0 0 24px;
+    color: var(--ink);
+  }
+
+  h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+
+  .subtitle {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--ink-soft);
+    line-height: 1.4;
+    margin: 0;
+    max-width: 600px;
+  }
+
+  .preamble {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--ink-muted);
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    line-height: 1.6;
+  }
+
+  /* Strategic summary box */
+  .summary {
+    margin: 0 0 96px;
+    padding: 40px 40px 32px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--rule);
+    border-left: 2px solid var(--accent);
+    position: relative;
+  }
+
+  .summary::before {
+    content: 'TL;DR';
+    position: absolute;
+    top: -10px;
+    left: 32px;
+    background: var(--bg);
+    padding: 0 12px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+  }
+
+  .summary h2 {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 24px;
+    margin: 0 0 20px;
+    color: var(--ink);
+    border: none;
+    padding: 0;
+  }
+
+  .summary p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin: 0 0 16px;
+  }
+
+  .summary p:last-child { margin-bottom: 0; }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+  }
+
+  @media (min-width: 600px) {
+    .summary-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .summary-grid .item {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+  }
+
+  .summary-grid .label {
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 9px;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .summary-grid .value { color: var(--ink-soft); }
+
+  /* Section styles */
+  section { margin-bottom: 96px; scroll-margin-top: 40px; }
+
+  h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin: 0 0 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
+
+  h2 .num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  h2 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  h3 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 56px 0 16px;
+  }
+
+  h3 .phase-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 400;
+  }
+
+  h4 {
+    font-family: var(--mono);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 32px 0 12px;
+  }
+
+  p {
+    margin: 0 0 20px;
+    color: var(--ink);
+  }
+
+  p strong {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  em { color: var(--ink-soft); }
+
+  blockquote {
+    border-left: 2px solid var(--accent);
+    padding: 4px 0 4px 24px;
+    margin: 32px 0;
+    font-style: italic;
+    color: var(--ink-soft);
+    font-size: 20px;
+    line-height: 1.5;
+  }
+
+  /* Phase cards */
+  .phase {
+    margin: 40px 0;
+    padding: 32px;
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--accent);
+    background: var(--bg-elevated);
+  }
+
+  .phase h3 { margin-top: 0; }
+
+  .phase .test {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--rule);
+    font-size: 16px;
+    color: var(--ink-soft);
+  }
+
+  .phase .test strong {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  /* Stack list */
+  .stack-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin: 32px 0;
+  }
+
+  @media (min-width: 700px) {
+    .stack-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .stack-item {
+    padding: 24px;
+    border: 1px solid var(--rule);
+    background: var(--bg-elevated);
+  }
+
+  .stack-item .layer {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 8px;
+  }
+
+  .stack-item .pick {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--accent);
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+
+  .stack-item .reasoning {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  /* Roles list */
+  .roles {
+    margin: 32px 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .role {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  @media (min-width: 700px) {
+    .role { grid-template-columns: 200px 1fr; gap: 32px; }
+  }
+
+  .role .title {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-style: italic;
+    font-weight: 500;
+    color: var(--accent);
+  }
+
+  .role .desc {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  /* Guardrails */
+  .guardrails .item {
+    margin: 32px 0;
+    padding-left: 24px;
+    border-left: 2px solid var(--warn);
+  }
+
+  .guardrails .item h4 {
+    color: var(--warn);
+    margin-top: 0;
+  }
+
+  .guardrails .item p { margin: 0; }
+
+  /* Footer */
+  footer {
+    margin-top: 120px;
+    padding-top: 32px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--ink-muted);
+    line-height: 1.7;
+  }
+
+  footer .end-mark {
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+
+  /* Drop cap on opening section */
+  .thesis > p:first-of-type::first-letter {
+    font-family: var(--serif);
+    font-size: 64px;
+    font-weight: 300;
+    float: left;
+    line-height: 0.85;
+    margin: 6px 12px 0 0;
+    color: var(--accent);
+  }
+
+  /* Print */
+  @media print {
+    aside { display: none; }
+    body { background: white; color: black; }
+    .layout { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<style>
+  #pin-gate {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Inter', -apple-system, sans-serif;
+  }
+  #pin-gate.hidden { display: none; }
+  #pin-gate .box { text-align: center; max-width: 380px; padding: 40px 32px; }
+  #pin-gate .mark {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 28px; font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 32px;
+    display: inline-flex; align-items: baseline; gap: 0.05em;
+  }
+  #pin-gate .mark .dot {
+    width: 5px; height: 5px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin: 0 0.18em;
+    align-self: center;
+    transform: translateY(-3px);
+  }
+  #pin-gate h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 400; font-size: 22px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  #pin-gate p {
+    color: var(--ink-muted);
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+  #pin-gate input {
+    width: 100%; padding: 14px 16px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--rule);
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px; letter-spacing: 0.5em; text-align: center;
+    border-radius: 4px; outline: none;
+    transition: border-color 0.15s ease;
+  }
+  #pin-gate input:focus { border-color: var(--accent); }
+  #pin-gate .err {
+    color: var(--accent);
+    font-size: 11px; margin-top: 12px; min-height: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+</style>
+<div id="pin-gate">
+  <div class="box">
+    <div class="mark">17<span class="dot"></span>06</div>
+    <h2>Private playbook</h2>
+    <p>This document is shared by direct invitation. Enter the access code to continue.</p>
+    <input id="pin-input" type="password" inputmode="numeric" maxlength="4" autocomplete="off" autofocus>
+    <div class="err" id="pin-err">&nbsp;</div>
+  </div>
+</div>
+<script>
+  (function(){
+    var PIN = "2704";
+    var gate = document.getElementById('pin-gate');
+    var input = document.getElementById('pin-input');
+    var err = document.getElementById('pin-err');
+    if (sessionStorage.getItem('train-pin-ok') === '1') { gate.classList.add('hidden'); return; }
+    input.addEventListener('input', function(){
+      err.innerHTML = '&nbsp;';
+      if (input.value.length === 4) {
+        if (input.value === PIN) {
+          sessionStorage.setItem('train-pin-ok', '1');
+          gate.classList.add('hidden');
+        } else {
+          err.textContent = 'Incorrect code';
+          input.value = '';
+        }
+      }
+    });
+  })();
+</script>
+
+<div class="layout">
+
+  <aside>
+    <div class="brand"><span class="brand-mark">∴</span> Train</div>
+    <div class="tagline">Working playbook · v0.1</div>
+    <nav>
+      <ol>
+        <li><a href="#thesis">The thesis</a></li>
+        <li><a href="#order">The order of operations</a></li>
+        <li><a href="#mechanics">The mechanics</a></li>
+        <li><a href="#stack">The platform stack</a></li>
+        <li><a href="#guardrails">What we are not doing yet</a></li>
+        <li><a href="#roles">Roles that need to exist</a></li>
+        <li><a href="#substack">Substack: framing for the team</a></li>
+        <li><a href="#portfolio">Train and the wider portfolio</a></li>
+      </ol>
+    </nav>
+  </aside>
+
+  <main>
+
+    <div class="doc-header">
+      <div class="meta">
+        <span>Working document</span>
+        <span>For Michelle</span>
+        <span>v0.1</span>
+      </div>
+      <h1><em>Train</em></h1>
+      <p class="subtitle">A working playbook for building a pro&#8209;democracy community in the AI era.</p>
+      <p class="preamble">For Michelle as operator. Designed to be argued with and adjusted as reality intervenes. The reasoning matters; strip it and this becomes a checklist the team will deviate from at the first obstacle.</p>
+    </div>
+
+    <div class="summary">
+      <h2>The shape of it, in two minutes.</h2>
+      <p>Train is a pro&#8209;democracy community for the United States, built on the premise that the people who care most about defending democracy are systematically out&#8209;equipped against actors already operating with AI at scale. AI fluency is the mechanic. Community is the form, because durable political power comes from communities with practiced readiness, not from broadcasts or one&#8209;off mobilisations.</p>
+      <p>The plan runs in three phases over six months. Narrative first, then recurring experience, then formation and practiced readiness. Each phase has a clear test before the next begins. The political encounter is not in the plan, deliberately; it cannot be scheduled, only prepared for.</p>
+      <div class="summary-grid">
+        <div class="item">
+          <span class="label">Phase 1 · Weeks 1&#8211;4</span>
+          <span class="value">Narrative. Substack live, manifesto in progress, seed list. No community yet.</span>
+        </div>
+        <div class="item">
+          <span class="label">Phase 2 · Weeks 4&#8211;12</span>
+          <span class="value">Recurring experience. Discord opens, weekly ritual runs, podcast launches.</span>
+        </div>
+        <div class="item">
+          <span class="label">Phase 3 · Months 3&#8211;6</span>
+          <span class="value">Formation. Status structure, monthly builds, manifesto v1.0 written by the community.</span>
+        </div>
+      </div>
+    </div>
+
+    <section id="thesis" class="thesis">
+      <h2><span class="num">01</span>The thesis</h2>
+      <p>Train is a pro&#8209;democracy community. The mission is durable democratic resilience in the United States at a moment when the institutions, narratives, and information environments that sustain democracy are under sustained pressure, much of it now amplified by AI.</p>
+      <p>The premise is that the people who care most about defending democracy are systematically out&#8209;equipped. Actors with the resources and intent to weaken democratic norms are operating with AI at scale. The people who would push back, organisers, civic leaders, journalists, educators, civil servants, ordinary citizens with skin in the game, are mostly not. Train exists to close that gap.</p>
+      <p>The mechanic is AI fluency. Not as an end in itself but as the lever that makes existing democratic energy meaningfully more powerful. Someone who already knows how to organise becomes ten times more effective when they can deploy agents, automate research, generate communications at scale, and reason with models. Train is the place where they learn to do that, alongside others doing the same, with a shared sense of what the work is for.</p>
+      <h4>Why a community, not a campaign or a media brand or a think tank</h4>
+      <p>Because durable political power comes from communities with practiced readiness, not from broadcasts or one&#8209;off mobilisations. The literature on civic capacity, summarised in <em>In Formation</em>, is unambiguous: communities that have rehearsed collective action through repeated, shared experience are the ones that can act when a political moment arrives. A campaign peaks and fades. A media brand reaches but does not coordinate. A think tank produces ideas but no muscle memory. Train is being designed as infrastructure that compounds over years, with the kind of distributed leadership and owned channels that survive the news cycle.</p>
+      <blockquote>Train is where people who care about democracy learn to use AI well enough to defend it.</blockquote>
+    </section>
+
+    <section id="order">
+      <h2><span class="num">02</span>The order of operations</h2>
+      <p>Three phases. Each has a clear purpose and a clear test for whether it is working before the next begins. They overlap at the edges; they are not strict gates. But the sequencing matters, and skipping ahead is the most common way community projects fail.</p>
+
+      <div class="phase">
+        <h3><span class="phase-tag">Phase 1 · Weeks 1 to 4</span>Narrative</h3>
+        <h4>Purpose</h4>
+        <p>Establish what Train is, what it stands for, and why it exists. Give people something to encounter before you ask them to join anything. You cannot recruit into a community that has no story.</p>
+        <h4>What gets built</h4>
+        <p>A Substack publication, named, designed, and live by end of week 2. The first three posts are queued before launch: a manifesto in progress (deliberately unfinished, an invitation rather than a declaration), one practical piece showing AI used well in a civic context, one piece of analysis on a current democratic vulnerability where AI fluency would have made a difference. From week 3 onward, one post per week, without exception. Rhythm is the point.</p>
+        <p>A landing page, simple, with a clear positioning statement, an email capture, and links to the Substack and any social presences. No community sign&#8209;up yet. The community does not exist.</p>
+        <p>A working list of the first 25 to 50 people you want to bring in when the community opens, drawn from existing networks. This is your seed group. They get a personal note, not a public sign&#8209;up form.</p>
+        <h4>What does not get built</h4>
+        <p>No Discord. No Slack. No public community. No events. No podcast yet. Resist all of these. The temptation in week 2 will be to open the doors. Don&#8217;t. People joining a community with nothing in it churn within a fortnight, and you only get one launch.</p>
+        <div class="test">
+          <strong>Test for moving on</strong>
+          Three Substack posts published on schedule. Email list growing without paid acquisition. Seed list of named individuals confirmed. A clear, defensible answer to the question &#8220;what is Train?&#8221; that anyone on the team can deliver in 30 seconds.
+        </div>
+      </div>
+
+      <div class="phase">
+        <h3><span class="phase-tag">Phase 2 · Weeks 4 to 12</span>Recurring experience</h3>
+        <h4>Purpose</h4>
+        <p>Stand up the community layer and the rituals. Get the rhythm running. The rhythm is the product in this phase. Membership numbers are a vanity metric this early; what matters is whether the recurring things actually recur.</p>
+        <h4>What gets built</h4>
+        <p>The community platform, opened to the seed list first, then gradually to Substack subscribers who opt in.</p>
+        <p>A weekly ritual, non&#8209;negotiable, the same day and time every week. The strongest options for Train are a Friday &#8220;what I built this week&#8221; thread, where members share one thing they used AI to do that mattered, and a fortnightly live session, an hour, where two or three members demo something or workshop a problem. Pick one to start. Add the second only when the first is reliably working.</p>
+        <p>The first podcast episode, recorded in week 8 or 9, published in week 10. Format: long&#8209;form conversation with someone using AI well in a civic context. Cadence: every two weeks. The podcast is parasocial scale; the community is dense connection. Both are needed.</p>
+        <p>A monthly newsletter for the wider Substack audience that summarises what the community has been doing, what it has built, what it has learned. This is how non&#8209;members see the community working and decide they want in.</p>
+        <h4>What does not get built</h4>
+        <p>No formal roles or status structures yet. No manifesto v1.0. No partnerships, no satellite chapters, no expansion. The single goal of this phase is making the rhythm reliable.</p>
+        <div class="test">
+          <strong>Test for moving on</strong>
+          Twelve consecutive weeks of the recurring ritual happening. Five podcast episodes published on cadence. A core of around 15 to 30 active members who show up regularly without prompting. Members beginning to refer others without being asked.
+        </div>
+      </div>
+
+      <div class="phase">
+        <h3><span class="phase-tag">Phase 3 · Months 3 to 6</span>Formation and practiced readiness</h3>
+        <h4>Purpose</h4>
+        <p>Turn a community with a rhythm into a community with identity and capacity. This is the hardest phase and the one that separates Train from a Substack with a Discord attached.</p>
+        <h4>What gets built</h4>
+        <p>A status structure that is light but real. Visible roles people earn through contribution, not paid membership tiers. A simple ladder: someone who shows up becomes a regular, someone who shares work becomes a contributor, someone who runs a session or ships something the community uses becomes a builder, someone who consistently brings others in and shapes the work becomes a leader. Names matter; pick ones that fit Train&#8217;s voice. Public credit matters more.</p>
+        <p>Practiced readiness through regular collective build activities. Monthly build nights where members work in small groups on a defined civic AI problem and ship something by the end of the evening. Quarterly bigger pushes where the community produces something visible: a tool, a guide, an investigation, an open dataset. The output matters less than the rehearsal of acting together.</p>
+        <p>The pairing mechanic, introduced gradually as numbers allow. Match AI&#8209;native builders with subject matter experts and seasoned civic operators, as a structured offering inside the community. Document and profile the pairs and what they ship. This is one of several mechanics Train can use, not the headline.</p>
+        <p>A second podcast format or content stream that profiles members and their work, feeding the recruitment engine and reinforcing identity. People want to belong to communities where members are visibly doing things that matter.</p>
+        <p>A first attempt at the manifesto v1.0, written collectively, with the community having shaped it through the preceding three months. This is not the founding document; it&#8217;s the document the community has earned the right to write.</p>
+        <div class="test">
+          <strong>Test for whether it&#8217;s working</strong>
+          Members describing themselves to outsiders as part of Train without prompting. Builds shipping on schedule. The community surviving at least one week where Michelle is unavailable, with rituals running anyway. Recruitment increasingly driven by member referral rather than top&#8209;down outreach.
+        </div>
+      </div>
+
+      <h4>What comes after</h4>
+      <p>Phase 4 is not in this plan, deliberately. It is the political encounter and collective action phase from <em>In Formation</em>, and it cannot be scheduled. It happens when a moment arrives, a threat, a shock, a revealed injustice, a visible win, and it works only if Phases 1 to 3 have built the readiness to meet it. The job between now and then is to be the kind of community that can act when the moment comes.</p>
+    </section>
+
+    <section id="mechanics">
+      <h2><span class="num">03</span>The mechanics</h2>
+      <p>Mechanics are tools that serve the mission. Train will accumulate more of them over time. These are the ones to start with.</p>
+
+      <h4>AI fluency as empowerment</h4>
+      <p>The core offer. Members come in at varying levels and leave more capable. This shows up in everything: the content of the Substack, the topics of the live sessions, the substance of the build nights. Not a curriculum, not a course, but a continuous practical exposure to using AI well for democratic ends.</p>
+
+      <h4>The pairing mechanic</h4>
+      <p>Match AI&#8209;native builders, often younger, fluent in models and agents, with subject matter experts and operators who bring deep domain knowledge of civic life, organising, policy, journalism, or governance. Each side has what the other lacks. The pairing is a force multiplier and also a recruitment proposition: it gives both audiences a clear reason to join. Introduce in Phase 3, not earlier; it requires enough density to match well.</p>
+
+      <h4>Builds and ships</h4>
+      <p>The community produces things. Tools, guides, investigations, datasets. Some are small, made in an evening. Some are quarterly pushes. The output is a recruitment engine, an identity signal, and the practiced readiness that turns a community into capacity.</p>
+
+      <h4>Owned channels</h4>
+      <p>Substack, podcast, Discord or equivalent, all owned by Train, not rented from algorithmic platforms. X and similar are amplifiers, not infrastructure. This is <em>In Formation</em> design principle 6, and it matters more for a movement community than for any other kind.</p>
+
+      <h4>Distributed leadership</h4>
+      <p>Michelle leads, but Train cannot depend on her. From Phase 2 onward, the rituals must run without her presence at least once per quarter. From Phase 3, named contributors and builders take ownership of specific surfaces: someone runs the Friday thread, someone produces the podcast, someone shapes the build nights. Train survives only if it can outlast any single person, including its founder.</p>
+    </section>
+
+    <section id="stack">
+      <h2><span class="num">04</span>The platform stack</h2>
+      <p>A clear recommendation per layer. Michelle can override knowingly; she does not need a menu.</p>
+
+      <div class="stack-grid">
+        <div class="stack-item">
+          <div class="layer">Public surface</div>
+          <div class="pick">Substack</div>
+          <p class="reasoning">For both the publication and the podcast. The right tool for narrative&#8209;led, paid&#8209;tier&#8209;optional, owned&#8209;list publishing in 2026. Single platform, single workflow, single subscriber list. Distribution to Apple, Spotify, YouTube via Substack&#8217;s native pipeline.</p>
+        </div>
+        <div class="stack-item">
+          <div class="layer">Community layer</div>
+          <div class="pick">Discord</div>
+          <p class="reasoning">Recommended over Slack, Circle, and Mighty Networks. Where AI&#8209;native builders already live. Signals movement and culture rather than workplace. Free, scales, has the right primitives. Trade&#8209;off: can feel chaotic to less technical members. Mitigate with tight onboarding and no more than five channels at launch.</p>
+        </div>
+        <div class="stack-item">
+          <div class="layer">Working layer</div>
+          <div class="pick">Notion + Signal</div>
+          <p class="reasoning">Notion for the team&#8217;s documents, planning, shared knowledge. Signal for team chat: private, secure, where Craig and Upendra already operate. Invisible to the community, deliberately. Never try to migrate the team and the community onto the same tools. Different jobs.</p>
+        </div>
+        <div class="stack-item">
+          <div class="layer">Agent layer</div>
+          <div class="pick">Train chief of staff</div>
+          <p class="reasoning">Train should have its own AI chief of staff agent, in the pattern of Bad Company&#8217;s Gru, living inside Signal where the core team operates and coordinating across Notion, GitHub, Substack, and Discord. The difference between a team that drowns in tool fragmentation and one that scales. Phase 2 build, not Phase 1.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="guardrails">
+      <h2><span class="num">05</span>What we are <em>deliberately</em> not doing yet</h2>
+      <p>Half of what kills early&#8209;stage projects is doing the right things in the wrong order. These are the guardrails.</p>
+
+      <div class="guardrails">
+        <div class="item">
+          <h4>No manifesto v1.0 in Phase 1</h4>
+          <p>The manifesto v0.1 in the first Substack post is deliberately unfinished. The real manifesto crystallises from what the community says and does over the first three months. Manifestos written before a community exists are performative and brittle.</p>
+        </div>
+        <div class="item">
+          <h4>No premature scaling</h4>
+          <p>Resist the pull to grow membership numbers in Phase 2. The goal is not to be big; it is to be reliable. A community of 30 people that meets every week without fail is more valuable than 3,000 people who joined and never came back.</p>
+        </div>
+        <div class="item">
+          <h4>No drift into pure mobilising</h4>
+          <p><em>In Formation</em> names the failure mode: Indivisible led with politics as the front door, ran on outrage, and fizzled when the political moment passed because no durable social fabric had been built. Train&#8217;s mission is openly pro&#8209;democracy, so it cannot disguise itself as apolitical, but it must not become a mobilising&#8209;only organisation. The defence is the rituals, the builds, the relationships, the practiced readiness. These have to be doing real work for members regardless of the news cycle.</p>
+        </div>
+        <div class="item">
+          <h4>No leader dependency</h4>
+          <p>From Phase 2 onward, Michelle is not the only person who can keep Train running. This requires deliberate effort: handing things off, naming co&#8209;leads, letting things be done imperfectly by others rather than perfectly by her. It will feel inefficient. It is the point.</p>
+        </div>
+        <div class="item">
+          <h4>No platform sprawl</h4>
+          <p>One platform per layer. The temptation will be to add WhatsApp because someone asks, then Telegram, then a separate forum. Resist. Members on five platforms means coordination on none.</p>
+        </div>
+        <div class="item">
+          <h4>No politics&#8209;by&#8209;import</h4>
+          <p>When the political moments arrive, and they will, the framing must come from inside the community&#8217;s own experience and language, not from external messaging handed down. This is <em>In Formation</em>&#8217;s Stage 4 principle: the trigger has to feel like the community&#8217;s problem, not someone else&#8217;s.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="roles">
+      <h2><span class="num">06</span>Roles that need to exist</h2>
+      <p>Role&#8209;agnostic, so Michelle can map people to it. The roles can be filled by one person each, shared, or held by Michelle herself in the early weeks. The point is to know what gaps to fill.</p>
+
+      <div class="roles">
+        <div class="role">
+          <div class="title">The lead</div>
+          <p class="desc">Michelle. Holds the mission, the voice, the relationships, the call. This role does not get delegated.</p>
+        </div>
+        <div class="role">
+          <div class="title">Narrative lead</div>
+          <p class="desc">Owns the Substack, the manifesto in progress, the editorial calendar. Could be Michelle in Phase 1; should be a named other from Phase 2.</p>
+        </div>
+        <div class="role">
+          <div class="title">Community lead</div>
+          <p class="desc">Owns the Discord, the rituals, the onboarding, the member experience. Critical hire or appointment by end of Phase 1.</p>
+        </div>
+        <div class="role">
+          <div class="title">Build lead</div>
+          <p class="desc">Owns the build nights, the quarterly pushes, the technical credibility of what Train ships. Likely an AI&#8209;native operator with civic instincts. Critical hire or appointment by Phase 2.</p>
+        </div>
+        <div class="role">
+          <div class="title">Producer</div>
+          <p class="desc">Owns the podcast, the production rhythm, the distribution. Can be a contractor.</p>
+        </div>
+        <div class="role">
+          <div class="title">Infrastructure builder</div>
+          <p class="desc">Builds and maintains the Train chief of staff agent, the Notion stack, the integrations. Technical, trusted, building inside the team. Phase 2 onward.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="substack">
+      <h2><span class="num">07</span>Substack: framing for the team</h2>
+      <p>Not a draft. The team writing it knows the substance better. What follows is the brief.</p>
+
+      <h4>Why a Substack matters at this stage</h4>
+      <p>It is the front door. Before Train has a community, it has a story. The Substack is where the story is told, week after week, and it does three jobs at once: it explains what Train is to people who have never heard of it, it builds an owned audience that can be invited into the community at the right moment, and it establishes the voice and authority that makes Train credible to allies, partners, and recruits.</p>
+
+      <h4>What it should cover</h4>
+      <p>Three threads, woven together over time. First, the analysis: what is happening to democracy in the AI era, what the threats look like up close, what the responses are and are not working. Second, the practice: real, specific, useful examples of AI being deployed for democratic ends, with enough detail that readers can actually do something with them. Third, the manifesto in progress: what Train believes, what Train is for, what kind of community Train is becoming, written openly and revised over time.</p>
+
+      <h4>What the call to action looks like</h4>
+      <p>Not &#8220;join Train&#8221; in the early weeks. There is nothing to join yet. The call to action is &#8220;subscribe, read along, and tell us where you&#8217;d want this to go.&#8221; When the community opens, the call evolves to &#8220;if you&#8217;ve been reading and want to do this with others, here&#8217;s how.&#8221; Members of the community are recruited from the Substack audience, in that order, deliberately.</p>
+
+      <h4>Voice</h4>
+      <p>Direct, plainspoken, technically credible without being academic. The reader should feel they are being treated as an intelligent adult who is already partway to the same conclusion. Avoid the failure modes of both genres: the doom&#8209;laden think piece on AI, and the breathless tech&#8209;enthusiast newsletter. Train sits between them and is sharper than either.</p>
+    </section>
+
+    <section id="portfolio">
+      <h2><span class="num">08</span>Train and the wider portfolio</h2>
+      <p>Train sits alongside Bad Company, Hearth, Staff, and the wider portfolio. Each project has a different front door but a shared underlying thesis: durable power comes from communities with practiced readiness, and the portfolio is constructing belonging&#8209;to&#8209;power infrastructure across multiple surfaces. Train&#8217;s specific contribution is the AI&#8209;fluency and democratic&#8209;resilience surface. The team should know they are not building in isolation; the portfolio thesis is the wider ground they stand on. The day&#8209;to&#8209;day work of Train, however, runs on its own logic. This document is that logic.</p>
+    </section>
+
+    <footer>
+      <div class="end-mark">∴</div>
+      Working playbook · v0.1 · Prepared for Michelle<br>
+      Designed to be argued with and adjusted as reality intervenes.
+    </footer>
+
+  </main>
+
+</div>
+
+</body>
+</html>
