@@ -829,12 +829,12 @@
     var gate = document.getElementById('pin-gate');
     var input = document.getElementById('pin-input');
     var err = document.getElementById('pin-err');
-    if (sessionStorage.getItem('you-pin-ok') === '1') { gate.classList.add('hidden'); return; }
+    if (sessionStorage.getItem('jussi-pin-ok') === '1') { gate.classList.add('hidden'); return; }
     input.addEventListener('input', function(){
       err.innerHTML = '&nbsp;';
       if (input.value.length === 4) {
         if (input.value === PIN) {
-          sessionStorage.setItem('you-pin-ok', '1');
+          sessionStorage.setItem('jussi-pin-ok', '1');
           gate.classList.add('hidden');
         } else {
           err.textContent = 'Incorrect code';
