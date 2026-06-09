@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light">
+<title>A First Read · For Jussi Nevanlinna</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..900,30..100&family=EB+Garamond:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light;
+    --paper: #F4EDDA;
+    --paper-deep: #EBE2C7;
+    --paper-card: #FBF6E7;
+    --ink: #1A1612;
+    --ink-soft: #4A4038;
+    --ink-mute: #847866;
+    --rule: #D5C9AC;
+    --rule-soft: #E4D9BC;
+    --oxblood: #7A1E1E;
+    --oxblood-deep: #5C1818;
+    --oxblood-soft: rgba(122, 30, 30, 0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    scroll-behavior: smooth;
+    background-color: #F4EDDA !important;
+    color-scheme: light !important;
+  }
+
+  body {
+    background-color: #F4EDDA !important;
+    color: #1A1612 !important;
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 19px;
+    line-height: 1.65;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    forced-color-adjust: none;
+    min-height: 100vh;
+  }
+
+  /* Defeat dark mode overrides from app webviews. When the system is in dark mode,
+     iOS apps and webviews may inject CSS that overrides background and text colours.
+     This media query explicitly forces the light palette to win. */
+  @media (prefers-color-scheme: dark) {
+    html {
+      background-color: #F4EDDA !important;
+      color-scheme: light !important;
+    }
+    body {
+      background-color: #F4EDDA !important;
+      color: #1A1612 !important;
+    }
+    .frame {
+      background-color: #F4EDDA !important;
+      color: #1A1612 !important;
+    }
+    .paper-wrap {
+      background-color: #F4EDDA !important;
+    }
+    .obs, .obs p, .opening p, .closing p, .question p,
+    .observations, .synthesis, .capability, .questions, .closing, .opening {
+      background-color: transparent !important;
+      color: #4A4038 !important;
+    }
+    .obs h2, .section-heading, h1.title, .meta-value {
+      color: #1A1612 !important;
+    }
+    .obs-numeral, .section-title, .kicker, .principle-label,
+    .cap-applies-label, .phase-numeral, .question-num, .sign-off-name,
+    .obs-tag {
+      color: #7A1E1E !important;
+    }
+    .obs-sub, .section-intro, .dek, .meta-label, .phase-sub, .cap-applies,
+    .mark, .timeline-stop-label, .capability-close {
+      color: #847866 !important;
+    }
+    .principle, .posture-note, .timeline, .phase-card {
+      background-color: #FBF6E7 !important;
+    }
+    footer {
+      color: #847866 !important;
+    }
+  }
+
+  /* Subtle paper texture using radial gradients */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(122, 30, 30, 0.015) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(74, 64, 56, 0.02) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Reading progress bar */
+  .progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    background: var(--oxblood);
+    width: 0;
+    z-index: 100;
+    transition: width 0.1s linear;
+  }
+
+  .frame {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 80px 40px 120px;
+  }
+
+  /* Masthead */
+  .masthead {
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 48px;
+    margin-bottom: 64px;
+  }
+
+  .mark {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 48px;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--ink-mute);
+  }
+
+  .mark-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--oxblood);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .mark-sep {
+    color: var(--rule);
+    margin: 0 4px;
+  }
+
+  .kicker {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--oxblood);
+    font-weight: 600;
+    margin-bottom: 32px;
+  }
+
+  h1.title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 400;
+    font-size: clamp(56px, 9vw, 96px);
+    line-height: 0.95;
+    letter-spacing: -0.025em;
+    font-variation-settings: "opsz" 144, "SOFT" 50;
+    margin-bottom: 32px;
+    color: var(--ink);
+  }
+
+  h1.title em {
+    font-style: italic;
+    color: var(--oxblood);
+    font-variation-settings: "opsz" 144, "SOFT" 100;
+  }
+
+  .dek {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 22px;
+    line-height: 1.45;
+    font-style: italic;
+    color: var(--ink-soft);
+    max-width: 580px;
+    margin-bottom: 48px;
+    font-weight: 400;
+  }
+
+  .meta {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px 24px;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+
+  .meta-label {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 10px;
+    color: var(--ink-mute);
+    font-weight: 600;
+    align-self: center;
+  }
+
+  .meta-value {
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  /* Opening */
+  .opening {
+    margin-bottom: 96px;
+  }
+
+  .opening p {
+    margin-bottom: 24px;
+    font-size: 20px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  .opening p:first-child::first-letter {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 76px;
+    line-height: 0.85;
+    float: left;
+    margin: 6px 12px 0 -2px;
+    color: var(--oxblood);
+    font-weight: 500;
+    font-variation-settings: "opsz" 144, "SOFT" 60;
+  }
+
+  /* Observations */
+  .observations {
+    margin-bottom: 96px;
+  }
+
+  .obs {
+    margin-bottom: 80px;
+    position: relative;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+
+  .obs.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .obs-numeral {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    color: var(--oxblood);
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .obs-numeral::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+    max-width: 60px;
+  }
+
+  .obs h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    margin-bottom: 12px;
+    color: var(--ink);
+    font-variation-settings: "opsz" 72, "SOFT" 40;
+  }
+
+  .obs-sub {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-style: italic;
+    font-size: 20px;
+    color: var(--ink-mute);
+    margin-bottom: 28px;
+    line-height: 1.4;
+  }
+
+  .obs p {
+    margin-bottom: 20px;
+    color: var(--ink-soft);
+  }
+
+  .obs p strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .principle {
+    margin-top: 32px;
+    padding: 24px 28px;
+    background: var(--paper-card);
+    border-left: 2px solid var(--oxblood);
+    position: relative;
+  }
+
+  .principle-label {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--oxblood);
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .principle p {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 19px;
+    line-height: 1.4;
+    color: var(--ink);
+    font-style: italic;
+    font-weight: 400;
+    margin: 0;
+    font-variation-settings: "opsz" 36, "SOFT" 60;
+  }
+
+  /* Section divider */
+  .section-divider {
+    text-align: center;
+    margin: 80px 0;
+    color: var(--oxblood);
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 18px;
+    letter-spacing: 0.4em;
+  }
+
+  /* Synthesis section */
+  .synthesis {
+    margin-bottom: 96px;
+  }
+
+  .section-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 13px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--oxblood);
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  .section-heading {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 400;
+    font-size: 42px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    color: var(--ink);
+    font-variation-settings: "opsz" 72, "SOFT" 40;
+  }
+
+  .section-heading em {
+    font-style: italic;
+    color: var(--oxblood);
+  }
+
+  .section-intro {
+    font-size: 20px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin-bottom: 48px;
+    font-style: italic;
+  }
+
+  /* Phases */
+  .timeline {
+    margin-bottom: 32px;
+  }
+
+  .phases-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+
+  .phase-card {
+    background: var(--paper-card);
+    border-top: 3px solid var(--oxblood);
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .phase-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 6px;
+  }
+
+  .phase-numeral {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 44px;
+    line-height: 1;
+    color: var(--oxblood);
+    font-style: italic;
+    font-weight: 400;
+    font-variation-settings: "opsz" 60, "SOFT" 80;
+  }
+
+  .phase-name {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1;
+    letter-spacing: -0.015em;
+    font-variation-settings: "opsz" 60, "SOFT" 40;
+  }
+
+  .phase-sub {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--ink-mute);
+    margin-bottom: 24px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--rule-soft);
+    line-height: 1.4;
+  }
+
+  .phase-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex: 1;
+  }
+
+  .phase-list li {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    padding: 16px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 12px;
+    align-items: baseline;
+  }
+
+  .phase-list li:last-child {
+    border-bottom: none;
+    padding-bottom: 4px;
+  }
+
+  .phase-list .obs-tag {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--oxblood);
+    font-weight: 600;
+  }
+
+  /* Posture note */
+  .posture-note {
+    margin-top: 40px;
+    padding: 28px 32px;
+    background: var(--paper-card);
+    border-left: 2px solid var(--ink-mute);
+  }
+
+  .posture-note-label {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .posture-note p {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--ink);
+    font-style: italic;
+    font-weight: 400;
+    margin: 0;
+    font-variation-settings: "opsz" 36, "SOFT" 60;
+  }
+
+  /* Capability section */
+  .capability {
+    margin-bottom: 96px;
+  }
+
+  .capabilities-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 8px;
+  }
+
+  .capability-item {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 28px;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+
+  .capability-item:last-of-type {
+    border-bottom: none;
+  }
+
+  .cap-num {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 36px;
+    line-height: 1;
+    color: var(--oxblood);
+    font-style: italic;
+    font-weight: 400;
+    font-variation-settings: "opsz" 48, "SOFT" 80;
+    padding-top: 4px;
+  }
+
+  .capability-item h4 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 400;
+    font-size: 26px;
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+    font-variation-settings: "opsz" 48, "SOFT" 40;
+  }
+
+  .capability-item p {
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin-bottom: 16px;
+  }
+
+  .cap-applies {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--ink-mute);
+    font-style: italic;
+    padding-top: 4px;
+  }
+
+  .cap-applies-label {
+    font-style: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 10px;
+    color: var(--oxblood);
+    font-weight: 600;
+    margin-right: 10px;
+  }
+
+  .capability-close {
+    margin-top: 40px;
+    padding-top: 32px;
+    border-top: 1px solid var(--rule);
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    font-size: 20px;
+    line-height: 1.45;
+    color: var(--ink);
+    font-variation-settings: "opsz" 36, "SOFT" 60;
+  }
+
+  /* Stance section */
+  .stance {
+    margin-bottom: 96px;
+  }
+
+  .stance p {
+    margin-bottom: 22px;
+    font-size: 19px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  .stance .section-intro {
+    font-size: 21px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin-bottom: 32px;
+    font-style: italic;
+    font-family: 'EB Garamond', Georgia, serif;
+  }
+
+  .stance .principle {
+    margin-top: 36px;
+  }
+
+  /* Questions */
+  .questions {
+    margin-bottom: 96px;
+  }
+
+  .question {
+    padding: 24px 0;
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 24px;
+    align-items: baseline;
+  }
+
+  .question:last-of-type {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .question-num {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 28px;
+    font-style: italic;
+    color: var(--oxblood);
+    font-weight: 400;
+    font-variation-settings: "opsz" 48, "SOFT" 80;
+  }
+
+  .question p {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 20px;
+    line-height: 1.45;
+    color: var(--ink);
+    font-style: italic;
+  }
+
+  /* Closing */
+  .closing {
+    margin-top: 96px;
+    padding-top: 64px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .closing p {
+    font-size: 20px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin-bottom: 20px;
+  }
+
+  .sign-off {
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid var(--rule-soft);
+  }
+
+  .sign-off-name {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 22px;
+    font-style: italic;
+    color: var(--oxblood);
+    font-weight: 500;
+  }
+
+  .sign-off-role {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  /* Footer */
+  footer {
+    margin-top: 80px;
+    padding-top: 32px;
+    border-top: 1px solid var(--rule);
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  footer a {
+    color: var(--ink-mute);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--rule);
+  }
+
+  footer a:hover {
+    color: var(--oxblood);
+    border-bottom-color: var(--oxblood);
+  }
+
+  /* Selection */
+  ::selection {
+    background: var(--oxblood);
+    color: var(--paper);
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .frame { padding: 48px 24px 80px; }
+    h1.title { font-size: 56px; }
+    .dek { font-size: 19px; }
+    .opening p { font-size: 18px; }
+    .obs h2 { font-size: 28px; }
+    .obs-sub { font-size: 18px; }
+    .section-heading { font-size: 32px; }
+    .timeline { padding: 0; }
+    .phases-grid { grid-template-columns: 1fr; gap: 16px; }
+    .phase-card { padding: 24px 22px; }
+    .phase-numeral { font-size: 36px; }
+    .phase-name { font-size: 24px; }
+    .phase-sub { font-size: 15px; margin-bottom: 18px; padding-bottom: 14px; }
+    .phase-list li { font-size: 15px; padding: 12px 0; grid-template-columns: 24px 1fr; gap: 10px; }
+    .question { grid-template-columns: 36px 1fr; gap: 16px; }
+    .question-num { font-size: 22px; }
+    .question p { font-size: 17px; }
+    .meta { grid-template-columns: 1fr; gap: 4px 0; }
+    .meta-label { margin-top: 12px; }
+    .posture-note { padding: 20px 22px; }
+    .posture-note p { font-size: 17px; }
+    .capability-item { grid-template-columns: 44px 1fr; gap: 16px; padding: 24px 0; }
+    .cap-num { font-size: 28px; }
+    .capability-item h4 { font-size: 22px; }
+    .capability-item p { font-size: 17px; }
+    .capability-close { font-size: 18px; }
+    .stance p { font-size: 17px; }
+    .stance .section-intro { font-size: 18px; }
+  }
+</style>
+</head>
+<body style="background-color: #F4EDDA; color: #1A1612;">
+
+<style>
+  #pin-gate {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'EB Garamond', Georgia, serif;
+  }
+  #pin-gate.hidden { display: none; }
+  #pin-gate .box { text-align: center; max-width: 380px; padding: 40px 32px; }
+  #pin-gate .mark {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 28px; font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 32px;
+    display: inline-flex; align-items: baseline; gap: 0.05em;
+  }
+  #pin-gate .mark .dot {
+    width: 5px; height: 5px;
+    background: var(--oxblood);
+    border-radius: 50%;
+    margin: 0 0.18em;
+    align-self: center;
+    transform: translateY(-3px);
+  }
+  #pin-gate h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 400; font-size: 22px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  #pin-gate p {
+    color: var(--ink-mute);
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+  #pin-gate input {
+    width: 100%; padding: 14px 16px;
+    background: var(--paper-deep);
+    border: 1px solid var(--rule);
+    color: var(--ink);
+    font-family: 'SF Mono', 'JetBrains Mono', ui-monospace, Menlo, monospace;
+    font-size: 18px; letter-spacing: 0.5em; text-align: center;
+    border-radius: 4px; outline: none;
+    transition: border-color 0.15s ease;
+  }
+  #pin-gate input:focus { border-color: var(--oxblood); }
+  #pin-gate .err {
+    color: var(--oxblood);
+    font-size: 11px; margin-top: 12px; min-height: 14px;
+    font-family: 'SF Mono', 'JetBrains Mono', ui-monospace, Menlo, monospace;
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+</style>
+<div id="pin-gate">
+  <div class="box">
+    <div class="mark">17<span class="dot"></span>06</div>
+    <h2>Private working note</h2>
+    <p>This document is shared by direct invitation. Enter the access code to continue.</p>
+    <input id="pin-input" type="password" inputmode="numeric" maxlength="4" autocomplete="off" autofocus>
+    <div class="err" id="pin-err">&nbsp;</div>
+  </div>
+</div>
+<script>
+  (function(){
+    var PIN = "2704";
+    var gate = document.getElementById('pin-gate');
+    var input = document.getElementById('pin-input');
+    var err = document.getElementById('pin-err');
+    if (sessionStorage.getItem('you-pin-ok') === '1') { gate.classList.add('hidden'); return; }
+    input.addEventListener('input', function(){
+      err.innerHTML = '&nbsp;';
+      if (input.value.length === 4) {
+        if (input.value === PIN) {
+          sessionStorage.setItem('you-pin-ok', '1');
+          gate.classList.add('hidden');
+        } else {
+          err.textContent = 'Incorrect code';
+          input.value = '';
+        }
+      }
+    });
+  })();
+</script>
+
+<div class="progress" id="progress"></div>
+
+<div class="frame">
+
+  <!-- Masthead -->
+  <header class="masthead">
+    <div class="mark">
+      <span class="mark-dot"></span>
+      <span>1706 Studio</span>
+      <span class="mark-sep">·</span>
+      <span>Working Note</span>
+    </div>
+
+    <div class="kicker">No. 01 · Visionix &amp; Icare</div>
+
+    <h1 class="title">A first <em>read</em></h1>
+
+    <p class="dek">Six observations on the marketing function at Revenio Icare, written in the days following our call and your note.</p>
+
+    <div class="meta">
+      <span class="meta-label">For</span>
+      <span class="meta-value">Jussi Nevanlinna · Global Marketing Director, Icare</span>
+      <span class="meta-label">From</span>
+      <span class="meta-value">Craig Hepburn · 1706 Studio</span>
+      <span class="meta-label">Date</span>
+      <span class="meta-value">8 June 2026</span>
+      <span class="meta-label">Status</span>
+      <span class="meta-value">Working draft. Not for circulation.</span>
+    </div>
+  </header>
+
+  <!-- Opening -->
+  <section class="opening">
+    <p>Revenio is closing the Visionix transaction, more than doubling its addressable market and adding OCT as a strategic platform. You are building a new global marketing function across two heritage brands, three regional teams, and a clinical narrative that is already AI native while the marketing function is not.</p>
+
+    <p>Most marketing leaders inherit a function that needs improving. You are inheriting one that needs reimagining, four months in, with the cover of a major acquisition to do it. The question is not whether marketing will be rebuilt across this integration. It is who decides what it is rebuilt into.</p>
+
+    <p>Your note already does most of the diagnostic. What follows is a working note. A stance, six observations, a small synthesis, a view of capability, and a few questions for the session.</p>
+
+    <div class="posture-note">
+      <span class="posture-note-label">A note on posture</span>
+      <p>The strategy is yours, the function is yours to build. My job is to bridge between marketing decisions and AI capability. What is real, what is jagged, what is hype, what will actually work for your buyers and your team. The rest of this note is written from that position.</p>
+    </div>
+  </section>
+
+  <!-- Stance -->
+  <section class="stance">
+    <div class="section-title">Stance</div>
+    <h3 class="section-heading">A <em>team game</em>.</h3>
+
+    <p class="section-intro">Most AI transformations in marketing fail because they are done to teams rather than with them. People feel their work being automated, their roles being audited, their value being questioned. The defensive posture sets in fast and the energy goes. The approach behind everything that follows is the opposite of that.</p>
+
+    <p>The technology is real and the capability is genuine. But the transformation itself is a team activity. People shape it, live it, and own it. The appetite several of your team already have is the most valuable asset in the building. Top-down implementation kills it. People owning the change sustains it.</p>
+
+    <p>In practice this means confidence, air cover, and permission to experiment without consequence. Internal champions surfaced and given the platform to lead. New roles emerging from how people themselves want to evolve, not from an org chart redesign. The function changes because the people in it changed first, not because they were told to.</p>
+
+    <p>AI is a way to focus human attention on what matters. Storytelling, judgement, taste, relationships, the conversations that need a person in the room. The repetitive work goes to the agents. The work humans are uniquely good at gets more of their time, not less. Done well, the team feels more useful. Done badly, the team feels surveilled.</p>
+
+    <p>The technology is the easy part now. Culture is the hard part. Get this right and everything else in this document works. Get it wrong and even the best stack will be resented.</p>
+
+    <p>One more thing worth saying here. Everything that follows comes from the AI side of the table. Where the observations touch operational or strategic terrain that is yours rather than mine, treat them as patterns to test, not prescriptions to follow. The strategy stays with you.</p>
+
+    <div class="principle">
+      <span class="principle-label">Principle</span>
+      <p>The team is the transformation, not the target.</p>
+    </div>
+  </section>
+
+  <!-- Observations -->
+  <section class="observations">
+
+    <article class="obs">
+      <div class="obs-numeral">I &nbsp;·&nbsp; The story discontinuity</div>
+      <h2>The clinical product is AI native. The go to market is not.</h2>
+      <p class="obs-sub">A credibility gap forming between what Revenio sells and how it sells it.</p>
+
+      <p>iCare ILLUME uses artificial intelligence to detect early signs of diabetic retinopathy, age-related macular degeneration, and glaucoma. Revenio's own strategy frames the company as a provider of comprehensive eye care solutions built on AI-based software, not as a supplier of devices. The clinical narrative has moved.</p>
+
+      <p>The marketing function is part of the way there, but only just. Product marketing is largely not using AI beyond personal use, with the notable exception of your team lead. Marketing comms is optimising for AI search, Visionix.com has an AI assistant fielding first-line queries and guiding purchase decisions, customer service automation pilots have already cut volume by thirty-five percent, and an AI-based content engine is in build. Useful pilots. Real signal. But the function as a whole is not yet AI native. The gap between an AI native clinical product and a not yet AI native go to market is visible to anyone working in AI today. It will be visible to a wider audience as AI literacy spreads.</p>
+
+      <p>This reframes the work internally. The conversation with the board is not <em>let's run an AI project in marketing</em>. It is <em>the marketing function is catching up with what Revenio Icare already is</em>. That framing is more defensible, more urgent, and more interesting.</p>
+
+      <div class="principle">
+        <span class="principle-label">Principle</span>
+        <p>Marketing is the last function to look like the company.</p>
+      </div>
+    </article>
+
+    <article class="obs">
+      <div class="obs-numeral">II &nbsp;·&nbsp; The closed loop opportunity</div>
+      <h2>The European distributor model is the cleanest AI play in your stack.</h2>
+      <p class="obs-sub">Classical attribution cannot solve it. Inference can.</p>
+
+      <p>The European market is bifurcated. Most of the continent runs through distributors, which means the funnel is open by design. You feed it from many touchpoints but you cannot follow a lead all the way to a closed sale. In France, Germany, Italy and Iberia, where you sell direct and are looking to stand up SDR teams, the closed loop is buildable. In the distributor markets it is not. Classical attribution will not fix the gap. The data simply isn't there.</p>
+
+      <p>What modelling can do is build a high-confidence picture of qualified demand across the touchpoints you do own. Search behaviour, content engagement, trade event participation, account-level activity, geographic concentration, intent signals from owned channels. Lead scoring becomes probabilistic rather than deterministic, and in this context that is a feature, not a bug.</p>
+
+      <p>The second-order effect matters as much as the first. When the data story sharpens, the conversation with sales becomes a different conversation. That tends to be where AI investment in marketing produces its most material near-term return, in any business where the funnel is open or partial. How it plays inside your specific commercial structure is yours to read.</p>
+
+      <div class="principle">
+        <span class="principle-label">Principle</span>
+        <p>When you cannot close the loop, close the inference.</p>
+      </div>
+    </article>
+
+    <article class="obs">
+      <div class="obs-numeral">III &nbsp;·&nbsp; The internal champion</div>
+      <h2>The product marketing lead who wrote the strategy paper.</h2>
+      <p class="obs-sub">Your most important asset, mentioned almost in passing.</p>
+
+      <p>You noted, almost in passing, that your product marketing team lead has written a strategy paper on how AI should be used in diagnostics and screening. This is the most important asset in your team and the easiest one to overlook.</p>
+
+      <p>Internal champions matter more than external hires in this kind of transformation. They carry context, credibility, and existing relationships. The risk is that they get pulled into operational delivery and never get the air cover to lead the AI-native product narrative externally. The opposite is what you want. Bring them forward. Make them visible.</p>
+
+      <p>When I am with you, a thirty to sixty minute conversation with this person should be the first thing in the diary.</p>
+
+      <div class="principle">
+        <span class="principle-label">Principle</span>
+        <p>The transformation runs faster with one internal champion than ten external ones.</p>
+      </div>
+    </article>
+
+    <article class="obs">
+      <div class="obs-numeral">IV &nbsp;·&nbsp; APAC as greenfield</div>
+      <h2>The advantage of starting late.</h2>
+      <p class="obs-sub">A region without baggage is the advantage, not the gap.</p>
+
+      <p>In AI adoption, greenfield contexts are materially easier to build for than retrofit contexts. No legacy tools to integrate, no inherited team patterns to unwind, no assumptions to dislodge. The cost and complexity of AI first build is a fraction of AI retrofit. That pattern holds wherever you find it.</p>
+
+      <p>In your note, APAC sits in that category. A region with a marketing lead and no localised digital channels reads at first glance like a gap. Under an AI lens it reads more like an opening. The discipline, if you choose to act on it, is to resist replicating the European or US model. That would be laying copper, in your own framing from the call.</p>
+
+      <p>Whether you go after that opening, when, and how, is yours to decide. The AI principle holds either way.</p>
+
+      <div class="principle">
+        <span class="principle-label">Principle</span>
+        <p>Greenfield is the advantage, not the gap.</p>
+      </div>
+    </article>
+
+    <article class="obs">
+      <div class="obs-numeral">V &nbsp;·&nbsp; Capability not capacity</div>
+      <h2>Thirty is not the question. What thirty can become is.</h2>
+      <p class="obs-sub">A reframing for the board conversation that is coming.</p>
+
+      <p>Thirty people. Your instinct is that the function is too large because too much is being done classically. The instinct is correct but the framing matters.</p>
+
+      <p>The board conversation, when it comes, is much more powerful as <em>we have reshaped what marketing does</em> than as <em>we have reduced headcount</em>. The two can be the same outcome, but the second is defensive and the first is strategic. The path is to take each role and ask what becomes possible when the manual work goes away. A senior content lead spending sixty percent of their time on production is doing junior work. The same person, freed, spends that time on storytelling, narrative work, and senior conversations. Different role, different ROI, same person.</p>
+
+      <p>The cost story takes care of itself. Natural attrition, role evolution, and reallocation will reshape the team across the integration without a difficult announcement. That is the right pace for a listed company and the right register for the team.</p>
+
+      <div class="principle">
+        <span class="principle-label">Principle</span>
+        <p>Replace tasks, not people.</p>
+      </div>
+    </article>
+
+    <article class="obs">
+      <div class="obs-numeral">VI &nbsp;·&nbsp; One engine, two brands</div>
+      <h2>The integration window is the only window.</h2>
+      <p class="obs-sub">Decide the operating model before redistributing the work.</p>
+
+      <p>AI tools have collapsed the cost and complexity of operating centrally across regions. Content generation, localisation, lead nurturing, sales enablement, analytics, internal reporting. These can now run from one team for many markets in ways that were prohibitive two years ago. The unit economics of centralised operations look different now than they did before.</p>
+
+      <p>What this means for how a function is organised is a real question and a different one than it would have been before AI. Your instinct in your note that the US team could play a more global role has the technology behind it. Whether and how you act on that is yours to shape. The window in which big structural choices stay open tends to be narrow during integration. Worth knowing the constraint, even if the decision is not now.</p>
+
+      <div class="principle">
+        <span class="principle-label">Principle</span>
+        <p>The integration window is the only window.</p>
+      </div>
+    </article>
+
+  </section>
+
+  <div class="section-divider">· · ·</div>
+
+  <!-- Synthesis -->
+  <section class="synthesis">
+    <div class="section-title">Synthesis</div>
+    <h3 class="section-heading">A view of <em>sequence</em>.</h3>
+    <p class="section-intro">Six observations, ordered by where they sit in the sequence of work. Some can be done in your first conversation with the executive team. Others sit further out but only work if their foundations are right from the start.</p>
+
+    <div class="timeline">
+      <div class="phases-grid">
+
+        <div class="phase-card">
+          <div class="phase-header">
+            <span class="phase-numeral">I</span>
+            <span class="phase-name">Frame</span>
+          </div>
+          <div class="phase-sub">Set the frame.</div>
+          <ul class="phase-list">
+            <li>
+              <span class="obs-tag">I</span>
+              <span>Position marketing as the function catching up with what the company already is.</span>
+            </li>
+            <li>
+              <span class="obs-tag">III</span>
+              <span>Engage the internal AI champion. Give them air cover.</span>
+            </li>
+            <li>
+              <span class="obs-tag">V</span>
+              <span>Reframe the team size question before it becomes a cost conversation.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-header">
+            <span class="phase-numeral">II</span>
+            <span class="phase-name">Foundations</span>
+          </div>
+          <div class="phase-sub">Set the operating model.</div>
+          <ul class="phase-list">
+            <li>
+              <span class="obs-tag">VI</span>
+              <span>Decide what runs centrally, regionally, and locally across the merged function.</span>
+            </li>
+            <li>
+              <span class="obs-tag">II</span>
+              <span>First propensity model in the European lead gen stack.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-header">
+            <span class="phase-numeral">III</span>
+            <span class="phase-name">Build</span>
+          </div>
+          <div class="phase-sub">Build the proof points.</div>
+          <ul class="phase-list">
+            <li>
+              <span class="obs-tag">IV</span>
+              <span>Stand up APAC as the AI-first regional template.</span>
+            </li>
+            <li>
+              <span class="obs-tag">II</span>
+              <span>Closed-loop substitute model influencing live sales conversations.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-header">
+            <span class="phase-numeral">IV</span>
+            <span class="phase-name">Integrate</span>
+          </div>
+          <div class="phase-sub">Spread the engine.</div>
+          <ul class="phase-list">
+            <li>
+              <span class="obs-tag">VI</span>
+              <span>Europe and US running on the new operating model end to end.</span>
+            </li>
+            <li>
+              <span class="obs-tag">I</span>
+              <span>Marketing visibly leading the AI native brand narrative externally.</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider">· · ·</div>
+
+  <!-- Capability -->
+  <section class="capability">
+    <div class="section-title">Capability</div>
+    <h3 class="section-heading">What sits <em>beneath</em>.</h3>
+    <p class="section-intro">The observations above only matter if the technology behind them is real. None of this depends on capability that is still emerging. All of it is achievable today with models and tooling that have been in production for more than a year. Worth naming the five capability classes that sit under everything, because the conversation moves faster when we are talking about the same things.</p>
+
+    <div class="capabilities-grid">
+
+      <div class="capability-item">
+        <div class="cap-num">01</div>
+        <div>
+          <h4>Language models that read, write, and reason.</h4>
+          <p>Most of what people call AI in marketing right now sits here. The current generation reads documents, summarises calls, drafts content, writes code, and reasons about your business at near-human quality when given proper context. The bottleneck is not the model. It is the prompting, the data the model can see, and the design of the workflow around it.</p>
+          <div class="cap-applies">
+            <span class="cap-applies-label">Where it shows up here</span>
+            The Visionix AI assistant, the in-build content engine, and the upskilling work across the whole team.
+          </div>
+        </div>
+      </div>
+
+      <div class="capability-item">
+        <div class="cap-num">02</div>
+        <div>
+          <h4>Multimodal generation across asset types.</h4>
+          <p>Text, image, video, and audio generated to production quality from a brief. The cost of producing marketing assets is falling by an order of magnitude every year. The production work your senior content lead carries today compresses from days to hours, with quality that holds for most of the channels you operate in. Not all channels, and not for everything. The direction is clear and the gap between what the team can produce and what an agency can produce is closing fast.</p>
+          <div class="cap-applies">
+            <span class="cap-applies-label">Where it shows up here</span>
+            The team reallocation question in observation V, and the broader cost story behind a thirty-person function.
+          </div>
+        </div>
+      </div>
+
+      <div class="capability-item">
+        <div class="cap-num">03</div>
+        <div>
+          <h4>Retrieval and discovery agents.</h4>
+          <p>When a clinician, distributor, or analyst asks Perplexity, Claude, Gemini, or ChatGPT about tonometers, OCT systems, or eye care diagnostic platforms, your content either shows up properly structured or it does not. This is the agent-era search layer your team has not yet built for. The competitive risk is real and rising. Whoever in your category builds AI-readable product, clinical, and outcome data first will get surfaced disproportionately by the systems clinicians are starting to use as their first port of call.</p>
+          <div class="cap-applies">
+            <span class="cap-applies-label">Where it shows up here</span>
+            Observation I, the story discontinuity, and a competitive risk that does not yet appear in your note.
+          </div>
+        </div>
+      </div>
+
+      <div class="capability-item">
+        <div class="cap-num">04</div>
+        <div>
+          <h4>Workflow agents that execute tasks.</h4>
+          <p>Not chatbots. Running software that does work that used to require a person. CRM enrichment, lead scoring, content distribution, competitive monitoring, calendar coordination, internal reporting, partner onboarding. Supervised, not autonomous. Not perfect. Real. The pattern is that one person plus a set of agents now does the work of three people six months ago. That is the practical mechanism behind the capability not capacity argument.</p>
+          <div class="cap-applies">
+            <span class="cap-applies-label">Where it shows up here</span>
+            Observation VI, where centralised agents serve regional teams, and observation V where they free people for senior work.
+          </div>
+        </div>
+      </div>
+
+      <div class="capability-item">
+        <div class="cap-num">05</div>
+        <div>
+          <h4>Modelling and inference on your data.</h4>
+          <p>Finding patterns and predicting outcomes from your data that a human team cannot see on its own. Propensity scoring, intent modelling, attribution substitution where the classical chain is broken, account-level signal aggregation. The most technical of the five. The one with the most direct commercial impact in your near-term picture, because it is what turns the broken European funnel into something sales can actually act on.</p>
+          <div class="cap-applies">
+            <span class="cap-applies-label">Where it shows up here</span>
+            Observation II, the closed loop inference move, and most of the lead gen work across the whole function.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="capability-close">None of this is exotic. The barrier to any of it is institutional, not technological. Which is the entire point of this document.</p>
+  </section>
+
+  <div class="section-divider">· · ·</div>
+
+  <!-- Questions -->
+  <section class="questions">
+    <div class="section-title">For the session</div>
+    <h3 class="section-heading">Six <em>questions</em>.</h3>
+    <p class="section-intro">Not for answering now. These are the ones I would want us to work through together when we meet, in the order they make the next ones answerable.</p>
+
+    <div class="question">
+      <div class="question-num">i</div>
+      <p>What does the CEO and the board need to see early in your tenure for this to be considered well started?</p>
+    </div>
+
+    <div class="question">
+      <div class="question-num">ii</div>
+      <p>Of the thirty people in the function, who already moves faster than the system around them?</p>
+    </div>
+
+    <div class="question">
+      <div class="question-num">iii</div>
+      <p>What does sales actually need from marketing in Europe to start valuing lead gen rather than dismissing it?</p>
+    </div>
+
+    <div class="question">
+      <div class="question-num">iv</div>
+      <p>How autonomous is the Visionix US team allowed to remain, and how autonomous does it want to remain?</p>
+    </div>
+
+    <div class="question">
+      <div class="question-num">v</div>
+      <p>Where does the existing in-house AI screening team sit organisationally, and could marketing collaborate with them on the AI-native content engine?</p>
+    </div>
+
+    <div class="question">
+      <div class="question-num">vi</div>
+      <p>What story are clinicians, distributors, and partners telling about Revenio Icare today, and what story do we want them telling next?</p>
+    </div>
+  </section>
+
+  <!-- Closing -->
+  <section class="closing">
+    <p>None of this is a finished view. It is a starting point to argue with, push back on, and shape together. Where I am wrong, the conversation gets sharper by being told. Where I am right, the value sits in turning observation into sequence and sequence into work.</p>
+
+    <p>Send your reactions in whatever form is easiest. I would like to come to Helsinki in the next two to three weeks so we can work through this in person, side by side. What you have here is a starting point, not the brief.</p>
+
+    <p>This is the most interesting marketing brief I have seen in some time, Jussi. A purpose this clear, with technology this capable, at a moment this rare. The world is beautiful and everyone should see it. That is not a tagline. It is the strongest narrative material I have come across in years to build a story with. Genuinely looking forward to building it with you.</p>
+
+    <div class="sign-off">
+      <div class="sign-off-name">Craig</div>
+      <div class="sign-off-role">Founder · 1706 Studio</div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <span>1706 Studio · Working Note No. 01</span>
+    <span>Drafted 8 June 2026 · Confidential</span>
+  </footer>
+
+</div>
+
+<script>
+  // Reading progress bar
+  const progress = document.getElementById('progress');
+  window.addEventListener('scroll', () => {
+    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrolled = (window.scrollY / scrollHeight) * 100;
+    progress.style.width = scrolled + '%';
+  });
+
+  // Scroll-triggered reveals for observations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -80px 0px' });
+
+  document.querySelectorAll('.obs').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
