@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>AI Working Party · Programme Command Centre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=EB+Garamond:ital,wght@0,400;0,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme:light;
+    --paper:#f3ecdd;
+    --surface:#fcf7ec;
+    --surface-2:#f7f0e0;
+    --ink:#221d16;
+    --muted:#6e6356;
+    --oxblood:#6b1f1a;
+    --gold:#9a7b2e;
+    --sage:#5f7a52;
+    --rule:#e0d6c0;
+    --rule-2:#cfc3a8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{color-scheme:light;background:var(--paper);}
+  body{
+    background:var(--paper);color:var(--ink);
+    font-family:"EB Garamond",Georgia,serif;font-size:17px;line-height:1.5;
+    -webkit-font-smoothing:antialiased;padding:30px 26px 60px;
+  }
+  .shell{max-width:1180px;margin:0 auto;}
+  .mono{font-family:"JetBrains Mono",monospace;}
+
+  /* header */
+  header{display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--rule-2);padding-bottom:24px;margin-bottom:24px;}
+  .kicker{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--oxblood);margin-bottom:12px;}
+  h1{font-family:"Fraunces",Georgia,serif;font-weight:500;font-size:clamp(30px,4.4vw,46px);line-height:1.0;letter-spacing:-0.01em;}
+  .sub{color:var(--muted);font-size:16px;margin-top:8px;font-style:italic;}
+  .stats{display:flex;gap:26px;align-items:flex-end;}
+  .stat{text-align:right;}
+  .stat .n{font-family:"Fraunces",Georgia,serif;font-weight:500;font-size:34px;line-height:1;}
+  .stat .l{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-top:6px;}
+  .stat.done .n{color:var(--sage);}
+  .stat.prog .n{color:var(--gold);}
+  .stat.todo .n{color:var(--oxblood);}
+  .barwrap{margin-bottom:22px;}
+  .bar{height:8px;border-radius:6px;overflow:hidden;display:flex;border:1px solid var(--rule-2);}
+  .bar i{display:block;height:100%;}
+  .bar .sd{background:var(--sage);}
+  .bar .sp{background:var(--gold);}
+  .bar .su{background:var(--oxblood);}
+
+  /* assistant panel */
+  .read{background:var(--surface);border:1px solid var(--rule-2);border-radius:16px;padding:24px 26px;margin-bottom:14px;}
+  .read .rtitle{display:flex;align-items:center;gap:10px;font-family:"Fraunces",Georgia,serif;font-size:20px;font-weight:500;margin-bottom:16px;}
+  .pulse{width:9px;height:9px;border-radius:50%;background:var(--oxblood);box-shadow:0 0 0 0 rgba(107,31,26,0.5);animation:pulse 2.4s infinite;}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(107,31,26,0.45);}70%{box-shadow:0 0 0 9px rgba(107,31,26,0);}100%{box-shadow:0 0 0 0 rgba(107,31,26,0);}}
+  ul.reads{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px 28px;}
+  ul.reads li{position:relative;padding:0 0 0 18px;font-size:15.5px;line-height:1.45;color:var(--ink);}
+  ul.reads li:before{content:"";position:absolute;left:0;top:0.6em;width:6px;height:6px;border-radius:50%;background:var(--oxblood);}
+  ul.reads li b{font-weight:600;}
+  .focus{margin-top:18px;border-top:1px dashed var(--rule-2);padding-top:16px;font-size:15.5px;}
+  .focus b{font-family:"Fraunces",Georgia,serif;color:var(--oxblood);}
+
+  /* lenses */
+  .lenses{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px;}
+  .lens{font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:0.04em;padding:8px 14px;border:1px solid var(--rule-2);border-radius:30px;background:var(--surface);color:var(--ink);cursor:pointer;transition:all .18s ease;}
+  .lens:hover{border-color:var(--oxblood);}
+  .lens.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+  .caption{color:var(--muted);font-size:15px;min-height:24px;margin:10px 2px 20px;font-style:italic;}
+
+  /* board */
+  .board{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+  .col{background:var(--surface-2);border:1px solid var(--rule);border-radius:14px;padding:14px;display:flex;flex-direction:column;}
+  .col-top{border-top:3px solid var(--rule-2);margin:-14px -14px 14px;border-radius:14px 14px 0 0;padding:14px 14px 0;}
+  .col[data-bucket="lead"] .col-top{border-top-color:var(--ink);}
+  .col[data-bucket="run"] .col-top{border-top-color:var(--oxblood);}
+  .col[data-bucket="teach"] .col-top{border-top-color:var(--gold);}
+  .col[data-bucket="prepare"] .col-top{border-top-color:var(--sage);}
+  .col-head{display:flex;justify-content:space-between;align-items:baseline;}
+  .col-name{font-family:"Fraunces",Georgia,serif;font-size:19px;font-weight:500;}
+  .col-count{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--muted);}
+  .col-sub{font-size:13px;color:var(--muted);margin:4px 0 14px;}
+  .cards{display:flex;flex-direction:column;gap:10px;}
+
+  .card{background:var(--surface);border:1px solid var(--rule-2);border-radius:11px;padding:13px 13px 12px;cursor:pointer;transition:all .18s ease;position:relative;}
+  .card:hover{border-color:var(--oxblood);transform:translateY(-1px);box-shadow:0 6px 18px rgba(34,29,22,0.06);}
+  .card-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .rag{width:9px;height:9px;border-radius:50%;flex:none;}
+  .rag.done{background:var(--sage);}
+  .rag.progress{background:var(--gold);}
+  .rag.unstarted{background:var(--oxblood);}
+  .cid{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--muted);}
+  .owner{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--ink);background:var(--surface-2);border:1px solid var(--rule);border-radius:5px;padding:1px 6px;margin-left:auto;}
+  .card-title{font-size:15.5px;line-height:1.3;color:var(--ink);}
+  .pills{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px;}
+  .pill{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:0.06em;text-transform:uppercase;padding:2px 7px;border-radius:20px;border:1px solid var(--rule-2);color:var(--muted);}
+  .pill.focus{border-color:var(--oxblood);color:var(--oxblood);}
+  .pill.risk{background:var(--oxblood);color:var(--paper);border-color:var(--oxblood);}
+  .pill.overlap{border-color:var(--gold);color:var(--gold);}
+  .pill.diagnosis{border-color:var(--sage);color:var(--sage);}
+
+  .card.dim{opacity:0.26;filter:saturate(0.5);}
+  .card.glow{border-color:var(--oxblood);box-shadow:0 0 0 2px rgba(107,31,26,0.18);}
+
+  /* legend + footer */
+  .legend{display:flex;flex-wrap:wrap;gap:18px;margin-top:22px;font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--muted);}
+  .legend span{display:flex;align-items:center;gap:7px;}
+  footer{margin-top:26px;border-top:1px solid var(--rule-2);padding-top:18px;color:var(--muted);font-size:15px;}
+  footer b{font-family:"Fraunces",Georgia,serif;color:var(--ink);font-weight:500;}
+
+  /* modal */
+  .overlay{position:fixed;inset:0;background:rgba(34,29,22,0.42);display:none;align-items:center;justify-content:center;padding:24px;z-index:60;}
+  .overlay.open{display:flex;}
+  .modal{background:var(--surface);border:1px solid var(--rule-2);border-radius:16px;max-width:520px;width:100%;padding:28px 28px 26px;box-shadow:0 30px 70px rgba(34,29,22,0.25);}
+  .modal .mlane{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--oxblood);margin-bottom:10px;}
+  .modal h3{font-family:"Fraunces",Georgia,serif;font-weight:500;font-size:25px;line-height:1.1;margin-bottom:16px;}
+  .mrow{display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap;}
+  .mnote{font-size:16px;line-height:1.55;color:var(--ink);}
+  .mclose{margin-top:22px;font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--muted);cursor:pointer;border:1px solid var(--rule-2);border-radius:8px;padding:8px 14px;display:inline-block;}
+  .mclose:hover{border-color:var(--oxblood);color:var(--oxblood);}
+
+  @media (max-width:980px){ .board{grid-template-columns:repeat(2,1fr);} ul.reads{grid-template-columns:1fr;} }
+  @media (max-width:600px){
+    body{padding:22px 16px 50px;}
+    .board{grid-template-columns:1fr;}
+    header{align-items:flex-start;}
+    .stats{gap:18px;}
+    .stat .n{font-size:28px;}
+  }
+  @media (prefers-color-scheme: dark){
+    html,body{background:#f3ecdd;color:#221d16;}
+  }
+  .switch{position:fixed;bottom:18px;right:18px;z-index:50;font-family:"Fraunces",Georgia,serif;font-size:13px;letter-spacing:0.02em;color:var(--ink);background:var(--surface);border:1px solid var(--rule-2);border-radius:30px;padding:9px 16px;text-decoration:none;transition:all .18s ease;box-shadow:0 6px 20px rgba(34,29,22,0.12);}
+  .switch:hover{border-color:var(--oxblood);color:var(--oxblood);}
+  .switch .ar{color:var(--oxblood);}
+</style>
+</head>
+<body>
+  <a class="switch" href="/hurst/discussion/"><span class="ar">&#8592;</span> Presentation</a>
+  <div class="shell">
+    <header>
+      <div>
+        <div class="kicker">AI Working Party · Hurst</div>
+        <h1>Programme Command Centre</h1>
+        <div class="sub">Your tracker, rebuilt as a working tool. Prototype by 1706 Studio.</div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="n">20</div><div class="l">Actions</div></div>
+        <div class="stat done"><div class="n">6</div><div class="l">Complete</div></div>
+        <div class="stat prog"><div class="n">10</div><div class="l">In progress</div></div>
+        <div class="stat todo"><div class="n">4</div><div class="l">Not started</div></div>
+      </div>
+    </header>
+
+    <div class="barwrap">
+      <div class="bar">
+        <i class="sd" style="width:30%"></i>
+        <i class="sp" style="width:50%"></i>
+        <i class="su" style="width:20%"></i>
+      </div>
+    </div>
+
+    <div class="read">
+      <div class="rtitle"><span class="pulse"></span> What your tracker is telling us</div>
+      <ul class="reads">
+        <li><b>Strong on delivery, lighter on direction.</b> Most actions are things to do; fewer set what Hurst is optimising for, and the strategy doc that would anchor it is still to start.</li>
+        <li><b>Three bot builds, one decision.</b> The public bot, the internal SharePoint bot and the subject prep buddy overlap. Worth settling the bot approach once.</li>
+        <li><b>Two training tracks in parallel.</b> Staff and pupil tiers could share one model, and one maintenance cost.</li>
+        <li><b>The diagnosis is already done.</b> Parent and employer surveys are complete. Those answers are the natural basis for the priorities.</li>
+        <li><b>One owner for the whole would help.</b> It is why a dedicated role makes sense, once its remit is clear.</li>
+        <li><b>Most builds carry an ongoing cost.</b> Bots, tools and training are commitments to maintain, not one off tasks.</li>
+      </ul>
+      <div class="focus"><b>If you settled three things this term:</b> name what Hurst is optimising for, make one call on bots and one on training, and define what the new AI lead owns before you advertise it.</div>
+    </div>
+
+    <div class="lenses" id="lenses">
+      <button class="lens active" data-lens="all">All actions</button>
+      <button class="lens" data-lens="bots">The bots</button>
+      <button class="lens" data-lens="training">Parallel training</button>
+      <button class="lens" data-lens="priorities">This term's focus</button>
+      <button class="lens" data-lens="diagnosis">The diagnosis</button>
+    </div>
+    <div class="caption" id="caption">The full programme, sorted into four lanes. Tap a lens to see what stands out, or any card for the detail.</div>
+
+    <div class="board" id="board"></div>
+
+    <div class="legend">
+      <span><span class="rag done"></span> Complete</span>
+      <span><span class="rag progress"></span> In progress</span>
+      <span><span class="rag unstarted"></span> Not started</span>
+    </div>
+
+    <footer>
+      This is your existing PDF tracker, rebuilt as a working tool in a few hours. <b>The next step is a live version</b> that updates itself, nudges owners, and flags risk as things change. That is the difference between a document about the programme and a tool that runs it. 1706 Studio.
+    </footer>
+  </div>
+
+  <div class="overlay" id="overlay">
+    <div class="modal" id="modal"></div>
+  </div>
+
+<script>
+  var BUCKETS = [
+    {key:"lead", name:"Lead & Govern", sub:"Strategy, ownership, decisions"},
+    {key:"run", name:"Run", sub:"AI inside the school"},
+    {key:"teach", name:"Teach", sub:"Teaching, learning, integrity"},
+    {key:"prepare", name:"Prepare", sub:"Pupils' futures & literacy"}
+  ];
+
+  var ITEMS = [
+    {id:1, title:"Updated AI working party doc", owner:"DWM", bucket:"lead", status:"unstarted", flags:["focus"], note:"A smarter, more professional version of the main strategy doc. Still to start, yet it is the piece that should anchor everything else."},
+    {id:2, title:"Next steps tracker (RAG + timescales)", owner:"OJJ", bucket:"lead", status:"done", flags:[], note:"Complete. This is the tracker itself. The tool you are looking at is its natural next step."},
+    {id:3, title:"Monthly meetings & termly away days", owner:"OJJ", bucket:"lead", status:"progress", flags:[], note:"A cadence for the working group. In progress."},
+    {id:4, title:"Survey parents on AI & digital", owner:"BTS", bucket:"lead", status:"done", flags:["diagnosis"], note:"Complete, with the data in a deck. This is half the diagnosis: what parents want for their children. The natural input to the priorities."},
+    {id:5, title:"Survey employers (Hurst Foundation)", owner:"BTS", bucket:"lead", status:"done", flags:["diagnosis"], note:"Complete. The other half of the diagnosis: what employers want pupils to leave with. Together these should set direction."},
+    {id:6, title:"Update PSHCE syllabus for AI safety", owner:"RLB/SRM", bucket:"teach", status:"progress", flags:[], note:"Years 7 and 8 updated; the rest to follow. Safeguarding taught inside lessons."},
+    {id:7, title:"Train staff to keep pupils safe with AI", owner:"RLB/SRM", bucket:"run", status:"progress", flags:[], note:"Folded into safeguarding training. The owner notes she is not an AI specialist, so depth may be limited. A capability gap worth naming."},
+    {id:8, title:"Update IT policies, handbook, pupil guide", owner:"SMU/LPD", bucket:"lead", status:"unstarted", flags:[], note:"Policy refresh planned for the summer. Governance groundwork."},
+    {id:9, title:"AI parental guidance booklet", owner:"LPD/HoS", bucket:"run", status:"progress", flags:[], note:"Parent facing guidance on digital and AI at home."},
+    {id:10, title:"Audit & shortlist AI teaching tools", owner:"GHM", bucket:"teach", status:"unstarted", flags:[], note:"Audit the tools in use, distil a high impact shortlist, then roll out through CPD. Still to start, and central to avoiding tool sprawl."},
+    {id:11, title:"AI proof prep into schemes of work", owner:"GHM/CEJ", bucket:"teach", status:"unstarted", flags:[], note:"Redesign prep so it cannot be gamed by AI. An integrity question. Still to start."},
+    {id:12, title:"Regular standardised testing", owner:"GHM", bucket:"teach", status:"progress", flags:[], note:"Exam readiness under unaided conditions. HoDs briefed and a CPD session delivered."},
+    {id:13, title:"Upskill all staff in AI (Gold / Silver / Bronze)", owner:"SMU", bucket:"run", status:"progress", flags:["overlap-train","focus"], note:"Tiered staff training. Build versus buy under review (Pedagogue, official routes, or in house). Carries an ongoing cost and maintenance commitment, and runs in parallel to the pupil tiers."},
+    {id:14, title:"Sept INSET: spotting AI misuse", owner:"GHM/KDKM", bucket:"run", status:"done", flags:[], note:"A short INSET moment on what pupils get wrong with AI. Complete."},
+    {id:15, title:"Pupil AI training (Master Programme)", owner:"RLB", bucket:"prepare", status:"progress", flags:["overlap-train","focus"], note:"Age appropriate Bronze, Silver, Gold for pupils. Runs alongside the staff tiers. One model could serve both."},
+    {id:16, title:"Launch AI club", owner:"OJJ/SMU", bucket:"prepare", status:"progress", flags:[], note:"A club to grow future AI builders. Costings and operating model being scoped. The pupil offer needs to be more attractive: apps, automations, practical builds."},
+    {id:17, title:"Entrepreneurial pathway through College", owner:"BTS", bucket:"prepare", status:"progress", flags:[], note:"Sixth Form pathway going well; other years need focus. Mostly a question of time."},
+    {id:18, title:"Public AI bot (website info)", owner:"LPD/SMU", bucket:"run", status:"done", flags:["overlap-bot","focus"], note:"A parent and pupil information bot for the website, ready for demo. Engineering and ongoing operating costs still to be quoted."},
+    {id:19, title:"AI leader job description", owner:"GHM/SMU", bucket:"lead", status:"progress", flags:["focus","risk"], note:"A doer to deliver the technical side. The risk: hiring before the role's deliverables are defined means six months of tool watching and little output. Decide what they own first, then write the brief."},
+    {id:20, title:"Subject 'prep buddy' tutoring bot", owner:"GHM/SMU", bucket:"teach", status:"done", flags:["overlap-bot","focus"], note:"A one to one AI tutoring bot, plus an internal SharePoint bot, both ready for demo. These overlap with the public bot. Three builds, really one decision."}
+  ];
+
+  var LENSES = {
+    all:        {flags:[], caption:"The full programme, sorted into four lanes. Tap a lens to see what stands out, or any card for the detail."},
+    bots:       {flags:["overlap-bot"], caption:"Two cards here, plus an internal SharePoint bot, are really one decision about your bot strategy. Settle it once."},
+    training:   {flags:["overlap-train"], caption:"Staff and pupil training are being built in parallel. One model, and one maintenance cost, could serve both."},
+    priorities: {flags:["focus"], caption:"The handful that would move things this term: the strategy doc, one bot decision, one training decision, and the AI lead's remit."},
+    diagnosis:  {flags:["diagnosis"], caption:"Parent and employer surveys are already done. That is your evidence base. Let it set the priorities."}
+  };
+
+  var PILL_LABEL = {focus:"Priority", risk:"Risk", "overlap-bot":"Overlaps", "overlap-train":"Overlaps", diagnosis:"Diagnosis"};
+  var PILL_CLASS = {focus:"focus", risk:"risk", "overlap-bot":"overlap", "overlap-train":"overlap", diagnosis:"diagnosis"};
+  var STATUS_LABEL = {done:"Complete", progress:"In progress", unstarted:"Not started"};
+
+  function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
+
+  function renderBoard(){
+    var board = document.getElementById("board");
+    board.innerHTML = "";
+    BUCKETS.forEach(function(b){
+      var items = ITEMS.filter(function(it){ return it.bucket===b.key; });
+      var col = el("div","col"); col.setAttribute("data-bucket", b.key);
+      var top = el("div","col-top");
+      var head = el("div","col-head");
+      head.appendChild(el("span","col-name", b.name));
+      head.appendChild(el("span","col-count", items.length + (items.length===1?" action":" actions")));
+      top.appendChild(head);
+      top.appendChild(el("div","col-sub", b.sub));
+      col.appendChild(top);
+      var cardWrap = el("div","cards");
+      items.forEach(function(it){
+        var c = el("div","card");
+        c.setAttribute("data-flags", (it.flags||[]).join(" "));
+        c.setAttribute("data-id", it.id);
+        var ctop = el("div","card-top");
+        ctop.appendChild(el("span","rag "+it.status));
+        ctop.appendChild(el("span","cid", "#"+(it.id<10?"0":"")+it.id));
+        ctop.appendChild(el("span","owner", it.owner));
+        c.appendChild(ctop);
+        c.appendChild(el("div","card-title", it.title));
+        var shown = (it.flags||[]).filter(function(f){ return f!=="overlap-bot" && f!=="overlap-train"; });
+        var hasOverlap = (it.flags||[]).indexOf("overlap-bot")>-1 || (it.flags||[]).indexOf("overlap-train")>-1;
+        if(shown.length || hasOverlap){
+          var pills = el("div","pills");
+          shown.forEach(function(f){ pills.appendChild(el("span","pill "+(PILL_CLASS[f]||""), PILL_LABEL[f]||f)); });
+          if(hasOverlap) pills.appendChild(el("span","pill overlap","Overlaps"));
+          c.appendChild(pills);
+        }
+        c.addEventListener("click", function(){ openModal(it); });
+        cardWrap.appendChild(c);
+      });
+      col.appendChild(cardWrap);
+      board.appendChild(col);
+    });
+  }
+
+  function setLens(name){
+    var lens = LENSES[name] || LENSES.all;
+    document.getElementById("caption").textContent = lens.caption;
+    document.querySelectorAll(".lens").forEach(function(b){ b.classList.toggle("active", b.getAttribute("data-lens")===name); });
+    var cards = document.querySelectorAll(".card");
+    cards.forEach(function(c){
+      c.classList.remove("dim","glow");
+      if(name==="all") return;
+      var f = (c.getAttribute("data-flags")||"").split(" ");
+      var match = lens.flags.some(function(t){ return f.indexOf(t)>-1; });
+      c.classList.add(match ? "glow" : "dim");
+    });
+  }
+
+  function openModal(it){
+    var m = document.getElementById("modal");
+    var bucket = BUCKETS.filter(function(b){ return b.key===it.bucket; })[0];
+    var pills = (it.flags||[]).map(function(f){ return '<span class="pill '+(PILL_CLASS[f]||"")+'">'+(PILL_LABEL[f]||f)+'</span>'; }).join("");
+    m.innerHTML =
+      '<div class="mlane">'+bucket.name+'</div>'+
+      '<h3>'+it.title+'</h3>'+
+      '<div class="mrow"><span class="rag '+it.status+'"></span><span class="mono" style="font-size:12px;color:var(--muted)">'+STATUS_LABEL[it.status]+'</span>'+
+      '<span class="owner" style="margin-left:0">'+it.owner+'</span>'+pills+'</div>'+
+      '<div class="mnote">'+it.note+'</div>'+
+      '<div class="mclose" id="mclose">Close</div>';
+    document.getElementById("overlay").classList.add("open");
+    document.getElementById("mclose").addEventListener("click", closeModal);
+  }
+  function closeModal(){ document.getElementById("overlay").classList.remove("open"); }
+
+  document.getElementById("lenses").addEventListener("click", function(e){
+    var b = e.target.closest(".lens"); if(!b) return; setLens(b.getAttribute("data-lens"));
+  });
+  document.getElementById("overlay").addEventListener("click", function(e){ if(e.target===this) closeModal(); });
+  document.addEventListener("keydown", function(e){ if(e.key==="Escape") closeModal(); });
+
+  renderBoard();
+  setLens("all");
+</script>
+</body>
+</html>
