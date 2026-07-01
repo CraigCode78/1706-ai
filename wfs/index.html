@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light">
+<title>AI and Football · World Football Summit · Craig Hepburn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..900,30..100&family=Inter:wght@300;400;600&family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light;
+    --paper:        #F3EEE4;
+    --ink:          #1A1714;
+    --oxblood:      #9A3324;
+    --oxblood-deep: #7E2A1C;
+    --paper-deep:   #EBE4D5;
+    --paper-card:   #FCFAF4;
+    --ink-soft:     #4A443C;
+    --ink-mute:     #8A8175;
+    --rule:         #DCD4C4;
+    --rule-soft:    #E7E0D2;
+    --oxblood-soft: rgba(154, 51, 36, 0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    scroll-behavior: smooth;
+    background-color: #F3EEE4 !important;
+    color-scheme: light !important;
+  }
+
+  body {
+    background-color: #F3EEE4 !important;
+    color: #1A1714 !important;
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 19px;
+    line-height: 1.65;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    forced-color-adjust: none;
+    min-height: 100dvh;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    html, body { background-color: #F3EEE4 !important; color: #1A1714 !important; }
+    .card { background-color: #FCFAF4 !important; }
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(122, 30, 30, 0.015) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(74, 64, 56, 0.02) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .progress {
+    position: fixed; top: 0; left: 0; height: 2px;
+    background: var(--oxblood); width: 0; z-index: 100;
+    transition: width 0.1s linear;
+  }
+
+  .frame {
+    position: relative; z-index: 1;
+    max-width: 760px; margin: 0 auto;
+    padding: 80px 40px 120px;
+  }
+
+  .mark-1706 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600; font-optical-sizing: auto;
+    line-height: 1; letter-spacing: -0.01em;
+    color: var(--ink); font-variant-numeric: lining-nums;
+    display: inline-block;
+  }
+  .mark-1706 .dot { color: var(--oxblood); }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .eyebrow .mark { color: var(--oxblood); }
+
+  /* Masthead */
+  .mast { border-bottom: 1px solid var(--rule); padding-bottom: 36px; margin-bottom: 44px; }
+  .mast h1 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-weight: 460;
+    font-size: clamp(38px, 7vw, 62px);
+    line-height: 1.06;
+    letter-spacing: -0.015em;
+    margin: 22px 0 16px;
+  }
+  .mast .standfirst {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 21px; line-height: 1.5; color: var(--ink-soft);
+    max-width: 54ch;
+  }
+
+  /* Method note card */
+  .card {
+    background-color: #FCFAF4;
+    border: 1px solid var(--rule-soft);
+    border-radius: 6px; padding: 26px 30px; margin: 0 0 8px;
+  }
+  .card .eyebrow { color: var(--oxblood); margin-bottom: 12px; display: block; }
+  .card p {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 18px; line-height: 1.55; color: var(--ink-soft);
+    margin-bottom: 0;
+  }
+
+  /* Part headers */
+  .part {
+    margin: 92px 0 4px;
+    padding-top: 40px;
+    border-top: 1px solid var(--ink);
+  }
+  .part:first-of-type { margin-top: 72px; }
+  .part-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--oxblood);
+  }
+  .part-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 440; font-optical-sizing: auto;
+    font-size: clamp(28px, 5vw, 40px);
+    line-height: 1.12; letter-spacing: -0.01em;
+    margin-top: 12px;
+  }
+
+  /* Question items */
+  .qitem { margin: 46px 0; }
+  .qnum {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; letter-spacing: 0.14em; color: var(--oxblood);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .qitem h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 440; font-optical-sizing: auto;
+    font-size: clamp(23px, 3.6vw, 30px);
+    line-height: 1.18; letter-spacing: -0.005em;
+    margin-bottom: 22px;
+  }
+  .qitem .answer p { margin-bottom: 18px; }
+  .qitem .answer p:last-child { margin-bottom: 0; }
+  .qitem + .qitem { border-top: 1px solid var(--rule-soft); padding-top: 44px; }
+
+  /* Pull quote */
+  .pull {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 27px; line-height: 1.34; color: var(--ink);
+    border-left: 2px solid var(--oxblood);
+    padding-left: 26px; margin: 56px 0;
+  }
+
+  /* Dark panel: the single inversion */
+  .dark-panel {
+    background: #1A1714; color: var(--paper);
+    border-radius: 6px; padding: 56px 44px; margin: 80px 0 0;
+    forced-color-adjust: none;
+  }
+  .dark-panel .eyebrow { color: rgba(244, 237, 218, 0.6); display: block; margin-bottom: 16px; }
+  .dark-panel .line {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 420; font-optical-sizing: auto;
+    font-size: clamp(24px, 4vw, 32px);
+    line-height: 1.24; color: var(--paper);
+  }
+
+  /* Footer */
+  .foot {
+    margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--rule);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; letter-spacing: 0.08em; color: var(--ink-mute);
+    line-height: 1.9;
+    display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap;
+  }
+  .foot .mark { color: var(--oxblood); }
+
+  @media (max-width: 600px) {
+    .frame { padding: 56px 22px 90px; }
+    .dark-panel { padding: 40px 26px; }
+    .card { padding: 22px 22px; }
+    body { font-size: 18px; }
+  }
+
+  @media print {
+    html, body { background: #F3EEE4; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .progress, .no-print { display: none; }
+    .part { break-before: page; }
+    .part:first-of-type { break-before: auto; }
+    .qitem { break-inside: avoid; }
+    @page { margin: 18mm 16mm; }
+  }
+</style>
+</head>
+<body>
+
+<style>
+  #pin-gate{
+    position:fixed;inset:0;z-index:99999;
+    background:var(--paper);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'EB Garamond',Georgia,serif;
+  }
+  #pin-gate.hidden{display:none}
+  #pin-gate .box{text-align:center;max-width:390px;padding:40px 32px}
+  #pin-gate .mark{
+    font-family:'JetBrains Mono',monospace;font-size:11px;
+    letter-spacing:.24em;text-transform:uppercase;color:var(--oxblood);
+    margin-bottom:30px;
+  }
+  #pin-gate h2{
+    font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:30px;
+    color:var(--ink);margin:0 0 12px;letter-spacing:-.01em;line-height:1.1;
+  }
+  #pin-gate p{color:var(--ink-soft);font-size:16px;line-height:1.55;margin:0 0 26px}
+  #pin-gate input{
+    width:100%;padding:14px 16px;
+    background:var(--paper-card);
+    border:1px solid var(--rule);
+    color:var(--ink);
+    font-family:'JetBrains Mono',monospace;
+    font-size:18px;letter-spacing:.4em;text-align:center;
+    border-radius:6px;outline:none;
+    transition:border-color .15s ease;
+  }
+  #pin-gate input::placeholder{letter-spacing:.18em;color:var(--ink-mute)}
+  #pin-gate input:focus{border-color:var(--oxblood)}
+  #pin-gate .err{
+    color:var(--oxblood);font-size:11px;margin-top:14px;min-height:14px;
+    font-family:'JetBrains Mono',monospace;letter-spacing:.1em;text-transform:uppercase;
+  }
+</style>
+<div id="pin-gate">
+  <div class="box">
+    <div class="mark">1706 Studio · World Football Summit</div>
+    <h2>AI and Football</h2>
+    <p>This note is shared by direct invitation. Enter the access passcode to continue.</p>
+    <input id="pin-input" type="password" inputmode="numeric" autocomplete="off" spellcheck="false" autofocus placeholder="Passcode">
+    <div class="err" id="pin-err">&nbsp;</div>
+  </div>
+</div>
+<script>
+  (function(){
+    var PASS = "2704";
+    var gate = document.getElementById('pin-gate');
+    var input = document.getElementById('pin-input');
+    var err = document.getElementById('pin-err');
+    if (sessionStorage.getItem('wfs-gate-ok') === '1') { gate.classList.add('hidden'); return; }
+    function check(){
+      if (input.value.trim() === PASS) {
+        sessionStorage.setItem('wfs-gate-ok', '1');
+        gate.classList.add('hidden');
+      } else {
+        err.textContent = 'Incorrect passcode';
+        input.value = '';
+      }
+    }
+    input.addEventListener('input', function(){ err.innerHTML = '&nbsp;'; });
+    input.addEventListener('keydown', function(e){ if (e.key === 'Enter') check(); });
+  })();
+</script>
+
+<div class="progress" id="progress"></div>
+
+<div class="frame">
+
+  <header class="mast">
+    <div class="mark-1706" style="font-size:40px; margin-bottom:22px;">17<span class="dot">.</span>06</div>
+    <div class="eyebrow">World Football Summit <span class="mark">·</span> September 2026</div>
+    <h1>AI and Football</h1>
+    <p class="standfirst">Written responses ahead of a session on AI and organisational capability. Craig Hepburn, AI strategist and Perplexity Fellow.</p>
+  </header>
+
+  <div class="card">
+    <span class="eyebrow">Method</span>
+    <p>These answers were produced by interview, not typed. The summit sent its questions as a document to fill in. Instead the questions went to Claude, which put each one in turn and recorded the spoken replies, then synthesised them into the responses below. The words, the logic and the positions are Craig's. The synthesis and this document are the machine's, directed by him. The final question returns to this in full.</p>
+  </div>
+
+  <!-- ============ PART I ============ -->
+  <div class="part">
+    <div class="part-eyebrow">Part I</div>
+    <div class="part-title">AI and football as an industry</div>
+  </div>
+
+  <div class="qitem">
+    <div class="qnum">Question 01</div>
+    <h2>You have argued that agentic AI is not an evolution of digital tools but a shift in the economics of production. What does that mean in concrete terms for a football organisation?</h2>
+    <div class="answer">
+      <p>The shift is in the economics of production itself. For twenty years, the question behind any digital project was whether you could afford to build it and who you'd get to do it. That question is going away. The cost of producing software, content and operational capability is falling towards the cost of compute, and that changes what a club or a league can sensibly take on.</p>
+      <p>Take it in three parts. First, building. The coding models, Codex, Claude Code and the others, take you from an idea to a working prototype in an afternoon. A fan app, a second screen product, an internal tool that used to need an agency, a design team, an IT department and a six figure discovery phase, you can now stand up for the price of a subscription. A club can build its own supporter app over a weekend and see it working before it commits any capital. This doesn't remove real production. Design, experience, brand, security, compliance and data still take skill and still matter. But the part that used to need a team assembled just to reach a first version has come down to very little, and builds that ran into the millions are going into production for a fraction of that.</p>
+      <p>Second, data. I wouldn't tear out your CRM, but most organisations sit on data they never use, because they never had the analyst hours to go through it. A model with the right context will work through large, messy, inconsistent information and surface the insight or the commercial opportunity that was always there and always out of reach. The constraint was never the data. It was the cost of looking at it.</p>
+      <p>Third, operations. Any process with several parties, competing systems and tangled workflows, broadcast, ticketing, sponsorship servicing, compliance reporting, you can map it, connect the right agent frameworks and tools, and rebuild it as one platform instead of a chain of handoffs and spreadsheets.</p>
+      <p>This is what agentic means in practice. It's more than building faster. What you build can then run itself. The unit of production stops being a person doing a task and becomes a system doing it continuously, across every market and language, on matchday, without someone watching over it.</p>
+      <p>So the useful way for an executive to hear this is in terms of what you stop doing. You stop commissioning long discovery phases to test whether an idea has legs, because you can build it and look at it. You stop treating "can we even make this" as the ceiling on ambition. And you stop letting data sit idle for want of someone to read it.</p>
+      <p>But the cost doesn't disappear. It moves. Off the balance sheet as labour, onto it as compute, and most of all from building to judgement. When anyone can produce almost anything cheaply, the scarce thing is no longer production. It's knowing what's worth building, and holding the data, context and relationships that let you build it better than the club down the road working from the same models. The advantage was never in the model. Everyone can buy the model. It's in what you build around it.</p>
+    </div>
+  </div>
+
+  <div class="qitem">
+    <div class="qnum">Question 02</div>
+    <h2>You describe tokens as the new unit of intellectual capital. How should a CEO of a club or a league be thinking about their AI investment today, and how does that differ from how most of them are actually thinking about it?</h2>
+    <div class="answer">
+      <p>Start by reframing what you're buying. Compute becomes tokens, tokens become intelligence, intelligence becomes production. You've bought a new general purpose input, in the same family as electricity or fuel. It can be pointed at almost anything, which is why most organisations point it at nothing in particular. The discipline isn't in buying it. It's in directing it.</p>
+      <p>The first thing I'd say is that someone senior has to understand the economics of the models properly. The closed frontier systems from Anthropic and OpenAI, and the open weights models, which now matter commercially. Something like GLM 5.2 runs close to frontier quality at a fraction of the cost, and you can run it inside your own walls. That choice sits at the centre of your spend, because it's the difference between OPEX, the tokens you consume, and CAPEX, the infrastructure you own to produce them. Most boards have nobody who can hold that conversation, and it's an important one to have.</p>
+      <p>Second, map your real cost base, including the costs that don't show up cleanly on a P&amp;L. The hours your people spend on planning, research, drafting, reconciliation, chasing systems that don't talk to each other. The agency fees for work a model now does in minutes. Once you have that map you can do the only sum that matters: the token cost of a task against the fully loaded human cost of the same task. That comparison moves your priorities quickly.</p>
+      <p>Then the mistake, and most people are making it. You give everyone a subscription, they do their existing job faster, and you stop there. Access is right. Everyone should have a model. But if nothing changes after that, you've created a double spend. You're paying for the person and the tokens, and getting the same output a bit quicker. The salesperson should be in more rooms, in front of more clients, not sitting at a laptop letting AI tidy up admin. The lawyer should be drafting and structuring more, faster, taking on work you used to send outside. The test of an AI investment isn't whether people are busier. It's whether the capability has freed them into higher value work, into outcomes and projects you couldn't afford before.</p>
+      <p>And to be clear, this isn't a headcount story. I'm wary of the idea that AI means fewer people. If the only thing it does for you is let you cut roles, that tells you something about how that capacity was being used in the first place. With good people, you reinvest the time rather than strip it out. You get far more from the team you have, pointed at growth, than the same operation run with fewer hands.</p>
+      <p>So the questions a CEO should sit with are simple. How do we invest in tokens. Where do we direct them. What does that free our people to do instead. And what can we now build that was out of reach before. Most leaders aren't asking any of these. They're asking which subscription to buy.</p>
+    </div>
+  </div>
+
+  <div class="qitem">
+    <div class="qnum">Question 03</div>
+    <h2>You have worked across organisations that are very different in terms of culture and resources. What separates the ones that genuinely extract value from AI from the ones that keep circling around it?</h2>
+    <div class="answer">
+      <p>One thing separates them: whether the leadership team uses the tools themselves.</p>
+      <p>The organisation that stays stuck experiences AI second hand. It comes as a slide, a vendor pitch, a deck put together by someone three layers down. Leadership forms a view without ever touching it, and usually decides it's a better search box or a chatbot, which is roughly where most of the market sat when I was leaving UEFA. That view isn't a judgement about AI. It's what happens when you've never used it.</p>
+      <p>The organisation that gets value has executives who log in. Not to write code, but to think. Some of the most capable chief executives I know of, well outside technology, now work inside tools like Claude Code, Codex or Perplexity, and use them to build decision frameworks, run their own research, interrogate their own data, stand up small systems that sharpen a call they're about to make. They've felt what an agent does. You can't direct a capability you've never used, so that firsthand understanding is the thing that matters most.</p>
+      <p>So the real blocker is rarely the technology. It's that leaders outsource their understanding of it, often to an IT function that's, reasonably, nervous about data and privacy. Those concerns are real and have to be managed properly. But that's an engineering problem, not a reason for the executive to stay uninformed. My advice is blunt. If your organisation won't yet let you point these tools at company data, use them constantly in your own life until you understand what they can do. Then walk back in and push the business on where to deploy them.</p>
+      <p>Once you have that understanding, the problem changes shape. It stops being "what is this even for" and becomes "where do I start", because you start to see it everywhere. Every flooded inbox of reports, dashboards, KPIs, spreadsheets and decks is information sitting idle, waiting to be worked into a decision. The organisations circling AI are waiting to be convinced. The ones getting value stopped waiting.</p>
+    </div>
+  </div>
+
+  <div class="qitem">
+    <div class="qnum">Question 04</div>
+    <h2>Football has an enormous resource asymmetry. Does AI amplify that gap, or does it open space for organisations that until now could not compete with the biggest players?</h2>
+    <div class="answer">
+      <p>There are two parts to this. The sport matters, and football runs all the way from the top tier down to grassroots, so there's a lot of it.</p>
+      <p>My honest view, and it isn't the diplomatic one, is that this is probably the biggest opportunity smaller organisations have ever had in technology. For the first time I can point to, everyone holds the same capability. The same frontier models, the same frameworks, the same intelligence, available to a grassroots club and a Champions League side on much the same terms. That's never been true before. Capability used to be something you bought, and only the big clubs could afford it.</p>
+      <p>That doesn't mean the gap closes on its own. If you have money and you hire the right people to use it well, you still build an edge, and the biggest clubs will. But the floor has moved far enough that resource is no longer the thing that decides the outcome. Direction is. A small, smart team that understands these tools can now produce work that used to need five or ten times the headcount. We're watching it across technology, where AI first companies of eight or twenty people reach a scale that used to demand a much larger business. The same thing now applies to a federation, a smaller club, a national body that was always told it couldn't compete.</p>
+      <p>The opening is strongest when a smaller organisation turns its own knowledge into an asset. A friend of mine is working with smaller clubs that have none of the elite technology, transcribing their coaching sessions and mapping their methodologies into a model that then helps their coaches deliver better and more consistently. The cost is a subscription and the time to do the work properly. They're building proprietary capability out of expertise they already owned and never had a way to scale. That's the point. Not competing with the giants on spend, but building on what's already yours.</p>
+      <p>And the constraint, everywhere I look, isn't budget. It's imagination. Most people don't know where to point this. The ones who use it best are often the ones who think differently, who push the model, feed it context, and don't accept the first answer. So the job for a smaller organisation is concrete. Get the leadership properly fluent, in the room and building, not sitting through courses. Turn your own knowledge into models and agents. And use the capability constantly. If you hold a subscription to one of these tools and you're not running several deep research projects a day on the things that matter to you, you're leaving a team of analysts sitting idle. Nobody is going to hand a smaller organisation an edge, but nothing is stopping it taking one, if it has the curiosity to use what's already in its hands.</p>
+    </div>
+  </div>
+
+  <div class="qitem">
+    <div class="qnum">Question 05</div>
+    <h2>If you were advising a football organisation on AI today, where would you tell them to focus?</h2>
+    <div class="answer">
+      <p>Start with a diagnosis, not a deployment. Before anyone talks about a model, I want to understand where the organisation actually hurts. Where the work is slow, complex, frustrating, repetitive. Every business carries it, in the commercial team, in legal, in finance, in marketing, in the daily friction of admin, contracts, reporting, sponsorship servicing, reconciliation. That map of the pain is the brief. You point the capability at the places already costing you time, money and patience, and the returns come quickly, because the problem was real to start with.</p>
+      <p>Then put people in the room and let them build. Open the laptops and have the team stand up their own small agents, apps and solutions to their own problems. The point isn't that this becomes their job. It's that they feel, for themselves, how an idea connects to their data and their context and gets solved. And here's something new. This is the first tool that carries its own instructions inside it. You can sit with it, describe your problem, and it will walk you through the solution, what to connect, what context it needs, what to do next, for as long as you want to go. Nobody has to be trained to start.</p>
+      <p>What I'd tell them not to chase is the big bang. Don't sign off a company wide AI rollout before you understand what you're deploying. The way to think about it is this: the model isn't a piece of software you install. It's a resource, a new general purpose input, closer to suddenly having a pool of capable people you can direct. So the question stops being "where do we install AI" and becomes "now that we have this, how would we run the business differently if we were designing it today". That's a more useful question, and it keeps you on the operating model rather than the tooling.</p>
+      <p>Take the most ordinary example. In every organisation I've worked in, there was one person who was brilliant at building the PowerPoint, and they lost days doing it for everyone else. That bottleneck is gone. You describe what you need to present and the outcome it has to reach, and you get an interactive, shareable deck in minutes. Multiply that across every team.</p>
+      <p>One warning, because focus is the point. Once people see what this can do, they see problems everywhere, and they can disappear into endlessly tinkering with it, what some are calling a kind of AI psychosis. That's exactly why you anchor on a small number of real pain points and take those to a finish. Capability isn't the constraint any more. Discipline is. Point it at where it hurts, finish the job, then move to the next.</p>
+    </div>
+  </div>
+
+  <div class="qitem">
+    <div class="qnum">Question 06</div>
+    <h2>The last decade has fundamentally changed football: how it is financed, where it is played, how it is consumed. Looking at the next ten years, do you think the impact of AI will make that transformation look modest by comparison?</h2>
+    <div class="answer">
+      <p>Yes, but not quite in the way people expect.</p>
+      <p>Start with what doesn't change, because it anchors everything. The ninety minutes on the pitch, a result nobody can predict or fake, is the one thing AI can't manufacture and shouldn't. In a decade where almost everything else, the films, the music, the advertising, the content we're surrounded by, becomes generated and abundant, that real, unrepeatable, uncertain live contest doesn't lose value. It gains it. You can already see the money moving this way, into live rights and live experience, because they can't be faked. People are pulling back from their screens and paying for things they know are real and shared. A World Cup night, a Champions League comeback, those are real in a way nothing generated will be. So the game itself, the part everyone assumes AI changes most, is where it changes least.</p>
+      <p>Everything around the game is where the real change happens, and it's large. The experience layer comes apart and reforms. The single broadcast feed, one picture sold to a set of broadcasters, gives way to millions of individual streams: your camera angles, your commentary, your language, your level of tactical detail, generated live for you. The new world models, trained on physical reality rather than text, finally deliver the immersive experience that VR and augmented reality kept failing to. The thing that was always missing wasn't the headset, it was the content engine, and now we have it. A fan who can't be in the stadium will feel close to the match, inside it from any angle. And every fan carries an agent that curates, explains, predicts and transacts, which means clubs hold a direct relationship with each supporter at a scale that wasn't possible before.</p>
+      <p>Then the backend, which is where I'd put my conviction, because it's the part nobody outside the building sees and the part that changes most. Performance becomes systematic: recruitment, scouting, injury prediction, individual training, the tactical edge made repeatable. The operating model turns over. A club runs from a small, sharp core, with agent systems carrying the commercial servicing, the content, the operations, the legal and the finance that used to need whole departments. And the lasting advantage, as I keep saying, isn't in the model, because every rival can buy the same model. It's in the context each club owns and directs: its performance data, its fan data, its history, its relationships. The club that turns that into capability builds something rivals can't copy. The club that doesn't will watch its rivals do it.</p>
+      <p>For the league, two things move. The unit of rights itself is in question, because once distribution is direct and personal, the old model of one feed sold on starts to break down, and that reshapes the commercial spine of the sport. And integrity becomes a front line job, not a back office one. In a world of convincing fakes and manipulated clips, the league's work grows to include proving what happened on the pitch.</p>
+      <p>So the last decade changed how football is financed, played and watched. The next decade changes what the football business is, while leaving the ninety minutes almost untouched, and in fact making them worth more. Bigger than people expect on the business and the experience. Smaller than they expect on the game. And those two are connected. It's because AI makes everything else synthetic and abundant that the one real, uncertain, human thing at the centre becomes the thing you can't replace.</p>
+    </div>
+  </div>
+
+  <div class="pull">So the game itself, the part everyone assumes AI changes most, is where it changes least.</div>
+
+  <!-- ============ PART II ============ -->
+  <div class="part">
+    <div class="part-eyebrow">Part II</div>
+    <div class="part-title">AI and football as entertainment</div>
+  </div>
+
+  <div class="qitem">
+    <div class="qnum">Question 07</div>
+    <h2>Football sits at the intersection of business and entertainment. How do you see AI reshaping both sides of that equation, the way the industry operates and the way people experience the game?</h2>
+    <div class="answer">
+      <p>Start with something people don't like to say. Football is, at its core, a data business. The game is driven by data, the commercial engine runs on it, sponsorship is priced and sold on it. And yet football has rarely been run like a data business. Look at Formula One for the contrast. It's obsessive about engineering, telemetry, insight and operational precision, a culture of technical experts working off hard data. That rigour was expensive, and for a long time football either couldn't or wouldn't make that investment on the business side. A few elite clubs and leagues managed it, because they could afford the people, and even they are dealing with enormous complexity. For most of the sport the capability was out of reach, and the people running these organisations never fully embraced technology where it counted, so the returns never came.</p>
+      <p>What AI changes is the price of that rigour. The kind of capability Formula One has, taking large, messy, fragmented information and turning it into operational intelligence, is no longer something only the wealthiest can buy. For twenty years the sport built complicated software systems and then didn't resource them properly, so the data sat there unread. That's no longer the constraint. Football can finally be run like the data business it always was.</p>
+      <p>Here's the connection most people miss by treating operations and fan experience as two separate conversations. They come from the same place. The intelligence that sharpens a recruitment call, prices a sponsorship or streamlines an operation is the same intelligence, pointed the other way, that deepens the fan's relationship with the game. The performance data, the fan data, the archive, the live feed, one asset, working in two directions. Inward, it's how the business is run. Outward, it's the personal stream, the immersive experience, the direct relationship with each supporter. There's no longer a wall between the backend and the fan facing product, because they're built on the same data.</p>
+      <p>So the operator's view and the fan's view stop being a trade off. The club that gets good at data to run itself better is, in the same act, getting good at data to bring the fan closer. And this is where my main argument matters for this industry. That combined asset, the context a club or league holds and directs, is the thing rivals can't buy off the shelf. The models are available to everyone. What each organisation does with its own data, on both sides at once, is what will separate the sport over the next ten years.</p>
+    </div>
+  </div>
+
+  <div class="qitem">
+    <div class="qnum">Question 08</div>
+    <h2>AI can generate film, music, video games, immersive experiences. Is sport immune to that? Is the unpredictability of the result the last asset a machine cannot manufacture?</h2>
+    <div class="answer">
+      <p>Sport isn't immune, and it doesn't need to be. I was in Cannes last week, and the mood in the creative industries has turned. The fear has given way to a clearer view: generative AI is a new tool in the kit, very good for prototyping, production and pushing what's possible, and it doesn't remove the human part, the taste and the judgement. Every creative field has always taken on new tools. Sport will take on this one too, across production, content and the fan experience, and it'll be better for it.</p>
+      <p>But there's a hard line, and it's at the result. The moment nobody scripted, the goal, the comeback, the outcome you didn't see coming, can't be synthesised. The instant you generate it, it stops being sport and becomes a game or a fiction. Nobody cares about a result they know was written in advance. So yes, the uncertain outcome is the one thing a machine can't manufacture, and that's exactly why it becomes more valuable as everything around it becomes abundant and synthetic.</p>
+      <p>What follows matters more than the observation. If the real result is the scarce thing, the industry's job is to protect it, its authenticity and its scarcity, not dilute it. Generative tools should sit around the live event, making it richer to produce and experience: personal replays, immersive recreations, fans making their own content from real archives and statistics. That's a good new layer of entertainment, and it's welcome. The discipline is knowing the difference between what deepens the meaning and what's just a gimmick. Sport is full of technologies that felt exciting for a season and faded because they added novelty, not meaning. The test doesn't change: what do people care about, and what still holds quality and truth. Protect the real thing at the centre, let AI make everything around it richer, and be clear about which is which.</p>
+    </div>
+  </div>
+
+  <!-- ============ PART III ============ -->
+  <div class="part">
+    <div class="part-eyebrow">Part III</div>
+    <div class="part-title">The expert and the machine</div>
+  </div>
+
+  <div class="qitem">
+    <div class="qnum">Question 09</div>
+    <h2>How do you use AI in your own daily work? What have you stopped doing yourself that a machine now does for you?</h2>
+    <div class="answer">
+      <p>The biggest shift, over about five years, is that I stopped working across tools and started wiring the tools to me. What I worked out early is that the value isn't in any single model, it's in connecting the model to my own context: my email, my calendar, my operational systems, my core data, a clear picture of who I am, what I'm working on and what my priorities are. Once that's wired in, I stop jumping between twenty applications and just work with whichever model or agent is nearest the task.</p>
+      <p>It runs on my own infrastructure, on purpose. I have several Mac minis at home running local models and a few agent frameworks, some through OpenClaw and Hermes, some sandboxed and walled off, others connected into my systems depending on what data and tools each agent is trusted with. An application called Little Bird takes in everything I'm doing across my laptop and phone and keeps it local. Alongside it I'm building what amounts to a second brain, my context pulled into markdown files, versioned in repositories for my agents, all living on a self managed system rather than in someone else's cloud.</p>
+      <p>And I've mostly stopped typing. I speak to the machine through Wispr Flow, which gives me three or four times the bandwidth of a keyboard. I'm doing it now. This interview is being run by an AI from a set of questions, and I'm speaking my answers into a microphone while the model turns them into something clean. That's how I work: the machine as a thought partner and a production partner at once, wired into everything, so I can describe an outcome, a piece of strategy, a research task, a website, an application, and it goes and does it with the context already in place.</p>
+      <p>What's left my plate is the wrangling. I don't build PowerPoint by hand any more. I rarely open Word. I don't copy and paste between systems or log in separately to my calendar, my email, my Whoop, my documents. All that friction, the app switching and manual assembly that used to fill a working day, is gone.</p>
+      <p>The honest caveat is that this is me experimenting at a personal level, where I can move fast and carry the risk myself. Doing the same inside a business is harder, because of security, data governance, performance and the sheer amount of context you need to stay accurate. But the order matters. It has to start with the individual understanding the capability for themselves. You can't direct at an organisation what you've never run yourself.</p>
+    </div>
+  </div>
+
+  <div class="qitem">
+    <div class="qnum">Question 10</div>
+    <h2>Is there anything you have refused to delegate to AI?</h2>
+    <div class="answer">
+      <p>The thinking. That's the line, and I hold it on purpose, because it's subtle and it matters more than anything else in how you work with these tools.</p>
+      <p>The failure most people are drifting towards isn't dramatic. You throw everything into the model, let it produce the answer, and then trust it wholesale. Do that often enough and the relationship turns around. The AI is no longer a capability you direct, it's leading you, and you've stopped noticing. It's easy to end up there, because the models are good enough to make it comfortable.</p>
+      <p>So the deep work stays mine. I still read, research and think through ordinary means, grounded in my own experience, and then I use AI to synthesise, to sharpen, to test an idea, to take it further than I could alone. The model is a thought partner, not the thinker. What I won't outsource is judgement, taste, a sense of what good looks like, a sense of what's true. Those come from living and working in the world, and the moment you hand them to a model you've given away the part that was yours.</p>
+      <p>I worry about this most for younger people. A generation is growing up trusting what the bots tell them the way an earlier one trusted what it saw on social media, believing the output without the means to question it. That's why I think critical thinking becomes the key skill of this era, and the thing our education system has to prioritise. When intelligence is wired into everything, the question is no longer how do I get an answer. It's how do I know whether to believe it, and how do I check it. Being able to question rather than accept is what has to be taught.</p>
+      <p>I'll say the personal side too. I have dyslexia, and a fair amount of ADHD, and these tools have been freeing for me. I think visually, I want to build and see things, and AI lets me take the thoughts and concepts that were always in my head and bring them to life quickly, in a form I can work with. But notice the direction of that. The thinking is mine, and the technology carries it into the world. That's the right way round. The moment it flips, the moment the machine is doing the thinking and I'm approving it, I've lost the thing that made the work mine.</p>
+    </div>
+  </div>
+
+  <div class="qitem">
+    <div class="qnum">Question 11</div>
+    <h2>Do you think AI needs limits, and if so, who should set them?</h2>
+    <div class="answer">
+      <p>Yes, it needs limits. The harder question is who's credible to set them, and that's where the current debate mostly goes wrong.</p>
+      <p>Start by putting both caricatures aside, because the public conversation is stuck between them. On one side, AI is the existential threat that ends jobs and everything we value. On the other, it's a glorified chatbot, just a token engine guessing the next word, nothing much to see. Both are wrong. The truth is the less dramatic, more demanding middle: this is a general purpose capability, very powerful in the right hands and dangerous in the wrong ones. You can already see the harm, in AI written malware and manipulated algorithms. It's worth remembering this technology sat behind the walls of the biggest companies for years before any of us could touch it. What changed is access. That's what levels the playing field, and it's what raises the stakes on how it's directed.</p>
+      <p>So limits, yes, but set at three levels, not one. Governments have to understand the real capability of these systems and regulate accordingly, particularly at the frontier. Companies have to decide, on purpose, where the boundaries sit in their own operations, what they will and won't hand to these tools. And individuals have to hold their own line, protecting the parts of judgement and free will they don't want a machine taking over. Governance isn't a single lever pulled in a capital city. It's layered, and each layer answers for a different thing.</p>
+      <p>Here's where I think the debate gets it wrong, and it's the point I'd press hardest. The real danger isn't too little regulation, it's badly shaped regulation that protects the companies already ahead. Write the rules so the frontier labs keep a permanent head start while everyone trying to build gets buried in compliance, and you haven't made anyone safer. You've locked in the leaders, killed the competition, and built a two tier world: those with access to the best models, and those without. That divide, running through society and through business, is one of the most serious risks in front of us, and clumsy regulation speeds it up rather than preventing it. So any credible framework has to protect competition and keep access broad, not pull the ladder up behind the leaders.</p>
+      <p>And there's a real tension I won't pretend away. The most powerful frontier models do need managing, and we're already seeing that happen, sometimes crudely, as with the restrictions placed on Fable. But the open weights models, the ones anyone can download and run, are very hard to regulate by their nature. You can't put those weights back in the box. So the honest answer isn't to try to control the models themselves but to legislate clearly on use: what these systems can and can't be used to do. I hold these views with conviction, and I'm equally clear that the detail of it is hard, contested, and above any one person's pay grade.</p>
+    </div>
+  </div>
+
+  <div class="qitem">
+    <div class="qnum">Question 12</div>
+    <h2>Have you used AI to respond to these questions? To what extent?</h2>
+    <div class="answer">
+      <p>Yes. Completely, and on purpose.</p>
+      <p>You sent a list of questions in a document, to be typed into. Reading them, I could see the hours of typing ahead. So I did the thing I've argued for across every answer here. I gave the questions to Claude and asked it to interview me: to put each one to me in turn, let me talk through my thinking, and then synthesise my own thoughts, logic and beliefs into clean, quotable answers. Every idea and every position in this document is mine. What the machine did was take them from a rough spoken answer to something sharp enough to read.</p>
+      <p>And it was a better process, not only a faster one. Going question by question, the model held the context of everything I'd already said, so each answer could build on the last and connect across the whole set. It knows how I think, so it could push and shape while I did this in the gaps between the fifty other things I'm building. The document would have given you worse answers and taken far longer.</p>
+      <p>So this is the argument, done rather than described. I didn't tell you I work with AI as a thought and production partner. I did it, in front of you, to answer your own question. The thinking stayed mine. The synthesis, the structure, the artefact you're reading, that was the machine, directed by me. That's what I mean when I say the value isn't in the model but in what you do with it.</p>
+      <p>And if you want, next time we go one better. We build you an agent that runs the interview itself, so the next speaker just talks, and it does the rest.</p>
+    </div>
+  </div>
+
+  <div class="dark-panel">
+    <span class="eyebrow">The through line</span>
+    <div class="line">Everyone can buy the model. The advantage is in what you build around it.</div>
+  </div>
+
+  <div class="foot">
+    <div>Craig Hepburn <span class="mark">·</span> AI strategist and Perplexity Fellow<br>World Football Summit <span class="mark">·</span> September 2026</div>
+    <div><span class="mark-1706" style="font-size:15px;">17<span class="dot">.</span>06</span></div>
+  </div>
+
+</div>
+
+<script>
+  const bar = document.getElementById('progress');
+  function update() {
+    const h = document.documentElement;
+    const scrolled = h.scrollTop / (h.scrollHeight - h.clientHeight);
+    bar.style.width = (scrolled * 100) + '%';
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+</script>
+</body>
+</html>
