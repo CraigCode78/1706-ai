@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light">
+<title>Woodward · Working PRD · 1706 Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..900,30..100&family=Inter:wght@300;400;600&family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light;
+    --paper:        #F3EEE4;
+    --ink:          #1A1714;
+    --oxblood:      #9A3324;
+    --oxblood-deep: #7E2A1C;
+    --paper-deep:   #EBE4D5;
+    --paper-card:   #FCFAF4;
+    --ink-soft:     #4A443C;
+    --ink-mute:     #8A8175;
+    --rule:         #DCD4C4;
+    --rule-soft:    #E7E0D2;
+    --oxblood-soft: rgba(154, 51, 36, 0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; background-color: #F3EEE4 !important; color-scheme: light !important; }
+  body {
+    background-color: #F3EEE4 !important;
+    color: #1A1714 !important;
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 19px; line-height: 1.65; font-weight: 400;
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility; forced-color-adjust: none; min-height: 100dvh;
+  }
+  @media (prefers-color-scheme: dark) {
+    html, body { background-color: #F3EEE4 !important; color: #1A1714 !important; }
+    .card { background-color: #FCFAF4 !important; }
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(122, 30, 30, 0.015) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(74, 64, 56, 0.02) 0%, transparent 40%);
+    pointer-events: none; z-index: 0;
+  }
+  .progress { position: fixed; top: 0; left: 0; height: 2px; background: var(--oxblood); width: 0; z-index: 100; transition: width 0.1s linear; }
+  .frame { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; padding: 80px 40px 120px; }
+  .mark-1706 {
+    font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-optical-sizing: auto;
+    line-height: 1; letter-spacing: -0.01em; color: var(--ink); font-variant-numeric: lining-nums; display: inline-block;
+  }
+  .mark-1706 .dot { color: var(--oxblood); }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink-mute);
+  }
+  .eyebrow .mark { color: var(--oxblood); }
+  .mast { border-bottom: 1px solid var(--rule); padding-bottom: 36px; margin-bottom: 56px; }
+  .mast h1 {
+    font-family: 'Fraunces', Georgia, serif; font-optical-sizing: auto; font-weight: 460;
+    font-size: clamp(34px, 6vw, 50px); line-height: 1.08; letter-spacing: -0.01em; margin: 22px 0 14px;
+  }
+  .mast .standfirst {
+    font-family: 'Newsreader', Georgia, serif; font-size: 21px; line-height: 1.5; color: var(--ink-soft); max-width: 58ch;
+  }
+  section { margin: 54px 0; }
+  .sec-mark { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.14em; color: var(--oxblood); margin-bottom: 14px; }
+  h2 {
+    font-family: 'Fraunces', Georgia, serif; font-weight: 440;
+    font-size: clamp(24px, 4vw, 31px); line-height: 1.15; letter-spacing: -0.005em; margin-bottom: 18px;
+  }
+  h3 { font-family: 'Fraunces', Georgia, serif; font-weight: 500; font-size: 20px; line-height: 1.3; margin: 24px 0 8px; }
+  p { margin-bottom: 18px; }
+  p .em { color: var(--oxblood-deep); font-weight: 500; }
+  hr { border: none; border-top: 1px solid var(--rule); margin: 48px 0; }
+  .card {
+    background-color: #FCFAF4; border: 1px solid var(--rule-soft);
+    border-radius: 6px; padding: 26px 30px; margin: 26px 0;
+  }
+  .card p:last-child { margin-bottom: 0; }
+  .pull {
+    font-family: 'Newsreader', Georgia, serif; font-size: 25px; line-height: 1.35; color: var(--ink);
+    border-left: 2px solid var(--oxblood); padding-left: 26px; margin: 38px 0;
+  }
+  .kv { display: grid; grid-template-columns: 150px 1fr; gap: 14px 20px; margin: 22px 0; }
+  .kv .k {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--oxblood); padding-top: 5px;
+  }
+  .kv .v { font-size: 17.5px; line-height: 1.55; color: var(--ink-soft); }
+  .kv .v strong { color: var(--ink); font-weight: 600; }
+  .layer {
+    display: grid; grid-template-columns: 44px 1fr; gap: 18px;
+    padding: 16px 0; border-bottom: 1px solid var(--rule-soft); align-items: start;
+  }
+  .layer:last-child { border-bottom: none; }
+  .layer .n {
+    font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: 26px; color: var(--oxblood); line-height: 1.15;
+  }
+  .layer p { margin-bottom: 0; font-size: 17.5px; color: var(--ink-soft); }
+  .layer strong { color: var(--ink); font-weight: 600; }
+  table.modules { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 16.5px; }
+  table.modules th {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink-mute); font-weight: 500; text-align: left; padding: 8px 14px 8px 0;
+    border-bottom: 2px solid var(--ink);
+  }
+  table.modules td { padding: 12px 14px 12px 0; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.5; color: var(--ink-soft); }
+  table.modules td:first-child { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.04em; color: var(--ink); width: 24%; padding-top: 15px; }
+  .dark-panel {
+    background: #1A1714; color: var(--paper); border-radius: 6px; padding: 54px 44px; margin: 64px 0;
+    forced-color-adjust: none;
+  }
+  .dark-panel .eyebrow { color: rgba(244, 237, 218, 0.6); }
+  .dark-panel h2 { color: var(--paper); margin-top: 14px; }
+  .dark-panel p { color: rgba(244, 237, 218, 0.86); }
+  .dark-panel .accent { color: #E0A0A0; }
+  .foot {
+    margin-top: 80px; padding-top: 28px; border-top: 1px solid var(--rule);
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.08em; color: var(--ink-mute);
+  }
+  .foot .mark { color: var(--oxblood); }
+  @media (max-width: 600px) {
+    .frame { padding: 56px 22px 90px; }
+    .dark-panel { padding: 40px 26px; }
+    .card { padding: 22px 20px; }
+    .kv { grid-template-columns: 1fr; gap: 4px 0; }
+    .kv .k { padding-top: 12px; }
+    table.modules { font-size: 14.5px; }
+  }
+  @media print {
+    html, body { background: #F3EEE4; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .progress, .no-print { display: none; }
+    @page { margin: 18mm 16mm; }
+  }
+</style>
+</head>
+<body>
+
+<style>
+  #pin-gate {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Inter', -apple-system, sans-serif;
+  }
+  #pin-gate.hidden { display: none; }
+  #pin-gate .box { text-align: center; max-width: 380px; padding: 40px 32px; }
+  #pin-gate .mark {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 28px; font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 32px;
+    display: inline-flex; align-items: baseline;
+  }
+  #pin-gate .mark .dot { color: var(--oxblood); }
+  #pin-gate h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 400; font-size: 22px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  #pin-gate p {
+    color: var(--ink-mute);
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+  #pin-gate input {
+    width: 100%; padding: 14px 16px;
+    background: var(--paper-card);
+    border: 1px solid var(--rule);
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px; letter-spacing: 0.5em; text-align: center;
+    border-radius: 4px; outline: none;
+    transition: border-color 0.15s ease;
+  }
+  #pin-gate input:focus { border-color: var(--oxblood); }
+  #pin-gate .err {
+    color: var(--oxblood);
+    font-size: 11px; margin-top: 12px; min-height: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+</style>
+<div id="pin-gate">
+  <div class="box">
+    <div class="mark">17<span class="dot">.</span>06</div>
+    <h2>Private working note</h2>
+    <p>This document is shared by direct invitation. Enter the access code to continue.</p>
+    <input id="pin-input" type="password" inputmode="numeric" maxlength="4" autocomplete="off" autofocus>
+    <div class="err" id="pin-err">&nbsp;</div>
+  </div>
+</div>
+<script>
+  (function(){
+    var PIN = "2704";
+    var gate = document.getElementById('pin-gate');
+    var input = document.getElementById('pin-input');
+    var err = document.getElementById('pin-err');
+    if (sessionStorage.getItem('woodward-pin-ok') === '1') { gate.classList.add('hidden'); return; }
+    input.addEventListener('input', function(){
+      err.innerHTML = '&nbsp;';
+      if (input.value.length === 4) {
+        if (input.value === PIN) {
+          sessionStorage.setItem('woodward-pin-ok', '1');
+          gate.classList.add('hidden');
+        } else {
+          err.textContent = 'Incorrect code';
+          input.value = '';
+        }
+      }
+    });
+  })();
+</script>
+
+<div class="progress" id="progress"></div>
+
+<div class="frame">
+
+  <header class="mast">
+    <div class="mark-1706" style="font-size:40px; margin-bottom:22px;">17<span class="dot">.</span>06</div>
+    <div class="eyebrow">1706 Studio <span class="mark">·</span> Working PRD <span class="mark">·</span> v0.1</div>
+    <h1>Woodward: the machine behind the pages</h1>
+    <p class="standfirst">A working product definition, written by Craig with input from Mike Miller. It builds on the mockups, sketches and analysis work already done, and sets out the architecture, experience and technical considerations for making it real at volume. A first pass to shape discussion, not a finished plan.</p>
+  </header>
+
+  <section>
+    <div class="sec-mark">I</div>
+    <h2>The product</h2>
+    <p>Woodward is the media layer for prediction markets. The world now comes with a number attached, odds on the election, the Fed, the war, the game, and a generation follows the news through those numbers. Woodward is where a number becomes legible: what's behind it, what's moving it, and what it means.</p>
+    <p>The pages already sketched prove what that looks like when done properly. A market page carries the base rates from history, the calendar of what's coming and which way each event pushes the price, where the platforms disagree, who's moving the money, and the story underneath, all sourced. Whether the market is a ceasefire, the midterms, a rate decision, the World Cup or the next Bond, the same apparatus applies.</p>
+    <p>That apparatus is the product. <span class="em">The analysis engine is what Woodward owns; the site, the newsletter, the share cards and the games are how it travels.</span> This document specifies the engine, the editorial system around it, and the delivery layer on top, so the depth so far produced by hand can be produced for any market, every day, by a small team.</p>
+  </section>
+
+  <section>
+    <div class="sec-mark">II</div>
+    <h2>Readers and their jobs</h2>
+    <p>Three audiences, already defined: signal seekers who've left mainstream news and trust a price over a headline; casual bettors who have a little on the election or the game; and observers, the biggest group and the least served, who follow the odds like a poll and never bet.</p>
+    <p>Across all three, the jobs are consistent. Decode a number I saw somewhere. Keep me ahead of what's moving today. Give me something worth posting and arguing about. And, increasingly, let me test my own read against the market and my friends. The observer being the largest audience pushes every design decision towards legibility over trading tools: Woodward explains markets, it does not operate them.</p>
+  </section>
+
+  <section>
+    <div class="sec-mark">III</div>
+    <h2>Principles</h2>
+    <div class="kv">
+      <span class="k">01</span>
+      <p class="v"><strong>A number never travels alone.</strong> Every price Woodward publishes ships with its read. The percentage and the explanation are one unit, on the page, in the newsletter, on the share card.</p>
+      <span class="k">02</span>
+      <p class="v"><strong>Every claim carries its source.</strong> Links, timestamps and shown work on everything. If a claim can't be traced to a source, it doesn't publish.</p>
+      <span class="k">03</span>
+      <p class="v"><strong>AI for volume and checking, humans for judgement and voice.</strong> The engine researches, verifies and drafts. A named editor decides. Bylined pieces are written by people. This division holds throughout.</p>
+      <span class="k">04</span>
+      <p class="v"><strong>One information layer, many registers.</strong> The ELI15 versions already prove it: the same analysis told at different depths for different readers. Full read, brief, card, debate, and later audio, all generated from one substrate.</p>
+      <span class="k">05</span>
+      <p class="v"><strong>Neutral by construction, not by tone.</strong> Balance isn't an adjective in a style guide. It's enforced by the machinery: opposing cases argued before anything is written, and measured in evaluation.</p>
+      <span class="k">06</span>
+      <p class="v"><strong>Built to be posted.</strong> Every unit of content renders as a clean card someone posts to look early and right. Sharing is the growth engine, so it's a property of the content, not a feature bolted on.</p>
+      <span class="k">07</span>
+      <p class="v"><strong>Show the track record.</strong> Calibration is published. When a read holds up, say so. When it doesn't, say so clearly. Trust builds slowly and is the hardest thing in this category to copy.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-mark">IV</div>
+    <h2>The system: five layers</h2>
+    <p>The architecture separates what changes constantly (prices, news) from what changes on triggers (analysis) and what changes on judgement (editorial). Each layer has one job.</p>
+    <div class="card">
+      <div class="layer"><span class="n">1</span><p><strong>Signals.</strong> Continuous ingestion: market prices, depth and resolution rules from the exchange APIs; news feeds; polling averages; official calendars and filings. Everything timestamped and stored raw before anything interprets it.</p></div>
+      <div class="layer"><span class="n">2</span><p><strong>Knowledge.</strong> The taxonomy and ontology. Markets are mapped to events, events to themes, stories to events, and the same question is matched across platforms. This layer is what makes divergence views and cross platform comparison possible, and it's the hardest asset to build.</p></div>
+      <div class="layer"><span class="n">3</span><p><strong>Analysis.</strong> A battery of agent modules runs against each event: forensics, base rates, catalysts, divergence, narrative, money flows. Then the debate chamber argues the number before a word of the read is drafted. Output is structured findings, each one checkable.</p></div>
+      <div class="layer"><span class="n">4</span><p><strong>Editorial.</strong> A named human editor reviews the findings and the debate, then approves, edits or rejects. Sensitive content classes take an additional standards check. Every decision is logged. Nothing publishes without a person.</p></div>
+      <div class="layer"><span class="n">5</span><p><strong>Delivery.</strong> The front page, market pages, deep end articles, newsletter, share cards, community bot and, in time, the conversational page. All registers render from the same approved substrate, with live prices overlaid on pre generated analysis.</p></div>
+    </div>
+    <p>The last point in layer five answers an architectural question early: analysis is regenerated on triggers (a price move past a threshold, a catalyst date arriving, a major news event), not on every page view. Readers get instant pages with live numbers; the expensive thinking happens asynchronously, once, and is reused everywhere.</p>
+  </section>
+
+  <section>
+    <div class="sec-mark">V</div>
+    <h2>The analysis engine</h2>
+    <p>The engine is the deck's battery of structured checks made concrete. Each module is an agent with defined inputs, named data sources, structured output and its own evaluation criteria. Modules run independently, so they can be built, tested and improved independently, and every finding they produce can be verified against its source.</p>
+    <table class="modules">
+      <thead><tr><th>Module</th><th>What it establishes</th></tr></thead>
+      <tbody>
+        <tr><td>Market forensics</td><td>How much to trust this price: depth, liquidity, spread, volume pattern, the exact resolution rules and any settlement ambiguity worth flagging to readers.</td></tr>
+        <tr><td>Base rates</td><td>What history says: comparable past events, how often the outcome in question has occurred, and how far the current price sits from that anchor.</td></tr>
+        <tr><td>Catalyst calendar</td><td>What's coming: dated upcoming events (votes, meetings, deadlines, matches, announcements) with the expected direction of impact on the price for each.</td></tr>
+        <tr><td>Divergence</td><td>The same question across Polymarket, Kalshi and Metaculus: where the platforms agree, where they split, and what the spread itself is saying.</td></tr>
+        <tr><td>Narrative</td><td>What moved the price: the reporting and events behind recent moves, attributed and cited, separated from noise.</td></tr>
+        <tr><td>Money flows</td><td>Who's positioned: whale movements, coordinated clusters, unusual timing. Presented as documented patterns with sources, never as accusations.</td></tr>
+      </tbody>
+    </table>
+    <p>Composition is deliberately separate from analysis. The modules produce findings; a distinct step assembles them into the verdict, the read and each register. Separating the two means the facts can be evaluated on their own before any prose exists, and the prose can be regenerated in any register without redoing the research.</p>
+  </section>
+
+  <section>
+    <div class="sec-mark">VI</div>
+    <h2>The debate chamber</h2>
+    <p>Before any read is drafted, several frontier models argue the number from assigned positions: one makes the case the probability should be higher, one that it should be lower, one holds the line on base rates and market structure. They see each other's arguments and respond. We've been experimenting with adversarial setups like this across models, and the effect is consistent: weak arguments get found fast, and hidden model biases cancel rather than compound.</p>
+    <p>The debate serves two purposes at once. As quality control, it means no single model's disposition ever becomes Woodward's editorial position; the read is drafted from the surviving arguments, and where the models split irreconcilably, the read says so plainly rather than manufacturing false confidence. As content, the debate is a format in its own right: one number, every angle, rendered for readers. It's a format the category doesn't have today.</p>
+    <div class="pull">Neutrality becomes a mechanism rather than a promise: the argument is on the record, and the reader can see it.</div>
+  </section>
+
+  <section>
+    <div class="sec-mark">VII</div>
+    <h2>The editorial layer</h2>
+    <p>A named editor makes the final call on everything the engine produces. The workflow is built for speed without surrendering the decision: the editor sees the draft alongside the structured findings and the debate that produced it, checks the load bearing claims through their citations, and approves, edits or rejects. Overrides are logged, both because they're the best training signal the engine will ever get and because an audit trail is part of the trust story.</p>
+    <p>Two content classes take an additional standards check before the editor's decision: anything naming individuals in the money flows work (trading pattern forensics, disclosure analysis), and anything with legal exposure. This material is some of the strongest in the current sketches, and it needs a designed review step, agreed with counsel once and applied every time, rather than being handled case by case.</p>
+    <p>The deep end stays human. Bylined long form pieces are written by named contributors, with the engine as their research desk: they get the findings, the base rates and the sourced timeline, and they bring the argument and the voice. That's the right division of labour, and it's also what makes the deep end worth a byline.</p>
+  </section>
+
+  <section>
+    <div class="sec-mark">VIII</div>
+    <h2>Data foundations</h2>
+    <h3>Sources, in tiers</h3>
+    <p>Tier one is the exchanges themselves: Polymarket, Kalshi and Metaculus APIs for prices, depth, history and resolution terms. Tier two is official and structural data: government and central bank calendars, filings and disclosures, polling averages, sports schedules. Tier three is reporting from named outlets, used with citation. Tier four is social and forum signal, used for colour and sentiment only, never load bearing. Every published claim traces to tier one, two or three.</p>
+    <h3>Taxonomy and ontology</h3>
+    <p>The unit of the product is the event, not the market. Many markets hang off one event ("US and Iran reach a deal" is one story and a dozen tradeable questions), events belong to themes, and stories attach to events. Getting this model right is what lets one piece of analysis serve every related market, and what stops the site fragmenting into thousands of disconnected pages.</p>
+    <p>Matching the same question across platforms is the hardest part, and worth being clear about: wording differs, resolution criteria differ, deadlines differ, and a naive match will pair questions that resolve differently. Cross platform comparison is one of the product's most distinctive features, so the entity resolution behind it is a first class engineering problem, with automated matching, confidence scoring and human review of the matches that matter. It's a natural centre of the dedicated data engineering work.</p>
+    <h3>Freshness</h3>
+    <p>Prices are live or near live everywhere they appear. Analysis regenerates on triggers, as described in section IV. The practical effect: a market page is always instant, always shows the current number, and its read is at most as old as the last meaningful thing that happened.</p>
+  </section>
+
+  <section>
+    <div class="sec-mark">IX</div>
+    <h2>Trust: evaluation and the track record</h2>
+    <p>An AI media product lives or dies on whether its numbers and claims hold up, so evaluation is built into the engine rather than run occasionally over it. Every module has pass criteria checked on every run: numeric accuracy against the source API, claim faithfulness against cited reporting, completeness of the required findings, and measured balance in the composed read (both directions argued, no unhedged prediction language). Drafts that fail don't reach the editor.</p>
+    <p>Above the module level, three system measures matter most. The editor override rate, which tells us where the engine is weak. The correction rate after publication, which we hold visibly low and log publicly when it happens. And calibration over time: when Woodward's read framed a market as rich or cheap against the base rate, was it right? That last one becomes content in its own right, a published track record, and it's the honest version of the Woodward Score idea: the house holds itself to the same standard it invites readers to play against.</p>
+  </section>
+
+  <section>
+    <div class="sec-mark">X</div>
+    <h2>The fluid front end</h2>
+    <p>The information architecture already designed holds: many front doors (reels, threads, stickers, games, newsletter, search), all landing on the market page as the hub, with the bylined deep end one level below. This section is about what the engine makes possible on top of that structure.</p>
+    <h3>Registers</h3>
+    <p>Because analysis and composition are separate, every read exists in multiple depths from one substrate: the share card, the one paragraph brief, the full read, the ELI15 version, the debate transcript, and later spoken audio. The reader chooses the depth; the facts underneath never change. This generalises what the ELI15 sketches already do by hand.</p>
+    <h3>The conversational page</h3>
+    <p>The direction worth watching is what Architect (tryarchitect.com) is doing for commercial sites: the page reshapes itself around each visitor, you ask it something and the page rebuilds to answer, so the page and the conversation become one thing. Applied to a market page: a casual reader gets the simple read; a deeper reader expands into the base rates and the money flows; and anyone can ask the page a question and get an answer drawn from that page's own sourced substrate, not from a model's general knowledge. That last constraint matters, because it means every conversational answer inherits the same evaluation and sourcing as the published read. We'd build this ourselves rather than buy it, and it's sequenced after the engine has earned trust, but the architecture above is designed so nothing has to be rebuilt to get there.</p>
+    <h3>Personalisation</h3>
+    <p>Your markets, your themes, your calls and your score, feeding the games and the friend challenge loop already sketched. Personalisation runs at the delivery layer only; the analysis everyone sees is the same, which is a neutrality property worth stating out loud.</p>
+  </section>
+
+  <section>
+    <div class="sec-mark">XI</div>
+    <h2>What ships, in what order</h2>
+    <p><strong>Phase one, the engine on a narrow board.</strong> Pick a board of roughly twenty five to fifty high volume markets across five or six themes: politics, geopolitics, macro, sport, tech, culture. Ship the front page, market pages, the newsletter and share cards, with the full pipeline running underneath: ingestion, taxonomy for the board, all six modules, the debate chamber, editorial workflow and evaluation. The phase exists to prove three numbers: cost per published page, time from trigger to publish, and quality the editor signs off without rewriting.</p>
+    <p><strong>Phase two, breadth and community.</strong> Expand the board and the taxonomy, launch the community channel with the bot content already mocked, ship the games and the Woodward Score, and the bet your friends flow as the acquisition mechanic. The engine's marginal cost per market should be falling measurably by now; if it isn't, we fix that before growing further.</p>
+    <p><strong>Phase three, fluidity.</strong> The conversational page, personalisation, alerts on the markets you follow, and additional registers including audio. By this point the substrate exists and is trusted, so these are delivery layer builds, not new machinery.</p>
+    <p>Phases, deliberately, not dates: each one gates on the numbers from the one before.</p>
+  </section>
+
+  <section>
+    <div class="sec-mark">XII</div>
+    <h2>Technical considerations and open questions</h2>
+    <p><strong>Cost per page decides viability.</strong> The token economics of running six modules plus a multi model debate on every market are real, and the design already reflects it: trigger based regeneration rather than per request, aggressive caching, smaller models for routine extraction and checks, frontier models reserved for the debate and composition. Cost per published page is a phase one headline metric, not a later optimisation.</p>
+    <p><strong>Structured output at volume is an engineering discipline.</strong> Models under token pressure produce truncated or malformed output; our weekend prototype hit exactly this on day one. The production answer is schemas, output repair, bounded retries and graceful degradation, applied everywhere a model produces structure, which in this system is everywhere.</p>
+    <p><strong>A model portfolio, not a vendor.</strong> The debate chamber requires plurality by design, which also means no single vendor dependence, and lets each module use whichever model measures best at its job.</p>
+    <p><strong>Nothing user facing waits on a model.</strong> Generation is asynchronous; delivery is instant. The reader never watches a spinner while a frontier model thinks.</p>
+    <p><strong>Full traceability.</strong> Every published claim maps back to the run that produced it: which sources, which model versions, which module outputs, which editor. This is what makes corrections fast, evaluation honest and the audit trail publishable.</p>
+    <p>Open questions, held deliberately: the name (Woodward versus the alternatives in circulation); the exact first board of markets; the community platform; how much of the engine's working shows to readers by default; and the affiliate and disclosure treatment per jurisdiction. None blocks phase one from starting.</p>
+  </section>
+
+  <section>
+    <div class="sec-mark">XIII</div>
+    <h2>What we measure</h2>
+    <p>Two dashboards from day one. The reader side carries the plan's existing questions: are people sharing what we make, which formats spread, what reach costs, and whether shares convert. The engine side carries the numbers that decide whether the machine works: cost per published page, time from trigger to publish, evaluation pass rates by module, editor override rate, correction rate, and the calibration score over time. The second dashboard is what lets a small team run a large board with confidence, and it's the evidence base for every scale decision.</p>
+  </section>
+
+  <section>
+    <div class="sec-mark">XIV</div>
+    <h2>Roles: a starting suggestion</h2>
+    <p>Responsibilities aren't settled yet and this section is a suggestion to discuss, not a proposal to accept. It's here because the architecture above implies a natural division of work, and it's easier to react to a drawn line than a blank page.</p>
+    <div class="kv">
+      <span class="k">Carter</span>
+      <p class="v">Product vision, editorial direction, the surfaces and formats. To be shaped by what Carter wants to own day to day.</p>
+      <span class="k">Craig</span>
+      <p class="v">AI architecture and model orchestration, and shaping the product together. The engine's design, the debate chamber, and how the layers fit.</p>
+      <span class="k">Mike Miller</span>
+      <p class="v">The data layer: ingestion pipelines, the taxonomy and cross platform entity resolution, the evaluation framework, and data reliability throughout.</p>
+      <span class="k">Editorial</span>
+      <p class="v">The named editor and contributors from the existing hiring plan own judgement, voice and the deep end.</p>
+    </div>
+    <p>One boundary in the architecture is worth agreeing early whoever holds what: the seam between the engine and the publication is the editorial layer, and keeping the human decision there is what makes everything else in this document safe to automate.</p>
+  </section>
+
+  <div class="dark-panel">
+    <div class="eyebrow">Why this is worth building</div>
+    <h2>A trusted read on every number, every day</h2>
+    <p>Prediction markets have the money and the attention, but not yet the layer that makes a number mean something, produced fast enough to matter and checked well enough to trust. The depth has been proven by hand in the existing work. The system described here is how that depth gets produced for <span class="accent">any market, every day</span>, with a person making every call that matters. All of it is buildable with what exists today.</p>
+  </div>
+
+  <div class="foot">1706 Studio <span class="mark">·</span> Woodward Working PRD v0.1 <span class="mark">·</span> <span class="mark-1706" style="font-size:13px;">17<span class="dot">.</span>06</span></div>
+
+</div>
+
+<script>
+  const bar = document.getElementById('progress');
+  function update() {
+    const h = document.documentElement;
+    const scrolled = h.scrollTop / (h.scrollHeight - h.clientHeight);
+    bar.style.width = (scrolled * 100) + '%';
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+</script>
+</body>
+</html>
